@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hing/theme/theme.dart';
 
 void main() {
   runApp(HingApp());
@@ -15,7 +16,7 @@ class _HingAppState extends State<HingApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      
+      theme: HingTheme.getHingThemeData(ThemeData.light()),
     );
   }
 }
