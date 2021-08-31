@@ -9,5 +9,5 @@ const String kRecipeRoute = '/recipe';
 const String kProfileRoute = '/profile';
 const String kUploadRecipe = '/upload';
 const String kEditProfileRoute = '/editProfile';
-const String kResetPasswordRoute = '/resetpassowrd';
+const String kResetPasswordRoute = '/resetpassword';
 const String kOnboardingRoute = '/onboarding';
