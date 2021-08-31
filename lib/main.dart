@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hing/routes.dart';
 import 'package:hing/theme/theme.dart';
 
 void main() {
@@ -17,6 +18,7 @@ class _HingAppState extends State<HingApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: HingTheme.getHingThemeData(ThemeData.light()),
+      onGenerateRoute: RouteGenerator.onGenerateRoutes,
     );
   }
 }
