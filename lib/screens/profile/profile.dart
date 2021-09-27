@@ -9,7 +9,8 @@ import 'package:hing/screens/profile/components/tab_posts_content.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final HingUser? user;
+  const ProfileScreen({Key? key, required this.user}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -59,16 +60,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
-                          ProfileHeader(),
+                          ProfileHeader(user: widget.user!),
                           ProfileTabs(),
                         ],
                       ),
                     )
                   ],
               body: TabBarView(children: [
-                ProfileTabPostsContent(),
-                ProfileTabUserContent(),
-                ProfileTabUserContent(),
+                ProfileTabPostsContent(user: widget.user!,),
+                ProfileTabUserContent(
+                  shouldFetchFollowers: false,
+                  user: widget.user!,
+                ),
+                ProfileTabUserContent(
+                  shouldFetchFollowers: true,
+                  user: widget.user!,
+                ),
               ]))),
     );
   }

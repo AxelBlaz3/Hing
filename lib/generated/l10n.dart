@@ -790,6 +790,16 @@ class S {
     );
   }
 
+  /// `Type your reply here`
+  String get typeYourReplyHere {
+    return Intl.message(
+      'Type your reply here',
+      name: 'typeYourReplyHere',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Comment`
   String get comment {
     return Intl.message(
@@ -815,6 +825,36 @@ class S {
     return Intl.message(
       'Reply',
       name: 'reply',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Favorites`
+  String get favorites {
+    return Intl.message(
+      'Favorites',
+      name: 'favorites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove from favorites`
+  String get removeFromFavorites {
+    return Intl.message(
+      'Remove from favorites',
+      name: 'removeFromFavorites',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You`
+  String get you {
+    return Intl.message(
+      'You',
+      name: 'you',
       desc: '',
       args: [],
     );

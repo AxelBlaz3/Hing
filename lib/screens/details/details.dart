@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/recipe/recipe.dart';
+import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/details/components/details_author_header.dart';
 import 'package:hing/screens/details/components/details_tabs.dart';
 import 'package:hing/screens/details/components/ingredients_list_item.dart';
 import 'package:hing/screens/home/components/feed_item_footer.dart';
+import 'package:provider/provider.dart';
 import 'components/details_app_bar.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -20,7 +22,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     //final int index = ModalRoute.of(context)?.settings.arguments as int;
     final Map<String, dynamic> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final Recipe recipe = data['recipe'];
+    Recipe recipe = data['recipe'];
     final int index = data['index'];
     final Function(Recipe recipe) refreshCallback = data['refresh_callback'];
 
@@ -71,17 +73,38 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  FeedItemFooter(
-                                    recipe: data['recipe'],
-                                    refreshCallback: refreshCallback,
-                                  ),
+                                  Consumer<RecipeProvider>(
+                                      builder: (context, recipeProvider,
+                                              child) =>
+                                          FeedItemFooter(
+                                            recipe: data['recipe'],
+                                            refreshCallback: refreshCallback,
+                                            detailsCallback: (updatedRecipe) {
+                                              recipe = updatedRecipe;
+                                            },
+                                          )),
                                   Padding(
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 16),
                                     child: ElevatedButton(
-                                        onPressed: () => {},
-                                        child:
-                                            Text(S.of(context).addToFavorite),
+                                        onPressed: () {
+                                          refreshCallback(recipe
+                                            ..isFavorite = !recipe.isFavorite);
+
+                                          context
+                                              .read<RecipeProvider>()
+                                              .notifyRecipeChanges();
+                                        },
+                                        child: Consumer<RecipeProvider>(
+                                            builder: (context, recipeProvider,
+                                                    child) =>
+                                                Text(recipe.isFavorite
+                                                    ? S
+                                                        .of(context)
+                                                        .removeFromFavorites
+                                                    : S
+                                                        .of(context)
+                                                        .addToFavorite)),
                                         style: ElevatedButton.styleFrom(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 24),

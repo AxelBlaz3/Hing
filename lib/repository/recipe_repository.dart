@@ -109,6 +109,30 @@ class RecipeRepository {
     }
   }
 
+  Future<Reply?> postNewReply(
+      {required String commentId,
+      required String recipeId,
+      required String body}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.post(Uri.parse(kAPIPostNewReplyRoute),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(<String, String>{
+            'body': body,
+            'user_id': user!.id.oid,
+            'recipe_id': recipeId,
+            'comment_id': commentId
+          }));
+
+      if (response.statusCode == HttpStatus.created) {
+        final Reply reply = Reply.fromJson(jsonDecode(response.body));
+        return reply;
+      }
+    } catch (e) {
+      print('Reply exception - $e');
+    }
+  }
+
   Future<bool> addRecipeToFavorites({required String recipeId}) async {
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
@@ -162,6 +186,66 @@ class RecipeRepository {
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
           body: jsonEncode(<String, String>{
             'recipe_id': recipeId,
+            'user_id': user!.id.oid
+          }));
+
+      return response.statusCode == HttpStatus.ok;
+    } catch (e) {}
+    return false;
+  }
+
+  Future<bool> likeComment({required String commentId}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.put(Uri.parse(kAPILikeCommentRoute),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(<String, String>{
+            'comment_id': commentId,
+            'user_id': user!.id.oid
+          }));
+
+      return response.statusCode == HttpStatus.ok;
+    } catch (e) {}
+    return false;
+  }
+
+  Future<bool> unLikeComment({required String commentId}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.put(Uri.parse(kAPIUnLikeCommentRoute),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(<String, String>{
+            'comment_id': commentId,
+            'user_id': user!.id.oid
+          }));
+
+      return response.statusCode == HttpStatus.ok;
+    } catch (e) {}
+    return false;
+  }
+
+  Future<bool> likeReply({required String commentId}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.put(Uri.parse(kAPILikeReplyRoute),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(<String, String>{
+            'comment_id': commentId,
+            'user_id': user!.id.oid
+          }));
+
+      return response.statusCode == HttpStatus.ok;
+    } catch (e) {}
+    return false;
+  }
+
+  Future<bool> unLikeReply({required String commentId}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.put(Uri.parse(kAPIUnLikeReplyRoute),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(<String, String>{
+            'comment_id': commentId,
             'user_id': user!.id.oid
           }));
 

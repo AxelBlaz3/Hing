@@ -9,8 +9,12 @@ import 'package:provider/provider.dart';
 class FeedItemFooter extends StatefulWidget {
   final Recipe recipe;
   final Function(Recipe recipe) refreshCallback;
+  final Function(Recipe recipe)? detailsCallback;
   const FeedItemFooter(
-      {Key? key, required this.recipe, required this.refreshCallback})
+      {Key? key,
+      required this.recipe,
+      required this.refreshCallback,
+      this.detailsCallback})
       : super(key: key);
 
   @override
@@ -28,7 +32,9 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
           iconPath: widget.recipe.isLiked!
               ? 'assets/star_filled.svg'
               : 'assets/star.svg',
-          countLabel: widget.recipe.likesCount > 0 ? S.of(context).xLikes(widget.recipe.likesCount) : S.of(context).like,
+          countLabel: widget.recipe.likesCount > 0
+              ? S.of(context).xLikes(widget.recipe.likesCount)
+              : S.of(context).like,
           onPressed: () {
             final RecipeProvider recipeProvider =
                 context.read<RecipeProvider>();
@@ -36,20 +42,36 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
             !widget.recipe.isLiked!
                 ? recipeProvider
                     .likeRecipe(recipeId: widget.recipe.id.oid)
-                    .then((success) => success
-                        ? widget.refreshCallback(widget.recipe
-                          ..isLiked = !widget.recipe.isLiked!
-                          ..likesCount = widget.recipe.likesCount + 1)
-                        : ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text('Retry'))))
+                    .then((success) {
+                    if (success) {
+                      final Recipe updatedRecipe = widget.recipe
+                        ..isLiked = !widget.recipe.isLiked!
+                        ..likesCount = widget.recipe.likesCount + 1;
+                      widget.refreshCallback(updatedRecipe);
+                      if (widget.detailsCallback != null) {
+                        widget.detailsCallback!(updatedRecipe);
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text('Retry')));
+                    }
+                  })
                 : recipeProvider
                     .unLikeRecipe(recipeId: widget.recipe.id.oid)
-                    .then((success) => success
-                        ? widget.refreshCallback(widget.recipe
-                          ..isLiked = !widget.recipe.isLiked!
-                          ..likesCount = widget.recipe.likesCount - 1)
-                        : ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text('Retry'))));
+                    .then((success) {
+                    if (success) {
+                      final Recipe updatedRecipe = widget.recipe
+                        ..isLiked = !widget.recipe.isLiked!
+                        ..likesCount = widget.recipe.likesCount - 1;
+                      widget.refreshCallback(updatedRecipe);
+                      if (widget.detailsCallback != null) {
+                        widget.detailsCallback!(updatedRecipe);
+                      }
+                    } else {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text('Retry')));
+                    }
+                  });
             //Navigator.of(context).pushNamed(kCommentsRoute);
           },
         )),
@@ -57,10 +79,15 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
             child: FeedActionItem(
           recipe: widget.recipe,
           iconPath: 'assets/message.svg',
-          countLabel: widget.recipe.commentsCount > 0 ? S.of(context).xComments(widget.recipe.commentsCount) : S.of(context).comment,
+          countLabel: widget.recipe.commentsCount > 0
+              ? S.of(context).xComments(widget.recipe.commentsCount)
+              : S.of(context).comment,
           onPressed: () {
-            Navigator.of(context)
-                .pushNamed(kCommentsRoute, arguments: widget.recipe);
+            Navigator.of(context).pushNamed(kCommentsRoute, arguments: {
+              'recipe': widget.recipe,
+              'refresh_callback': widget.refreshCallback,
+              'details_callback': widget.detailsCallback
+            });
           },
         )),
         Expanded(

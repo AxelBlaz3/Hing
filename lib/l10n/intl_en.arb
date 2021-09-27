@@ -73,7 +73,11 @@
     "quantityCannotBeEmptyError": "Quantity cannot be empty",
     "newRecipeCreated": "New recipe created.",
     "typeYourCommentHere": "Type your comment here",
+    "typeYourReplyHere": "Type your reply here",
     "comment": "Comment",
     "like": "Like",
-    "reply": "Reply"
+    "reply": "Reply",
+    "favorites": "Favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "you": "You"
 }

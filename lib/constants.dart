@@ -20,7 +20,15 @@ const String kAPIRemoveRecipeFromFavoritesRoute =
 const String kAPIPostNewCommentRoute = '$kBaseUrl/$kAPIPrefix/comment';
 const String kAPILikeCommentRoute = '$kBaseUrl/$kAPIPrefix/comment/like';
 const String kAPIUnLikeCommentRoute = '$kBaseUrl/$kAPIPrefix/comment/unlike';
+const String kAPILikeReplyRoute = '$kBaseUrl/$kAPIPrefix/comment/reply/like';
+const String kAPIUnLikeReplyRoute = '$kBaseUrl/$kAPIPrefix/comment/reply/unlike';
 const String kAPIPostNewReplyRoute = '$kBaseUrl/$kAPIPrefix/comment/reply';
+const String kAPIGetFollowingRoute = '$kBaseUrl/$kAPIPrefix/user/{}/following';
+const String kAPIGetFollowersRoute = '$kBaseUrl/$kAPIPrefix/user/{}/followers';
+const String kAPIGetFavoritesRoute = '$kBaseUrl/$kAPIPrefix/user/{}/favorites';
+const String kAPIGetPostsRoute = '$kBaseUrl/$kAPIPrefix/user/{}/posts';
+const String kAPIFollowUserRoute = '$kBaseUrl/$kAPIPrefix/user/follow';
+const String kAPIUnFollowUserRoute = '$kBaseUrl/$kAPIPrefix/user/unfollow';
 
 // Route names
 const String kLoginRoute = '/login';
@@ -28,6 +36,7 @@ const String kSignupRoute = '/signup';
 const String kHomeRoute = '/home';
 const String kRecipeRoute = '/recipe';
 const String kProfileRoute = '/profile';
+const String kMyProfileRoute = '/myProfile';
 const String kUploadRecipe = '/upload';
 const String kEditProfileRoute = '/editProfile';
 const String kResetPasswordRoute = '/resetpassword';
@@ -62,6 +71,14 @@ List<String> getAllCategories(BuildContext context) => List.generate(
 
 List<String> getHomeCategories(BuildContext context) =>
     [S.of(context).all, ...getAllCategories(context)];
+
+const int kTotalProfileCategories = 4;
+List<String> getMyProfileTabTitles(BuildContext context) => <String>[
+      S.of(context).posts,
+      S.of(context).following,
+      S.of(context).followers,
+      S.of(context).favorites
+    ];
 
 List<String> getQuantityUnits() =>
     ['gms', 'kg', 'ml', 'mg', 'litres', 'tbsp', 'pcs'];

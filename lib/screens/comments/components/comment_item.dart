@@ -31,8 +31,9 @@ class _CommentItemState extends State<CommentItem> {
             CommentHeader(isReply: widget.isReply, comment: widget.comment),
             CommentBody(comment: widget.comment),
             CommentFooter(
+              isReply: widget.isReply,
               recipe: widget.recipe,
-              comment: widget.comment,
+              comment: widget.comment
             )
           ],
         ));

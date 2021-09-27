@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/theme/colors.dart';
 

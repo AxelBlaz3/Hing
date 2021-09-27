@@ -6,7 +6,10 @@ import 'package:hing/theme/colors.dart';
 
 class FeedItemProfile extends StatefulWidget {
   final Recipe recipe;
-  const FeedItemProfile({Key? key, required this.recipe}) : super(key: key);
+  final bool isDetailScreen;
+  const FeedItemProfile(
+      {Key? key, required this.recipe, this.isDetailScreen = false})
+      : super(key: key);
 
   @override
   _FeedItemProfileState createState() => _FeedItemProfileState();
@@ -52,15 +55,16 @@ class _FeedItemProfileState extends State<FeedItemProfile> {
             SizedBox(
               height: 4,
             ),
-            Text(
-              widget.recipe.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context)
-                  .textTheme
-                  .caption
-                  ?.copyWith(color: kBodyTextColor),
-            )
+            if (!widget.isDetailScreen)
+              Text(
+                widget.recipe.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context)
+                    .textTheme
+                    .caption
+                    ?.copyWith(color: kBodyTextColor),
+              )
           ],
         ))
       ],

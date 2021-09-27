@@ -17,6 +17,10 @@ class CommentProvider extends ChangeNotifier {
 
   CommentProvider({required this.recipeRepository});
 
+  void notifyCommentChanges() {
+    notifyListeners();
+  }
+
   Future<List<Comment>> getCommentsForRecipe(
       {required String recipeId, int page = 1}) async {
     return await recipeRepository.getCommentsForRecipe(
@@ -33,5 +37,29 @@ class CommentProvider extends ChangeNotifier {
       {required String recipeId, required String body}) async {
     return await recipeRepository.postNewComment(
         recipeId: recipeId, body: body);
+  }
+
+  Future<Reply?> postNewReply(
+      {required String commentId,
+      required String recipeId,
+      required String body}) async {
+    return await recipeRepository.postNewReply(
+        commentId: commentId, body: body, recipeId: recipeId);
+  }
+
+  Future<bool> likeComment({required String commentId}) async {
+    return await recipeRepository.likeComment(commentId: commentId);
+  }
+
+  Future<bool> unLikeComment({required String commentId}) async {
+    return await recipeRepository.unLikeComment(commentId: commentId);
+  }
+
+  Future<bool> likeReply({required String commentId}) async {
+    return await recipeRepository.likeReply(commentId: commentId);
+  }
+
+  Future<bool> unLikeReply({required String commentId}) async {
+    return await recipeRepository.unLikeReply(commentId: commentId);
   }
 }

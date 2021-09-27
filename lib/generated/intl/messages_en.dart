@@ -58,6 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Email cannot be empty"),
         "emailNotAvailable":
             MessageLookupByLibrary.simpleMessage("That email is not available"),
+        "favorites": MessageLookupByLibrary.simpleMessage("Favorites"),
         "follow": MessageLookupByLibrary.simpleMessage("Follow"),
         "followers": MessageLookupByLibrary.simpleMessage("Followers"),
         "following": MessageLookupByLibrary.simpleMessage("Following"),
@@ -103,6 +104,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "quantityCannotBeEmptyError":
             MessageLookupByLibrary.simpleMessage("Quantity cannot be empty"),
         "quantity_hint": MessageLookupByLibrary.simpleMessage("1"),
+        "removeFromFavorites":
+            MessageLookupByLibrary.simpleMessage("Remove from favorites"),
         "replies": MessageLookupByLibrary.simpleMessage("Replies"),
         "reply": MessageLookupByLibrary.simpleMessage("Reply"),
         "resetPasswordHint": MessageLookupByLibrary.simpleMessage(
@@ -117,6 +120,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "title": MessageLookupByLibrary.simpleMessage("Title"),
         "typeYourCommentHere":
             MessageLookupByLibrary.simpleMessage("Type your comment here"),
+        "typeYourReplyHere":
+            MessageLookupByLibrary.simpleMessage("Type your reply here"),
         "unfollow": MessageLookupByLibrary.simpleMessage("Unfollow"),
         "units": MessageLookupByLibrary.simpleMessage("Units"),
         "update": MessageLookupByLibrary.simpleMessage("Update"),
@@ -126,6 +131,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "video": MessageLookupByLibrary.simpleMessage("Video"),
         "xComments": m0,
         "xLikes": m1,
-        "xReplies": m2
+        "xReplies": m2,
+        "you": MessageLookupByLibrary.simpleMessage("You")
       };
 }

@@ -4,7 +4,7 @@ import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/object_id/object_id.dart';
-import 'package:hing/providers/auth_provider.dart';
+import 'package:hing/providers/user_provider.dart';
 import 'package:hing/providers/comment_provider.dart';
 import 'package:hing/providers/feed_provider.dart';
 import 'package:hing/providers/recipe_provider.dart';
@@ -20,8 +20,8 @@ import 'package:provider/provider.dart';
 void main() async {
   final UserRepository _userRepository = UserRepository();
   final RecipeRepository _recipeRepository = RecipeRepository();
-  final AuthProvider _authProvider =
-      AuthProvider(userRepository: _userRepository);
+  final UserProvider _authProvider =
+      UserProvider(userRepository: _userRepository);
   final RecipeProvider _recipeProvider =
       RecipeProvider(recipeRepository: _recipeRepository);
 

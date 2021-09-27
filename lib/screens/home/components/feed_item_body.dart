@@ -27,16 +27,14 @@ class _FeedItemBodyState extends State<FeedItemBody> {
   void initState() {
     _videoPlayerController =
         widget.recipe.media.first.mediaType - 1 == RecipeMediaType.video.index
-            ? VideoPlayerController.network(
+            ? (VideoPlayerController.network(
                 '$kBaseUrl/${widget.recipe.media.first.mediaPath}')
+              ..initialize().then((_) {
+                setState(() {});
+              }))
             : null;
 
     super.initState();
-  }
-
-  Future<void> initVideoController() async {
-    await _videoPlayerController?.initialize();
-    await _videoPlayerController?.play();
   }
 
   @override
@@ -59,22 +57,25 @@ class _FeedItemBodyState extends State<FeedItemBody> {
                         fallbackHeight: 208,
                       ),
                     )
-                  : FutureBuilder<void>(
-                      future: initVideoController(),
-                      builder: (context, snapshot) {
-                        return snapshot.connectionState ==
-                                ConnectionState.done
-                            ? AspectRatio(
-                                aspectRatio:
-                                    _videoPlayerController!.value.aspectRatio,
-                                child: VideoPlayer(_videoPlayerController!))
-                            : Container(
-                                height: 208,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurface
-                                    .withOpacity(.1));
-                      })),
+                  : GestureDetector(
+                      onTap: () {
+                        if (_videoPlayerController!.value.isPlaying)
+                          _videoPlayerController!.pause();
+                        else
+                          _videoPlayerController!.play();
+                      },
+                      child: _videoPlayerController!.value.isInitialized
+                          ? AspectRatio(
+                              aspectRatio:
+                                  _videoPlayerController!.value.aspectRatio,
+                              child:
+                                  VideoPlayer(_videoPlayerController!..play()))
+                          : Container(
+                              height: 208,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onSurface
+                                  .withOpacity(.1)))),
         ));
   }
 }

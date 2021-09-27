@@ -4,13 +4,17 @@ import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/comment/comment.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/comment_provider.dart';
+import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/comments/components/comment_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
 class CommentsScreen extends StatefulWidget {
   final Recipe recipe;
-  const CommentsScreen({Key? key, required this.recipe}) : super(key: key);
+  final Function(Recipe updatedRecipe) refreshCallback;
+  const CommentsScreen(
+      {Key? key, required this.recipe, required this.refreshCallback})
+      : super(key: key);
 
   @override
   _CommentsScreenState createState() => _CommentsScreenState();
@@ -72,7 +76,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 padding: EdgeInsets.only(bottom: 120),
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate<Comment>(
-                  animateTransitions: true,
+                    animateTransitions: true,
                     itemBuilder: (_, comment, index) =>
                         CommentItem(recipe: widget.recipe, comment: comment)))),
         SafeArea(
@@ -104,10 +108,22 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
                                           if (comment != null) {
                                             _bodyController.text = '';
-                                            _pagingController.itemList = List.of([
+                                            _pagingController.itemList =
+                                                List.of([
                                               comment,
-                                              ...
-                                                  _pagingController.itemList!]);
+                                              ..._pagingController.itemList!
+                                            ]);
+                                            final Recipe updatedRecipe = widget
+                                                .recipe
+                                              ..commentsCount =
+                                                  widget.recipe.commentsCount +
+                                                      1;
+                                            widget
+                                                .refreshCallback(updatedRecipe);
+                                                
+                                            context
+                                                .read<RecipeProvider>()
+                                                .notifyRecipeChanges();
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(SnackBar(
@@ -124,9 +140,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                         : Theme.of(context).colorScheme.primary,
                                   )),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide:
-                                      BorderSide(color: Colors.blue[900]!)),
+                                borderRadius: BorderRadius.circular(40),
+                              ),
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(40),
                                   borderSide: BorderSide(

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ProfilePhoto extends StatefulWidget {
-  const ProfilePhoto({Key? key}) : super(key: key);
+  final double? size;
+  const ProfilePhoto({Key? key, this.size}) : super(key: key);
 
   @override
   _ProfilePhotoState createState() => _ProfilePhotoState();
@@ -20,8 +21,8 @@ class _ProfilePhotoState extends State<ProfilePhoto> {
           borderRadius: BorderRadius.circular(16),
           child: Image.asset(
             'assets/sample_post_image.jpg',
-            height: 72,
-            width: 72,
+            height: widget.size ?? 72,
+            width: widget.size ?? 72,
             fit: BoxFit.cover,
           )),
     );

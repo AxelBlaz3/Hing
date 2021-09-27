@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
-import 'package:hing/providers/auth_provider.dart';
+import 'package:hing/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -101,8 +101,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          final AuthProvider authProvider =
-                                  context.read<AuthProvider>();
+                          final UserProvider authProvider =
+                                  context.read<UserProvider>();
 
                           authProvider
                               .signup(
