@@ -9,16 +9,16 @@ class HomeTabDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
           BuildContext context, double shrinkOffset, bool overlapsContent) =>
       Container(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+        padding: EdgeInsets.only(left: 16, right: 16),
         color: Theme.of(context).scaffoldBackgroundColor,
         child: tabBar,
       );
 
   @override
-  double get maxExtent => tabBar.preferredSize.height + 16;
+  double get maxExtent => tabBar.preferredSize.height;
 
   @override
-  double get minExtent => tabBar.preferredSize.height + 16;
+  double get minExtent => tabBar.preferredSize.height;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>

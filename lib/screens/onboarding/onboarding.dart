@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hing/constants.dart';
+import 'package:hing/generated/l10n.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  final int index;
+  const OnboardingScreen({Key? key, required this.index}) : super(key: key);
 
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
@@ -13,48 +17,68 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
-      alignment: Alignment.bottomCenter,
+      alignment: Alignment.topCenter,
       children: [
-        Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: SvgPicture.asset(
-                  'assets/onboarding_background.svg',
-                  fit: BoxFit.cover,
-                ))),
-        Padding(
-            padding: EdgeInsets.all(48),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Find your comfort food here',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                Text(
-                  'Some weird description making up to two lines. At least two lines.',
-                  style: Theme.of(context).textTheme.caption,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 48,
-                ),
-                ElevatedButton(
-                  onPressed: () => {},
-                  child: Text('Next'),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(MediaQuery.of(context).size.width, 48),
-                    padding: EdgeInsets.all(24),
-                  ),
-                )
-              ],
-            ))
+        Image.asset('assets/onboarding_background.png',
+            height: MediaQuery.of(context).size.height / 2,
+            width: MediaQuery.of(context).size.width),
+        SafeArea(
+            child: Container(
+                alignment: Alignment.bottomCenter,
+                padding: EdgeInsets.all(48),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/logo.svg',
+                      height: 48,
+                    ),
+                    SizedBox(
+                      height: 32,
+                    ),
+                    Text(
+                      widget.index == 1
+                          ? S.of(context).onboardingOneTitle
+                          : S.of(context).onboardingTwoTitle,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    SizedBox(
+                      height: 24,
+                    ),
+                    Text(
+                      widget.index == 1
+                          ? S.of(context).onboardingOneSummary
+                          : S.of(context).onboardingTwoSummary,
+                      style: Theme.of(context).textTheme.caption,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 48,
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (widget.index < 2) {
+                          Navigator.of(context).pushNamed(kOnBoardingRoute,
+                              arguments: widget.index + 1);
+                        } else {
+                          // Update shared preferences and set onBoardingDone to true.
+                          (await SharedPreferences.getInstance())
+                              .setBool(kOnBoardingPrefKey, true);
+                              
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              kLoginRoute, (route) => false);
+                        }
+                      },
+                      child: Text('Next'),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(0, 48),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 48),
+                      ),
+                    )
+                  ],
+                )))
       ],
     ));
   }

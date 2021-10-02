@@ -510,70 +510,80 @@ class S {
     );
   }
 
-  /// `Enter your new password and repeat it once more to get your password changed`
+  /// `Enter your new password and repeat it once more to get your password changed.`
   String get resetPasswordHint {
     return Intl.message(
-      'Enter your new password and repeat it once more to get your password changed',
+      'Enter your new password and repeat it once more to get your password changed.',
       name: 'resetPasswordHint',
       desc: '',
       args: [],
     );
   }
 
-  /// `Email cannot be empty`
+  /// `Email cannot be empty.`
   String get emailCannotBeEmpty {
     return Intl.message(
-      'Email cannot be empty',
+      'Email cannot be empty.',
       name: 'emailCannotBeEmpty',
       desc: '',
       args: [],
     );
   }
 
-  /// `Password cannot be empty`
+  /// `Name cannot be empty.`
+  String get nameCannotBeEmpty {
+    return Intl.message(
+      'Name cannot be empty.',
+      name: 'nameCannotBeEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password cannot be empty.`
   String get passwordCannotBeEmpty {
     return Intl.message(
-      'Password cannot be empty',
+      'Password cannot be empty.',
       name: 'passwordCannotBeEmpty',
       desc: '',
       args: [],
     );
   }
 
-  /// `Min 8 chars`
+  /// `Min. 8 chars.`
   String get passwordMustBeAtLeast8Chars {
     return Intl.message(
-      'Min 8 chars',
+      'Min. 8 chars.',
       name: 'passwordMustBeAtLeast8Chars',
       desc: '',
       args: [],
     );
   }
 
-  /// `That email is not available`
+  /// `That email is not available.`
   String get emailNotAvailable {
     return Intl.message(
-      'That email is not available',
+      'That email is not available.',
       name: 'emailNotAvailable',
       desc: '',
       args: [],
     );
   }
 
-  /// `Incorrect credentials`
+  /// `Incorrect credentials.`
   String get incorrectCredentials {
     return Intl.message(
-      'Incorrect credentials',
+      'Incorrect credentials.',
       name: 'incorrectCredentials',
       desc: '',
       args: [],
     );
   }
 
-  /// `Some went wrong`
+  /// `Something went wrong.`
   String get somethingWentWrong {
     return Intl.message(
-      'Some went wrong',
+      'Something went wrong.',
       name: 'somethingWentWrong',
       desc: '',
       args: [],
@@ -855,6 +865,216 @@ class S {
     return Intl.message(
       'You',
       name: 'you',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{follower} started following you.`
+  String xFollowedY(Object follower) {
+    return Intl.message(
+      '$follower started following you.',
+      name: 'xFollowedY',
+      desc: '',
+      args: [follower],
+    );
+  }
+
+  /// `Profile updated`
+  String get profileUpdated {
+    return Intl.message(
+      'Profile updated',
+      name: 'profileUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fix errors and submit`
+  String get fixErrorsAbove {
+    return Intl.message(
+      'Fix errors and submit',
+      name: 'fixErrorsAbove',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oops!`
+  String get emptyTitle {
+    return Intl.message(
+      'Oops!',
+      name: 'emptyTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No recipes found here. Be the first to post under this category.`
+  String get noRecipesFound {
+    return Intl.message(
+      'No recipes found here. Be the first to post under this category.',
+      name: 'noRecipesFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hang on`
+  String get hangOn {
+    return Intl.message(
+      'Hang on',
+      name: 'hangOn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your recipe is being published.`
+  String get publishingSummary {
+    return Intl.message(
+      'Your recipe is being published.',
+      name: 'publishingSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create your password`
+  String get createNewPassword {
+    return Intl.message(
+      'Create your password',
+      name: 'createNewPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter the email associated with your account and We'll send an email with instructions to reset your password.`
+  String get resetNewPasswordSummary {
+    return Intl.message(
+      'Enter the email associated with your account and We\'ll send an email with instructions to reset your password.',
+      name: 'resetNewPasswordSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send Instructions`
+  String get sendInstructions {
+    return Intl.message(
+      'Send Instructions',
+      name: 'sendInstructions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset Password`
+  String get resetPassword {
+    return Intl.message(
+      'Reset Password',
+      name: 'resetPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Code`
+  String get code {
+    return Intl.message(
+      'Code',
+      name: 'code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passwords must match.`
+  String get passwordsMustMatch {
+    return Intl.message(
+      'Passwords must match.',
+      name: 'passwordsMustMatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password should container at least 8 characters.`
+  String get passwordShouldContainAtleastEightChars {
+    return Intl.message(
+      'Password should container at least 8 characters.',
+      name: 'passwordShouldContainAtleastEightChars',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Code cannot be empty.`
+  String get codeIsEmpty {
+    return Intl.message(
+      'Code cannot be empty.',
+      name: 'codeIsEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Find your comfort food here`
+  String get onboardingOneTitle {
+    return Intl.message(
+      'Find your comfort food here',
+      name: 'onboardingOneTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Here you can find a chef or dish for every taste and color. Enjoy!`
+  String get onboardingOneSummary {
+    return Intl.message(
+      'Here you can find a chef or dish for every taste and color. Enjoy!',
+      name: 'onboardingOneSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Food Ninja is where your comfort food lives`
+  String get onboardingTwoTitle {
+    return Intl.message(
+      'Food Ninja is where your comfort food lives',
+      name: 'onboardingTwoTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enjoy a fast and smooth food delivery at your doorstep.`
+  String get onboardingTwoSummary {
+    return Intl.message(
+      'Enjoy a fast and smooth food delivery at your doorstep.',
+      name: 'onboardingTwoSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a valid email.`
+  String get enterAValidEmail {
+    return Intl.message(
+      'Enter a valid email.',
+      name: 'enterAValidEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password updated`
+  String get passwordUpdated {
+    return Intl.message(
+      'Password updated',
+      name: 'passwordUpdated',
       desc: '',
       args: [],
     );

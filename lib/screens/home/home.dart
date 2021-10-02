@@ -6,6 +6,8 @@ import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/feed_provider.dart';
+import 'package:hing/screens/components/empty_illustration.dart';
+import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:hing/screens/home/components/feed_item.dart';
 import 'package:hing/screens/home/components/home_tab_delegate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -92,8 +94,10 @@ class _HomeScreenState extends State<HomeScreen>
                                           .withOpacity(.1),
                                       borderRadius: BorderRadius.circular(24)),
                                   child: Text(e,
-                                      style:
-                                          Theme.of(context).textTheme.button),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1
+                                          ?.copyWith(fontSize: 14.0)),
                                 ),
                               )))
                           .toList(),
@@ -133,7 +137,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                   ..[index] = newRecipe;
                                             _pagingControllers[key].itemList =
                                                 updatedRecipes;
-                                          })),
+                                          }),
+                                          noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration()),
                             ),
                           )))
                       .values
@@ -158,21 +163,22 @@ class _HomeAppBarState extends State<HomeAppBar> {
     final HingUser? user = Hive.box<HingUser>(kUserBox).get(kUserKey);
 
     return SliverAppBar(
-        floating: true,
         automaticallyImplyLeading: false,
         title: SvgPicture.asset('assets/logo.svg'),
         bottom: PreferredSize(
-            preferredSize: Size.fromHeight(48),
+            preferredSize: Size.fromHeight(56),
             child: Container(
                 alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.only(left: 16, right: 16),
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
                 child: Text(
                   S.of(context).categories,
                   style: Theme.of(context).textTheme.headline5,
                 ))),
         actions: [
           IconButton(
-              onPressed: () => {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(kNotificationRoute);
+              },
               icon:
                   SizedBox(child: SvgPicture.asset('assets/notification.svg'))),
           IconButton(
@@ -182,28 +188,16 @@ class _HomeAppBarState extends State<HomeAppBar> {
                 Navigator.of(context)
                     .pushNamed(kMyProfileRoute, arguments: user);
               },
-              icon: user == null
-                  ? CircleAvatar(
-                      radius: 16,
-                      child: Icon(Icons.person_rounded,
-                          color: Theme.of(context).colorScheme.onSurface),
-                      backgroundColor: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(.25),
-                    )
-                  : CachedNetworkImage(
-                      imageUrl: '$kBaseUrl/${user.image}',
-                      errorWidget: (_, __, ___) => CircleAvatar(
-                        radius: 16,
-                        child: Icon(Icons.person_rounded,
-                            color: Theme.of(context).colorScheme.onSurface),
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(.25),
-                      ),
-                    )),
+              icon: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: CachedNetworkImage(
+                    height: 32,
+                    width: 32,
+                    fit: BoxFit.cover,
+                    imageUrl: '$kBaseUrl/${user?.image}',
+                    errorWidget: (_, __, ___) => const UserPlaceholder(),
+                    placeholder: (_, __) => const UserPlaceholder(),
+                  ))),
         ]);
   }
 }

@@ -9,6 +9,7 @@ import 'package:hing/screens/newrecipe/components/ingredients_list.dart';
 import 'package:hing/screens/newrecipe/components/media_picker.dart';
 import 'package:hing/screens/newrecipe/components/new_integredient_sheet.dart';
 import 'package:hing/screens/newrecipe/components/preview_media.dart';
+import 'package:hing/screens/newrecipe/publishing_sheet.dart';
 import 'package:hing/theme/colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -186,9 +187,28 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                                 jsonEncode(_recipeProvider.ingredients)
                           };
 
+                          // Show publishing sheet.
+                          showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              enableDrag: false,
+                              isDismissible: false,
+                              builder: (_) => SafeArea(
+                                  child: Padding(
+                                      padding: const EdgeInsets.all(24),
+                                      child: const PublishingSheet())),
+                              backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(24))));
+
                           final isRecipeCreated = await _recipeProvider
                               .createRecipe(recipe: recipe);
                           if (!isRecipeCreated) {
+                            // Dimiss publishing sheet.
+                            Navigator.of(context).pop();
+
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content:
                                     Text(S.of(context).somethingWentWrong)));
@@ -196,10 +216,10 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                           }
 
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content:
-                                    Text(S.of(context).newRecipeCreated)));
+                              content: Text(S.of(context).newRecipeCreated)));
 
-                          Navigator.of(context).pop();
+                          Navigator.of(context)
+                              .pushNamedAndRemoveUntil(kHomeRoute, (route) => false);
                         },
                         child: Text(S.of(context).publish),
                         style: ElevatedButton.styleFrom(

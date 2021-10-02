@@ -2,7 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/models/recipe/recipe.dart';
+import 'package:hing/screens/components/error_illustration.dart';
+import 'package:hing/screens/components/toque_placeholder.dart';
+import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class FeedItemBody extends StatefulWidget {
   final int index;
@@ -53,9 +57,8 @@ class _FeedItemBodyState extends State<FeedItemBody> {
                           '$kBaseUrl/${widget.recipe.media.first.mediaPath}',
                       height: 208,
                       width: double.infinity,
-                      errorWidget: (_, __, ___) => Placeholder(
-                        fallbackHeight: 208,
-                      ),
+                      errorWidget: (_, __, ___) => const ErrorIllustration(),
+                      placeholder: (_, __) => const ToqueAnimation(size: 8.0,),
                     )
                   : GestureDetector(
                       onTap: () {
@@ -64,7 +67,7 @@ class _FeedItemBodyState extends State<FeedItemBody> {
                         else
                           _videoPlayerController!.play();
                       },
-                      child: _videoPlayerController!.value.isInitialized
+                      child: _videoPlayerController?.value.isInitialized ?? false
                           ? AspectRatio(
                               aspectRatio:
                                   _videoPlayerController!.value.aspectRatio,

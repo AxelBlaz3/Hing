@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/models/recipe/recipe.dart';
+import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:hing/theme/colors.dart';
 
 class FeedItemProfile extends StatefulWidget {
@@ -24,22 +25,14 @@ class _FeedItemProfileState extends State<FeedItemProfile> {
           borderRadius: BorderRadius.circular(24),
           child: widget.recipe.user.image != null
               ? CachedNetworkImage(
+                fit: BoxFit.cover,
                   height: 36,
                   width: 36,
                   imageUrl: '$kBaseUrl/${widget.recipe.user.image}',
-                  errorWidget: (_, __, ___) => CircleAvatar(
-                      radius: 36,
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      child: Icon(Icons.person_rounded,
-                          color: Theme.of(context).colorScheme.onSurface)),
+                  errorWidget: (_, __, ___) => const UserPlaceholder(size: 24),
+                  placeholder: (_, __) => const UserPlaceholder(size: 24),
                 )
-              : CircleAvatar(
-                  radius: 20,
-                  backgroundColor:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(.15),
-                  child: Icon(Icons.person_rounded,
-                      color: Theme.of(context).colorScheme.onSurface)),
+              : const UserPlaceholder(size: 24),
         ),
         SizedBox(width: 8),
         Expanded(

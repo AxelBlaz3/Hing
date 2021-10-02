@@ -14,7 +14,7 @@ class HingUser {
   @HiveField(1)
   final String? email;
   @HiveField(2)
-  final String? image;
+  String? image;
   @HiveField(3)
   @JsonKey(name: 'display_name')
   final String displayName;

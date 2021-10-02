@@ -28,6 +28,7 @@ class _CommentHeaderState extends State<CommentHeader> {
                 borderRadius: BorderRadius.circular(24),
                 child: widget.comment.user.image != null
                     ? CachedNetworkImage(
+                        fit: BoxFit.cover,
                         height: widget.isReply ? 24 : 40,
                         width: widget.isReply ? 24 : 40,
                         imageUrl: '$kBaseUrl/${widget.comment.user.image}',

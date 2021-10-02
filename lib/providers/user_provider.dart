@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
+import 'package:hing/models/hing_notification/hing_notification.dart';
 import 'package:hing/repository/user_repository.dart';
+import 'package:image_picker/image_picker.dart';
 
 class UserProvider extends ChangeNotifier {
   final UserRepository userRepository;
 
   UserProvider({required this.userRepository});
+
+  XFile? _editProfileImage;
+
+  XFile? get editProfileImage => _editProfileImage;
+
+  void setEditProfileImage(XFile? image) {
+    _editProfileImage = image;
+    notifyListeners();
+  }
+
+  void notifyUserChanges() {
+    notifyListeners();
+  }
 
   Future<dynamic> login(
       {required String email, required String password}) async {
@@ -21,11 +36,21 @@ class UserProvider extends ChangeNotifier {
         email: email, password: password, displayName: displayName);
   }
 
-  Future<List<HingUser>> getFollowers({int page = 1, String? userId}) async {
+  Future<bool> sendVerificationCode({required String email}) async {
+    return await userRepository.sendVerificationCode(email: email);
+  }
+
+  Future<bool> createNewPassword({required String email, required String password, required String code}) async {
+    return await userRepository.createNewPassword(email: email, password: password, code: code);
+  }
+
+  Future<List<HingUser>> getFollowers(
+      {int page = 1, required String userId}) async {
     return await userRepository.getFollowers(page: page, userId: userId);
   }
 
-  Future<List<HingUser>> getFollowing({int page = 1, String? userId}) async {
+  Future<List<HingUser>> getFollowing(
+      {int page = 1, required String userId}) async {
     return await userRepository.getFollowing(page: page, userId: userId);
   }
 
@@ -37,13 +62,24 @@ class UserProvider extends ChangeNotifier {
     return await userRepository.getPosts(page: page, userId: userId);
   }
 
-  Future<bool> followUser(
-      {required String followeeId}) async {
+  Future<bool> followUser({required String followeeId}) async {
     return await userRepository.followUser(followeeId: followeeId);
   }
 
-  Future<bool> unFollowUser(
-      {required String followeeId}) async {
+  Future<bool> unFollowUser({required String followeeId}) async {
     return await userRepository.unFollowUser(followeeId: followeeId);
+  }
+
+  Future<List<HingNotification>> getNotifications(
+      {int page = 1, int perPage = 10}) async {
+    return await userRepository.getNotifications(page: page);
+  }
+
+  Future<bool> updateUser(
+      {required String displayName,
+      required String email,
+      XFile? image}) async {
+    return await userRepository.updateUser(
+        email: email, displayName: displayName, image: image);
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
+import 'package:hing/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class ProfileDetails extends StatefulWidget {
   final HingUser user;
@@ -11,6 +13,15 @@ class ProfileDetails extends StatefulWidget {
 }
 
 class _ProfileDetailsState extends State<ProfileDetails> {
+  late HingUser user;
+
+  @override
+  void initState() {
+    super.initState();
+
+    user = widget.user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,19 +35,58 @@ class _ProfileDetailsState extends State<ProfileDetails> {
         SizedBox(
           height: 4,
         ),
-        widget.user.isFollowing!
-            ? OutlinedButton(
-                onPressed: () => {},
-                child: Text(S.of(context).unfollow),
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16)),
-              )
-            : ElevatedButton(
-                onPressed: () => {},
-                child: Text(S.of(context).follow),
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16)),
-              )
+        Consumer<UserProvider>(
+            builder: (_, userProvider, __) => user.isFollowing!
+                ? OutlinedButton(
+                    onPressed: () {
+                      final UserProvider userProvider =
+                          context.read<UserProvider>();
+
+                      userProvider
+                          .unFollowUser(followeeId: widget.user.id.oid)
+                          .then((success) {
+                        if (success) {
+                          final UserProvider userProvider =
+                              context.read<UserProvider>();
+                          user = user..isFollowing = !user.isFollowing!;
+
+                          userProvider.notifyUserChanges();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(S.of(context).somethingWentWrong)));
+                        }
+                      });
+                    },
+                    child: Text(S.of(context).unfollow),
+                    style: ElevatedButton.styleFrom(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 8, horizontal: 16)),
+                  )
+                : ElevatedButton(
+                    onPressed: () {
+                      final UserProvider userProvider =
+                          context.read<UserProvider>();
+
+                      userProvider
+                          .followUser(followeeId: widget.user.id.oid)
+                          .then((success) {
+                        if (success) {
+                          final UserProvider userProvider =
+                              context.read<UserProvider>();
+                          user = user..isFollowing = !user.isFollowing!;
+
+                          userProvider.notifyUserChanges();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text(S.of(context).somethingWentWrong)));
+                        }
+                      });
+                    },
+                    child: Text(S.of(context).follow),
+                    style: ElevatedButton.styleFrom(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 8, horizontal: 16)),
+                  ))
       ],
     );
   }

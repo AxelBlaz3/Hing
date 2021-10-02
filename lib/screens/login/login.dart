@@ -16,6 +16,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool isValidated = false;
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -40,103 +43,133 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                       alignment: Alignment.bottomCenter,
                       child: Form(
+                          key: _formKey,
+                          onChanged: () {
+                            setState(() {
+                              isValidated =
+                                  _formKey.currentState?.validate() ?? false;
+                            });
+                          },
                           child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Text(
-                            S.of(context).loginToYourAccount,
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                          SizedBox(
-                            height: 32,
-                          ),
-                          TextFormField(
-                            validator: (text) {
-                              if (text == null || text.isEmpty)
-                                return S.of(context).emailCannotBeEmpty;
-                            },
-                            controller: _emailController,
-                            decoration: InputDecoration(
-                                hintText: S.of(context).email,
-                                prefixIcon: IconButton(
-                                    onPressed: null,
-                                    icon: SvgPicture.asset(
-                                      'assets/mail.svg',
-                                    ))),
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          TextFormField(
-                            validator: (text) {
-                              if (text == null || text.isEmpty)
-                                return S.of(context).passwordCannotBeEmpty;
-                              else if (text.length < 8)
-                                return S
-                                    .of(context)
-                                    .passwordMustBeAtLeast8Chars;
-                            },
-                            controller: _passwordController,
-                            decoration: InputDecoration(
-                                hintText: S.of(context).password,
-                                prefixIcon: IconButton(
-                                    onPressed: null,
-                                    icon: SvgPicture.asset(
-                                      'assets/lock.svg',
-                                    ))),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: () => {
-                                Navigator.of(context)
-                                    .pushNamed(kResetPasswordRoute)
-                              },
-                              child: Text(S.of(context).forgotYourPassword),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 48,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              final UserProvider authProvider =
-                                  context.read<UserProvider>();
-                              authProvider
-                                  .login(
-                                      email: _emailController.text,
-                                      password: _passwordController.text)
-                                  .then((response) => (response is HingUser?)
-                                      ? Navigator.of(context)
-                                          .pushReplacementNamed(kHomeRoute)
-                                      : ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(response == 403
-                                                  ? S
-                                                      .of(context)
-                                                      .incorrectCredentials
-                                                  : S
-                                                      .of(context)
-                                                      .somethingWentWrong))));
-                            },
-                            child: Text(S.of(context).login),
-                            style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(vertical: 24),
-                                minimumSize: Size(
-                                    MediaQuery.of(context).size.width, 48)),
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          TextButton(
-                            onPressed: () => {
-                              Navigator.of(context)
-                                  .pushReplacementNamed(kSignupRoute)
-                            },
-                            child: Text(S.of(context).createAccount),
-                          ),
-                        ],
-                      )))))),
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/logo.svg',
+                                height: 48,
+                              ),
+                              SizedBox(
+                                height: 32,
+                              ),
+                              Text(
+                                S.of(context).loginToYourAccount,
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                              SizedBox(
+                                height: 32,
+                              ),
+                              TextFormField(
+                                validator: (text) =>
+                                    text == null || text.isEmpty
+                                        ? S.of(context).emailCannotBeEmpty
+                                        : null,
+                                controller: _emailController,
+                                decoration: InputDecoration(
+                                    hintText: S.of(context).email,
+                                    prefixIcon: IconButton(
+                                        onPressed: null,
+                                        icon: SvgPicture.asset(
+                                          'assets/mail.svg',
+                                        ))),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              TextFormField(
+                                validator: (text) =>
+                                    text == null || text.isEmpty
+                                        ? S.of(context).passwordCannotBeEmpty
+                                        : null,
+                                controller: _passwordController,
+                                obscureText: _obscurePassword,
+                                decoration: InputDecoration(
+                                    hintText: S.of(context).password,
+                                    suffixIcon: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            _obscurePassword =
+                                                !_obscurePassword;
+                                          });
+                                        },
+                                        icon: Icon(Icons.visibility_rounded,
+                                            color: !_obscurePassword
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
+                                                : Colors.grey)),
+                                    prefixIcon: IconButton(
+                                        onPressed: null,
+                                        icon: SvgPicture.asset(
+                                          'assets/lock.svg',
+                                        ))),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () => {
+                                    Navigator.of(context)
+                                        .pushNamed(kResetPasswordRoute)
+                                  },
+                                  child: Text(S.of(context).forgotYourPassword),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 48,
+                              ),
+                              ElevatedButton(
+                                onPressed: !isValidated
+                                    ? null
+                                    : () {
+                                        final UserProvider authProvider =
+                                            context.read<UserProvider>();
+                                        authProvider
+                                            .login(
+                                                email: _emailController.text,
+                                                password:
+                                                    _passwordController.text)
+                                            .then((response) => (response
+                                                    is HingUser?)
+                                                ? Navigator.of(context)
+                                                    .pushReplacementNamed(
+                                                        kHomeRoute)
+                                                : ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(response ==
+                                                                403
+                                                            ? S
+                                                                .of(context)
+                                                                .incorrectCredentials
+                                                            : S
+                                                                .of(context)
+                                                                .somethingWentWrong))));
+                                      },
+                                child: Text(S.of(context).login),
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(vertical: 24),
+                                    minimumSize: Size(
+                                        MediaQuery.of(context).size.width, 48)),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              TextButton(
+                                onPressed: () => {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed(kSignupRoute)
+                                },
+                                child: Text(S.of(context).createAccount),
+                              ),
+                            ],
+                          )))))),
     ]));
   }
 }

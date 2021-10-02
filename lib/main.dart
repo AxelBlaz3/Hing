@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hing/constants.dart';
@@ -13,9 +15,12 @@ import 'package:hing/repository/user_repository.dart';
 import 'package:hing/routes.dart';
 import 'package:hing/screens/home/home.dart';
 import 'package:hing/screens/login/login.dart';
+import 'package:hing/screens/onboarding/onboarding.dart';
+import 'package:hing/theme/colors.dart';
 import 'package:hing/theme/theme.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   final UserRepository _userRepository = UserRepository();
@@ -34,6 +39,9 @@ void main() async {
 
   final bool isLoggedIn =
       Hive.box<HingUser>(kUserBox).get(kUserKey, defaultValue: null) != null;
+  final bool isOnboardingDone =
+      (await SharedPreferences.getInstance()).getBool(kOnBoardingPrefKey) ??
+          false;
 
   runApp(MultiProvider(
     providers: [
@@ -44,35 +52,53 @@ void main() async {
       ChangeNotifierProvider(create: (_) => _authProvider),
       ChangeNotifierProvider(create: (_) => _recipeProvider)
     ],
-    child: HingApp(
-      isLoggedIn: isLoggedIn,
-    ),
+    child: HingApp(isLoggedIn: isLoggedIn, isOnBoardingDone: isOnboardingDone),
   ));
 }
 
 class HingApp extends StatefulWidget {
   final bool isLoggedIn;
-  const HingApp({Key? key, required this.isLoggedIn}) : super(key: key);
+  final bool isOnBoardingDone;
+  const HingApp({Key? key, required this.isLoggedIn, required this.isOnBoardingDone}) : super(key: key);
 
   @override
   _HingAppState createState() => _HingAppState();
 }
 
 class _HingAppState extends State<HingApp> {
+  Future<void> _initializeFirebase() async {
+    await Firebase.initializeApp();
+
+    FirebaseMessaging.onMessage.listen((message) {
+      print(message.notification);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: HingTheme.getHingThemeData(ThemeData.light()),
-      onGenerateRoute: RouteGenerator.onGenerateRoutes,
-      localizationsDelegates: [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      home: widget.isLoggedIn ? HomeScreen() : LoginScreen(),
-    );
+    return FutureBuilder(
+        future: _initializeFirebase(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return Center(
+                child: CircularProgressIndicator(
+              color: kOnSurfaceColor,
+            ));
+          }
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: HingTheme.getHingThemeData(ThemeData.light()),
+            onGenerateRoute: RouteGenerator.onGenerateRoutes,
+            localizationsDelegates: [
+              S.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: S.delegate.supportedLocales,
+            home: widget.isLoggedIn ? HomeScreen() : widget.isOnBoardingDone ? LoginScreen() : OnboardingScreen(index: 1,),
+          );
+        });
   }
 }

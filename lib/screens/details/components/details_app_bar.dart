@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hing/models/recipe/recipe.dart';
@@ -14,13 +16,20 @@ class DetailsAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 350,
-      leading: Container(
-        padding: EdgeInsets.only(left: 8),
-        decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(.25),
-            borderRadius: BorderRadius.circular(24)),
-        child: BackButton(),
-      ),
+      leadingWidth: 72,
+      leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(48),
+              child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 4.0,
+                    sigmaY: 4.0,
+                  ),
+                  child: ColoredBox(
+                    color: const Color(0xFFC4C4C4).withOpacity(.5),
+                    child: BackButton(),
+                  )))),
       flexibleSpace: Stack(
         children: [
           Positioned.fill(

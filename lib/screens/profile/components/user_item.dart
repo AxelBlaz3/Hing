@@ -4,6 +4,7 @@ import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/providers/user_provider.dart';
+import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -35,24 +36,20 @@ class _UserItemState extends State<UserItem> {
               borderRadius: BorderRadius.circular(24),
               child: widget.user.image != null
                   ? CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      height: 48,
+                      width: 48,
                       imageUrl: '$kBaseUrl/${widget.user.image}',
-                      errorWidget: (_, __, ___) => CircleAvatar(
-                          radius: 24,
-                          child: Icon(Icons.person_rounded,
-                              color: Theme.of(context).colorScheme.onSurface),
-                          backgroundColor: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withOpacity(.25)),
+                      placeholder: (_, __) => const UserPlaceholder(
+                        size: 24,
+                      ),
+                      errorWidget: (_, __, ___) => const UserPlaceholder(
+                        size: 24,
+                      ),
                     )
-                  : CircleAvatar(
-                      radius: 24,
-                      child: Icon(Icons.person_rounded,
-                          color: Theme.of(context).colorScheme.onSurface),
-                      backgroundColor: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withOpacity(.25)),
+                  : const UserPlaceholder(
+                      size: 24,
+                    ),
             ),
             SizedBox(
               width: 16,
@@ -68,7 +65,7 @@ class _UserItemState extends State<UserItem> {
             SizedBox(
               width: 16,
             ),
-            widget.isFollowing
+            widget.user.isFollowing ?? false
                 ? OutlinedButton(
                     onPressed: user.id.oid == widget.user.id.oid
                         ? null

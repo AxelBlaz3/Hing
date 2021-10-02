@@ -20,14 +20,19 @@ class _ProfileHeaderState extends State<ProfileHeader> {
         padding: EdgeInsets.only(left: 24, right: 24, top: 24),
         child: Row(
           children: [
-            ProfilePhoto(),
+            Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(48),
+                    border: Border.all(
+                        width: 2,
+                        color: Theme.of(context).colorScheme.primary)),
+                child: ProfilePhoto(
+                  user: widget.user,
+                  size: 56,
+                )),
             SizedBox(width: 16),
-            Expanded(child: ProfileDetails(user: widget.user)),
-            IconButton(
-              onPressed: () =>
-                  {Navigator.of(context).pushNamed(kEditProfileRoute)},
-              icon: SvgPicture.asset('assets/edit.svg'),
-            )
+            Expanded(child: ProfileDetails(user: widget.user))
           ],
         ));
   }

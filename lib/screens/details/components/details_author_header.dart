@@ -7,7 +7,7 @@ import 'package:hing/screens/home/components/feed_item_profile.dart';
 import 'package:provider/provider.dart';
 
 class DetailsAuthorHeader extends StatefulWidget {
-  Recipe recipe;
+  final Recipe recipe;
   DetailsAuthorHeader({Key? key, required this.recipe}) : super(key: key);
 
   @override
@@ -15,10 +15,19 @@ class DetailsAuthorHeader extends StatefulWidget {
 }
 
 class _DetailsAuthorHeaderState extends State<DetailsAuthorHeader> {
+  late Recipe recipe;
+
+  @override
+  void initState() {
+    super.initState();
+
+    recipe = widget.recipe;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(bottom: 24),
+        padding: EdgeInsets.only(bottom: 8),
         child: Row(
           children: [
             Expanded(
@@ -26,7 +35,7 @@ class _DetailsAuthorHeaderState extends State<DetailsAuthorHeader> {
                     recipe: widget.recipe, isDetailScreen: true)),
             Consumer<RecipeProvider>(
                 builder: (_, recipeProvider, __) => widget
-                            .recipe.user.isFollowing!
+                        .recipe.user.isFollowing!
                     ? OutlinedButton(
                         onPressed: () async {
                           final bool isUnfollowed = await context
@@ -35,8 +44,9 @@ class _DetailsAuthorHeaderState extends State<DetailsAuthorHeader> {
                                   followeeId: widget.recipe.user.id.oid);
 
                           if (isUnfollowed) {
-                            widget.recipe = widget.recipe..user
-                              .isFollowing = !widget.recipe.user.isFollowing!;
+                            recipe = recipe
+                              ..user.isFollowing =
+                                  !recipe.user.isFollowing!;
                             context
                                 .read<RecipeProvider>()
                                 .notifyRecipeChanges();
@@ -61,9 +71,10 @@ class _DetailsAuthorHeaderState extends State<DetailsAuthorHeader> {
                                   followeeId: widget.recipe.user.id.oid);
 
                           if (isFollowed) {
-                            widget.recipe = widget.recipe..user
-                              .isFollowing = !widget.recipe.user.isFollowing!;
-                              
+                            recipe = recipe
+                              ..user.isFollowing =
+                                  !recipe.user.isFollowing!;
+
                             context
                                 .read<RecipeProvider>()
                                 .notifyRecipeChanges();

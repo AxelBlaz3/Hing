@@ -46,6 +46,30 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   recipe.title,
                                   style: Theme.of(context).textTheme.headline5,
                                 ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Row(
+                                  children: [
+                                    Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(.1)),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 8),
+                                        child: Text(
+                                          'MEXICAN',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .overline,
+                                        )),
+                                    Expanded(child: SizedBox())
+                                  ],
+                                ),
                                 Padding(
                                     padding: EdgeInsets.symmetric(vertical: 8),
                                     child: DetailsTab())

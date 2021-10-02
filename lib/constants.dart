@@ -2,6 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:hing/generated/l10n.dart';
 
+// Shared preferences keys
+const String kOnBoardingPrefKey = 'HING.ONBOARDING_KEY';
+
+// Email regex.
+final emailRegexPattern = RegExp(
+    r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+
 const String kBaseUrl = 'http://192.168.1.48:4999';
 const int kAPIVersion = 1;
 const String kAPIPrefix = 'api/v$kAPIVersion';
@@ -21,14 +28,21 @@ const String kAPIPostNewCommentRoute = '$kBaseUrl/$kAPIPrefix/comment';
 const String kAPILikeCommentRoute = '$kBaseUrl/$kAPIPrefix/comment/like';
 const String kAPIUnLikeCommentRoute = '$kBaseUrl/$kAPIPrefix/comment/unlike';
 const String kAPILikeReplyRoute = '$kBaseUrl/$kAPIPrefix/comment/reply/like';
-const String kAPIUnLikeReplyRoute = '$kBaseUrl/$kAPIPrefix/comment/reply/unlike';
+const String kAPIUnLikeReplyRoute =
+    '$kBaseUrl/$kAPIPrefix/comment/reply/unlike';
 const String kAPIPostNewReplyRoute = '$kBaseUrl/$kAPIPrefix/comment/reply';
 const String kAPIGetFollowingRoute = '$kBaseUrl/$kAPIPrefix/user/{}/following';
 const String kAPIGetFollowersRoute = '$kBaseUrl/$kAPIPrefix/user/{}/followers';
+const String kAPIGetNotificationsRoute =
+    '$kBaseUrl/$kAPIPrefix/user/{}/notifications';
 const String kAPIGetFavoritesRoute = '$kBaseUrl/$kAPIPrefix/user/{}/favorites';
 const String kAPIGetPostsRoute = '$kBaseUrl/$kAPIPrefix/user/{}/posts';
 const String kAPIFollowUserRoute = '$kBaseUrl/$kAPIPrefix/user/follow';
 const String kAPIUnFollowUserRoute = '$kBaseUrl/$kAPIPrefix/user/unfollow';
+const String kAPIUpdateUserRoute = '$kBaseUrl/$kAPIPrefix/user/update';
+const String kAPISendVerificationEmailRoute =
+    '$kBaseUrl/$kAPIPrefix/user/send/resetcode';
+const String kAPICreatePasswordRoute = '$kBaseUrl/$kAPIPrefix/user/create/password';
 
 // Route names
 const String kLoginRoute = '/login';
@@ -39,11 +53,13 @@ const String kProfileRoute = '/profile';
 const String kMyProfileRoute = '/myProfile';
 const String kUploadRecipe = '/upload';
 const String kEditProfileRoute = '/editProfile';
-const String kResetPasswordRoute = '/resetpassword';
-const String kOnboardingRoute = '/onboarding';
+const String kResetPasswordRoute = '/resetPassword';
+const String kOnBoardingRoute = '/onboarding';
 const String kCommentsRoute = '/comments';
 const String kRepliesRoute = '/replies';
 const String kDetailsRoute = '/details';
+const String kNotificationRoute = '/notifications';
+const String kCreatePasswordRoute = '/createPassword';
 
 // Categories
 const List<String> allCategories = <String>[
@@ -75,9 +91,9 @@ List<String> getHomeCategories(BuildContext context) =>
 const int kTotalProfileCategories = 4;
 List<String> getMyProfileTabTitles(BuildContext context) => <String>[
       S.of(context).posts,
-      S.of(context).following,
+      S.of(context).favorites,
       S.of(context).followers,
-      S.of(context).favorites
+      S.of(context).following
     ];
 
 List<String> getQuantityUnits() =>
@@ -96,6 +112,7 @@ const int kRecipeType = 3;
 const int kMediaType = 4;
 const int kCommentType = 5;
 const int kTimestampType = 6;
+const int kHingNotificationType = 7;
 
 // Hive boxes
 const String kUserBox = 'userBox';

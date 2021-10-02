@@ -21,9 +21,11 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(commentsCount) => "${commentsCount} comments";
 
-  static String m1(likesCount) => "${likesCount} likes";
+  static String m1(follower) => "${follower} started following you.";
 
-  static String m2(repliesCount) => "${repliesCount} replies";
+  static String m2(likesCount) => "${likesCount} likes";
+
+  static String m3(repliesCount) => "${repliesCount} replies";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -38,6 +40,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "categories": MessageLookupByLibrary.simpleMessage("Categories"),
         "category": MessageLookupByLibrary.simpleMessage("Category"),
         "chinese": MessageLookupByLibrary.simpleMessage("CHINESE"),
+        "code": MessageLookupByLibrary.simpleMessage("Code"),
+        "codeIsEmpty":
+            MessageLookupByLibrary.simpleMessage("Code cannot be empty."),
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
         "comments": MessageLookupByLibrary.simpleMessage("Comments"),
         "confirmPassword":
@@ -49,25 +54,33 @@ class MessageLookup extends MessageLookupByLibrary {
         "createAccount": MessageLookupByLibrary.simpleMessage("Create account"),
         "createAnAccount":
             MessageLookupByLibrary.simpleMessage("Create an account"),
+        "createNewPassword":
+            MessageLookupByLibrary.simpleMessage("Create your password"),
         "description": MessageLookupByLibrary.simpleMessage("Description"),
         "displayName": MessageLookupByLibrary.simpleMessage("Display name"),
         "done": MessageLookupByLibrary.simpleMessage("DONE"),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit Profile"),
         "email": MessageLookupByLibrary.simpleMessage("Email"),
         "emailCannotBeEmpty":
-            MessageLookupByLibrary.simpleMessage("Email cannot be empty"),
-        "emailNotAvailable":
-            MessageLookupByLibrary.simpleMessage("That email is not available"),
+            MessageLookupByLibrary.simpleMessage("Email cannot be empty."),
+        "emailNotAvailable": MessageLookupByLibrary.simpleMessage(
+            "That email is not available."),
+        "emptyTitle": MessageLookupByLibrary.simpleMessage("Oops!"),
+        "enterAValidEmail":
+            MessageLookupByLibrary.simpleMessage("Enter a valid email."),
         "favorites": MessageLookupByLibrary.simpleMessage("Favorites"),
+        "fixErrorsAbove":
+            MessageLookupByLibrary.simpleMessage("Fix errors and submit"),
         "follow": MessageLookupByLibrary.simpleMessage("Follow"),
         "followers": MessageLookupByLibrary.simpleMessage("Followers"),
         "following": MessageLookupByLibrary.simpleMessage("Following"),
         "forgotYourPassword":
             MessageLookupByLibrary.simpleMessage("Forgot your password?"),
+        "hangOn": MessageLookupByLibrary.simpleMessage("Hang on"),
         "hing": MessageLookupByLibrary.simpleMessage("Hing"),
         "image": MessageLookupByLibrary.simpleMessage("Image"),
         "incorrectCredentials":
-            MessageLookupByLibrary.simpleMessage("Incorrect credentials"),
+            MessageLookupByLibrary.simpleMessage("Incorrect credentials."),
         "indian": MessageLookupByLibrary.simpleMessage("INDIAN"),
         "ingredientCannotBeEmptyError": MessageLookupByLibrary.simpleMessage(
             "Ingredient name cannot be empty"),
@@ -81,6 +94,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "logout": MessageLookupByLibrary.simpleMessage("Logout"),
         "mexican": MessageLookupByLibrary.simpleMessage("MEXICAN"),
         "name": MessageLookupByLibrary.simpleMessage("Name"),
+        "nameCannotBeEmpty":
+            MessageLookupByLibrary.simpleMessage("Name cannot be empty."),
         "newIngredient": MessageLookupByLibrary.simpleMessage("New Ingredient"),
         "newIngredientSummary": MessageLookupByLibrary.simpleMessage(
             "You can add more ingredients by clicking the ADD MORE button"),
@@ -88,18 +103,39 @@ class MessageLookup extends MessageLookupByLibrary {
         "newRecipeCreated":
             MessageLookupByLibrary.simpleMessage("New recipe created."),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
+        "noRecipesFound": MessageLookupByLibrary.simpleMessage(
+            "No recipes found here. Be the first to post under this category."),
+        "onboardingOneSummary": MessageLookupByLibrary.simpleMessage(
+            "Here you can find a chef or dish for every taste and color. Enjoy!"),
+        "onboardingOneTitle":
+            MessageLookupByLibrary.simpleMessage("Find your comfort food here"),
+        "onboardingTwoSummary": MessageLookupByLibrary.simpleMessage(
+            "Enjoy a fast and smooth food delivery at your doorstep."),
+        "onboardingTwoTitle": MessageLookupByLibrary.simpleMessage(
+            "Food Ninja is where your comfort food lives"),
         "others": MessageLookupByLibrary.simpleMessage("OTHERS"),
         "password": MessageLookupByLibrary.simpleMessage("Password"),
         "passwordCannotBeEmpty":
-            MessageLookupByLibrary.simpleMessage("Password cannot be empty"),
+            MessageLookupByLibrary.simpleMessage("Password cannot be empty."),
         "passwordMustBeAtLeast8Chars":
-            MessageLookupByLibrary.simpleMessage("Min 8 chars"),
+            MessageLookupByLibrary.simpleMessage("Min. 8 chars."),
         "passwordResetSuccessful":
             MessageLookupByLibrary.simpleMessage("Password reset successful"),
+        "passwordShouldContainAtleastEightChars":
+            MessageLookupByLibrary.simpleMessage(
+                "Password should container at least 8 characters."),
+        "passwordUpdated":
+            MessageLookupByLibrary.simpleMessage("Password updated"),
+        "passwordsMustMatch":
+            MessageLookupByLibrary.simpleMessage("Passwords must match."),
         "posts": MessageLookupByLibrary.simpleMessage("Posts"),
         "preview": MessageLookupByLibrary.simpleMessage("PREVIEW"),
         "profile": MessageLookupByLibrary.simpleMessage("Profile"),
+        "profileUpdated":
+            MessageLookupByLibrary.simpleMessage("Profile updated"),
         "publish": MessageLookupByLibrary.simpleMessage("Publish"),
+        "publishingSummary": MessageLookupByLibrary.simpleMessage(
+            "Your recipe is being published."),
         "quantity": MessageLookupByLibrary.simpleMessage("Quantity"),
         "quantityCannotBeEmptyError":
             MessageLookupByLibrary.simpleMessage("Quantity cannot be empty"),
@@ -108,13 +144,18 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Remove from favorites"),
         "replies": MessageLookupByLibrary.simpleMessage("Replies"),
         "reply": MessageLookupByLibrary.simpleMessage("Reply"),
+        "resetNewPasswordSummary": MessageLookupByLibrary.simpleMessage(
+            "Enter the email associated with your account and We\'ll send an email with instructions to reset your password."),
+        "resetPassword": MessageLookupByLibrary.simpleMessage("Reset Password"),
         "resetPasswordHint": MessageLookupByLibrary.simpleMessage(
-            "Enter your new password and repeat it once more to get your password changed"),
+            "Enter your new password and repeat it once more to get your password changed."),
         "resetYourPassword":
             MessageLookupByLibrary.simpleMessage("Reset your password"),
+        "sendInstructions":
+            MessageLookupByLibrary.simpleMessage("Send Instructions"),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
         "somethingWentWrong":
-            MessageLookupByLibrary.simpleMessage("Some went wrong"),
+            MessageLookupByLibrary.simpleMessage("Something went wrong."),
         "termsAndConditions":
             MessageLookupByLibrary.simpleMessage("Terms & Conditions"),
         "title": MessageLookupByLibrary.simpleMessage("Title"),
@@ -130,8 +171,9 @@ class MessageLookup extends MessageLookupByLibrary {
             "Supported formats PNG or JPG or MP4. Photos are usually 400x300 or 800x600 but not enforced."),
         "video": MessageLookupByLibrary.simpleMessage("Video"),
         "xComments": m0,
-        "xLikes": m1,
-        "xReplies": m2,
+        "xFollowedY": m1,
+        "xLikes": m2,
+        "xReplies": m3,
         "you": MessageLookupByLibrary.simpleMessage("You")
       };
 }

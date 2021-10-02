@@ -5,3 +5,4 @@ const Color kOnSurfaceColor = Color(0xFF512700);
 const Color kScaffoldBackgroundColor = Color(0xFFFFFBF3);
 const Color kBodyTextColor = Color(0xFFA8917A);
 const Color kPillColor = Color(0xFFFEF6ED);
+const Color kPlaceholderBackgroundColor = Color(0xFFE8E8E8);

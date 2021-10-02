@@ -14,7 +14,8 @@ import 'package:provider/provider.dart';
 class RepliesScreen extends StatefulWidget {
   final Recipe recipe;
   final Comment comment;
-  const RepliesScreen({Key? key, required this.recipe, required this.comment})
+  final bool isReply;
+  const RepliesScreen({Key? key, required this.recipe, required this.comment, required this.isReply})
       : super(key: key);
 
   @override

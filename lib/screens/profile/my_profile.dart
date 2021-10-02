@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 import 'components/user_item.dart';
 
 class MyProfileScreen extends StatefulWidget {
-  final HingUser? user;
+  final HingUser user;
   const MyProfileScreen({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -33,7 +33,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
     final UserProvider userProvider = Provider.of(context, listen: false);
 
     for (var index = 0; index < kTotalProfileCategories; index++) {
-      if (index == 0 || index == kTotalProfileCategories - 1)
+      if (index == 0 || index == 1)
         _pagingControllers.add(PagingController<int, Recipe>(firstPageKey: 1));
       else
         _pagingControllers
@@ -53,16 +53,18 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             });
             break;
           case 1:
-            userProvider.getFollowing(page: pageKey).then((users) {
-              if (users.length < _perPage) {
-                _pagingControllers[index].appendLastPage(users);
+            userProvider.getFavorites(page: pageKey).then((recipes) {
+              if (recipes.length < _perPage) {
+                _pagingControllers[index].appendLastPage(recipes);
               } else {
-                _pagingControllers[index].appendPage(users, pageKey + 1);
+                _pagingControllers[index].appendPage(recipes, pageKey + 1);
               }
             });
             break;
           case 2:
-            userProvider.getFollowers(page: pageKey).then((users) {
+            userProvider
+                .getFollowers(page: pageKey, userId: widget.user.id.oid)
+                .then((users) {
               if (users.length < _perPage) {
                 _pagingControllers[index].appendLastPage(users);
               } else {
@@ -71,11 +73,13 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
             });
             break;
           default:
-            userProvider.getFavorites(page: pageKey).then((recipes) {
-              if (recipes.length < _perPage) {
-                _pagingControllers[index].appendLastPage(recipes);
+            userProvider
+                .getFollowing(page: pageKey, userId: widget.user.id.oid)
+                .then((users) {
+              if (users.length < _perPage) {
+                _pagingControllers[index].appendLastPage(users);
               } else {
-                _pagingControllers[index].appendPage(recipes, pageKey + 1);
+                _pagingControllers[index].appendPage(users, pageKey + 1);
               }
             });
             break;
@@ -105,41 +109,44 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (_, innerScroll) => [
                           SliverAppBar(
-                            title: Text(S.of(context).profile),
-                            floating: true,
-                            //snap: true,
-                            leading: BackButton(
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                            expandedHeight: 96,
-                            bottom: PreferredSize(
-                              preferredSize: Size.fromHeight(96),
-                              child: Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: MyProfileHeader(
-                                    user: widget.user!,
-                                  )),
-                            ),
-                            actions: [
-                          PopupMenuButton(
-                              icon: Icon(Icons.more_vert_rounded,
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
-                              onSelected: (value) {
-                                if (value == 0) {
-                                  Hive.box<HingUser>(kUserBox).clear().then(
-                                      (value) => Navigator.of(context)
-                                          .pushNamedAndRemoveUntil(
-                                              kLoginRoute, (route) => false));
-                                }
-                              },
-                              itemBuilder: (_) => <PopupMenuEntry>[
-                                    PopupMenuItem(
-                                        value: 0,
-                                        child: Text(S.of(context).logout))
-                                  ])
-                        ]
-                          ),
+                              title: Text(S.of(context).profile),
+                              floating: true,
+                              //snap: true,
+                              leading: BackButton(
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                              expandedHeight: 96,
+                              bottom: PreferredSize(
+                                preferredSize: Size.fromHeight(96),
+                                child: Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: MyProfileHeader(
+                                      user: widget.user,
+                                    )),
+                              ),
+                              actions: [
+                                PopupMenuButton(
+                                    icon: Icon(Icons.more_vert_rounded,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface),
+                                    onSelected: (value) {
+                                      if (value == 0) {
+                                        Hive.box<HingUser>(kUserBox)
+                                            .clear()
+                                            .then((value) =>
+                                                Navigator.of(context)
+                                                    .pushNamedAndRemoveUntil(
+                                                        kLoginRoute,
+                                                        (route) => false));
+                                      }
+                                    },
+                                    itemBuilder: (_) => <PopupMenuEntry>[
+                                          PopupMenuItem(
+                                              value: 0,
+                                              child: Text(S.of(context).logout))
+                                        ])
+                              ]),
                           SliverPersistentHeader(
                               pinned: true,
                               delegate: ProfileTabDelegate(
@@ -181,9 +188,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                             (index) => RefreshIndicator(
                                 onRefresh: () => Future.sync(
                                     () => _pagingControllers[index].refresh()),
-                                child: index == 0 ||
-                                        index == kTotalProfileCategories - 1
+                                child: index == 0 || index == 1
                                     ? PagedListView<int, Recipe>.separated(
+                                      padding: const EdgeInsets.only(bottom: 72, top: 24),
                                         separatorBuilder: (_, index) => Divider(
                                               indent: 16.0,
                                               endIndent: 16.0,
@@ -193,7 +200,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                   .primary
                                                   .withOpacity(.75),
                                             ),
-                                        pagingController: _pagingControllers[index]
+                                        pagingController: _pagingControllers[
+                                                index]
                                             as PagingController<int, Recipe>,
                                         key: PageStorageKey(index),
                                         builderDelegate:
@@ -205,25 +213,10 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                             recipe: recipe,
                                                             refreshCallback:
                                                                 (updatedRecipe) {
-                                                              if (index ==
-                                                                  tabTitles
-                                                                          .length -
-                                                                      1) {
-                                                                // Find index of updatedRecipe and remove it from favorites
-                                                                final indexOfUpdatedRecipe = (_pagingControllers[index]
-                                                                            .itemList
-                                                                        as List<
-                                                                            Recipe>)
-                                                                    .indexWhere((recipe) =>
-                                                                        recipe
-                                                                            .id
-                                                                            .oid ==
-                                                                        updatedRecipe
-                                                                            .id
-                                                                            .oid);
-
-                                                                if (indexOfUpdatedRecipe !=
-                                                                    -1) {
+                                                              if (index == 1) {
+                                                                // Check if recipe is not a favorite. If so, remove it from favorites list.
+                                                                if (!updatedRecipe
+                                                                    .isFavorite) {
                                                                   _pagingControllers[
                                                                           index]
                                                                       .itemList = List<Recipe>.of((_pagingControllers[
@@ -232,37 +225,24 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                       as List<
                                                                           Recipe>)
                                                                     ..removeAt(
-                                                                        indexOfUpdatedRecipe));
-                                                                }
-
-                                                                // Sync the updated recipe in posts if any.
-                                                                final otherControllerIndex =
-                                                                    0;
-
-                                                                final indexOfRecipeInOtherController = (_pagingControllers[otherControllerIndex]
-                                                                            .itemList
-                                                                        as List<
-                                                                            Recipe>)
-                                                                    .indexWhere((recipe) =>
-                                                                        recipe
-                                                                            .id
-                                                                            .oid ==
-                                                                        updatedRecipe
-                                                                            .id
-                                                                            .oid);
-
-                                                                if (indexOfRecipeInOtherController !=
-                                                                    -1) {
+                                                                        childIndex));
+                                                                } else {
+                                                                  // Likes are updated. Don't remove the recipe from favorites, update it's likes instead.
                                                                   _pagingControllers[
-                                                                          otherControllerIndex]
+                                                                          index]
                                                                       .itemList = List<Recipe>.of((_pagingControllers[
-                                                                              otherControllerIndex]
-                                                                          .itemList
-                                                                      as List<
-                                                                          Recipe>)
-                                                                    ..[indexOfRecipeInOtherController] =
-                                                                        updatedRecipe);
+                                                                          index]
+                                                                      .itemList!
+                                                                    ..[childIndex] =
+                                                                        updatedRecipe) as List<
+                                                                      Recipe>);
                                                                 }
+
+                                                                // Refresh the other paging controller to sync with new list.
+                                                                _pagingControllers[
+                                                                        index -
+                                                                            1]
+                                                                    .refresh();
                                                               } else {
                                                                 _pagingControllers[
                                                                         index]
@@ -275,140 +255,58 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                                       ..[childIndex] =
                                                                           updatedRecipe);
 
-                                                                final otherControllerIndex =
-                                                                    tabTitles
-                                                                            .length -
-                                                                        1;
-
-                                                                if (updatedRecipe
-                                                                    .isFavorite) {
-                                                                  if (_pagingControllers[
-                                                                              otherControllerIndex]
-                                                                          .itemList ==
-                                                                      null)
-                                                                    return;
-
-                                                                  _pagingControllers[
-                                                                              otherControllerIndex]
-                                                                          .itemList =
-                                                                      List<
-                                                                          Recipe>.of([
-                                                                    updatedRecipe,
-                                                                    ...(_pagingControllers[otherControllerIndex].itemList
-                                                                            as List<Recipe>? ??
-                                                                        <Recipe>[])
-                                                                  ]);
-                                                                } else {
-                                                                  // Find index of recipe in other controller and remove it from list.
-                                                                  final int
-                                                                      indexOfRecipe =
-                                                                      (_pagingControllers[otherControllerIndex].itemList as List<Recipe>? ?? <Recipe>[]).indexWhere((recipe) =>
-                                                                          recipe
-                                                                              .id
-                                                                              .oid ==
-                                                                          updatedRecipe
-                                                                              .id
-                                                                              .oid);
-
-                                                                  if (indexOfRecipe !=
-                                                                      1) {
-                                                                    _pagingControllers[
-                                                                            otherControllerIndex]
-                                                                        .itemList = List<Recipe>.of((_pagingControllers[otherControllerIndex].itemList
-                                                                            as List<
-                                                                                Recipe>? ??
-                                                                        <
-                                                                            Recipe>[])
-                                                                      ..removeAt(
-                                                                          indexOfRecipe));
-                                                                  }
-                                                                }
+                                                                _pagingControllers[
+                                                                        index +
+                                                                            1]
+                                                                    .refresh();
                                                               }
                                                             })))
                                     : PagedListView<int, HingUser>(
                                         pagingController: _pagingControllers[
                                                 index]
                                             as PagingController<int, HingUser>,
-                                        builderDelegate:
-                                            PagedChildBuilderDelegate(
-                                                itemBuilder:
-                                                    (_, user, childIndex) =>
-                                                        UserItem(
-                                                            user: user,
-                                                            isFollowing:
-                                                                user.isFollowing!,
-                                                            refreshCallback:
-                                                                (updatedUser) {
-                                                              final List<
-                                                                      HingUser>
-                                                                  updatedUsers;
+                                        builderDelegate: PagedChildBuilderDelegate(
+                                            itemBuilder: (_, user, childIndex) => UserItem(
+                                                user: user,
+                                                isFollowing: user.isFollowing!,
+                                                refreshCallback: (updatedUser) {
+                                                  final List<HingUser>
+                                                      updatedUsers;
 
-                                                              // Remove item from list when index is 1 i.e., user unfollowed some other user.
-                                                              if (index == 1) {
-                                                                updatedUsers = List.of(_pagingControllers[
-                                                                            index]
-                                                                        .itemList
-                                                                    as List<
-                                                                        HingUser>
-                                                                  ..removeAt(
-                                                                      childIndex));
+                                                  // Remove item from list when index is 1 i.e., user unfollowed some other user.
+                                                  if (index ==
+                                                      tabTitles.length - 1) {
+                                                    updatedUsers = List.of(
+                                                        _pagingControllers[
+                                                                    index]
+                                                                .itemList
+                                                            as List<HingUser>
+                                                          ..removeAt(
+                                                              childIndex));
 
-                                                                _pagingControllers[
-                                                                            index]
-                                                                        .itemList =
-                                                                    updatedUsers;
-                                                              } else {
-                                                                updatedUsers = List.of(_pagingControllers[
-                                                                            index]
-                                                                        .itemList
-                                                                    as List<
-                                                                        HingUser>
-                                                                  ..[childIndex] =
-                                                                      updatedUser);
-                                                                _pagingControllers[
-                                                                            index]
-                                                                        .itemList =
-                                                                    updatedUsers;
+                                                    _pagingControllers[index]
+                                                            .itemList =
+                                                        updatedUsers;
 
-                                                                if (updatedUser
-                                                                        .isFollowing!) {
-                                                                  // Add the new user to the current user's following list
-                                                                  _pagingControllers[
-                                                                          index -
-                                                                              1]
-                                                                      .itemList = List<
-                                                                          HingUser>.of(
-                                                                      (_pagingControllers[index - 1]
-                                                                              .itemList
-                                                                          as List<
-                                                                              HingUser>)
-                                                                        ..add(
-                                                                            updatedUser));
-                                                                } else {
-                                                                  // Remove the user for current user's following list
-                                                                  final indexOfUnfollowedUser = (_pagingControllers[index - 1]
-                                                                              .itemList
-                                                                          as List<
-                                                                              HingUser>)
-                                                                      .indexWhere((user) =>
-                                                                          user.id
-                                                                              .oid ==
-                                                                          updatedUser
-                                                                              .id
-                                                                              .oid);
-                                                                  _pagingControllers[
-                                                                          index -
-                                                                              1]
-                                                                      .itemList = List<HingUser>.of((_pagingControllers[
-                                                                              index -
-                                                                                  1]
-                                                                          .itemList!
-                                                                      as List<
-                                                                          HingUser>)
-                                                                    ..removeAt(
-                                                                        indexOfUnfollowedUser));
-                                                                }
-                                                              }
-                                                            }))))))))));
+                                                    _pagingControllers[
+                                                            index - 1]
+                                                        .refresh();
+                                                  } else {
+                                                    updatedUsers = List.of(
+                                                        _pagingControllers[
+                                                                    index]
+                                                                .itemList
+                                                            as List<HingUser>
+                                                          ..[childIndex] =
+                                                              updatedUser);
+                                                    _pagingControllers[index]
+                                                            .itemList =
+                                                        updatedUsers;
+
+                                                    _pagingControllers[
+                                                            index + 1]
+                                                        .refresh();
+                                                  }
+                                                }))))))))));
   }
 }

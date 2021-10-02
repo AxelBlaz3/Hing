@@ -9,10 +9,13 @@ import 'package:hing/screens/editprofile/editprofile.dart';
 import 'package:hing/screens/home/home.dart';
 import 'package:hing/screens/login/login.dart';
 import 'package:hing/screens/newrecipe/new_recipe.dart';
+import 'package:hing/screens/notifications/notifications.dart';
+import 'package:hing/screens/onboarding/onboarding.dart';
 import 'package:hing/screens/profile/my_profile.dart';
 import 'package:hing/screens/profile/profile.dart';
 import 'package:hing/screens/replies/replies.dart';
-import 'package:hing/screens/resetpassword/reset_password.dart';
+import 'package:hing/screens/resetpassword/create_password_screen.dart';
+import 'package:hing/screens/resetpassword/reset_password_screen.dart';
 import 'package:hing/screens/signup/signup.dart';
 
 class RouteGenerator {
@@ -20,6 +23,8 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (_) => LoginScreen());
+      case kOnBoardingRoute:
+        return MaterialPageRoute(builder: (_) => OnboardingScreen(index: settings.arguments as int));      
       case kLoginRoute:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case kSignupRoute:
@@ -34,22 +39,38 @@ class RouteGenerator {
       case kRepliesRoute:
         return MaterialPageRoute(
             builder: (_) => RepliesScreen(
-              recipe: (settings.arguments! as Map<String, dynamic>)['recipe'] as Recipe,
-              comment: (settings.arguments! as Map<String, dynamic>)['comment'] as Comment,
-              
-            ));
+                  recipe: (settings.arguments!
+                      as Map<String, dynamic>)['recipe'] as Recipe,
+                  comment: (settings.arguments!
+                      as Map<String, dynamic>)['comment'] as Comment,
+                  isReply: (settings.arguments! as Map<String, dynamic>)['is_reply'] as bool? ?? false
+                ));
       case kCommentsRoute:
         return MaterialPageRoute(
-          settings: settings,
-          builder: (_) => CommentsScreen(recipe: (settings.arguments as Map<String, dynamic>)['recipe'] as Recipe, refreshCallback: (settings.arguments as Map<String, dynamic>)['refresh_callback']));
+            settings: settings,
+            builder: (_) => CommentsScreen(
+                recipe: (settings.arguments as Map<String, dynamic>)['recipe']
+                    as Recipe,
+                refreshCallback: (settings.arguments
+                    as Map<String, dynamic>)['refresh_callback']));
       case kResetPasswordRoute:
         return MaterialPageRoute(builder: (_) => ResetPasswordScreen());
       case kProfileRoute:
-        return MaterialPageRoute(builder: (_) => ProfileScreen(user: settings.arguments as HingUser?,));
-        case kMyProfileRoute:
-        return MaterialPageRoute(builder: (_) => MyProfileScreen(user: settings.arguments as HingUser?,));
+        return MaterialPageRoute(
+            builder: (_) => ProfileScreen(
+                  user: settings.arguments as HingUser,
+                ));
+      case kMyProfileRoute:
+        return MaterialPageRoute(
+            builder: (_) => MyProfileScreen(
+                  user: settings.arguments as HingUser,
+                ));
       case kEditProfileRoute:
-        return MaterialPageRoute(builder: (_) => EditProfileScreen());
+        return MaterialPageRoute(builder: (_) => EditProfileScreen(user: settings.arguments as HingUser,));
+      case kNotificationRoute:
+        return MaterialPageRoute(builder: (_) => NotificationsScreen());
+      case kCreatePasswordRoute:
+        return MaterialPageRoute(builder: (_) => CreatePasswordScreen(email: settings.arguments as String));  
       default:
         throw Exception(
             'Unknown route ${settings.name}. Make sure to add the route to RouteGenerator before navigating.');
