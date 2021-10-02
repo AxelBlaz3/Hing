@@ -1,8 +1,8 @@
 {
     "hing": "Hing",
-    "xLikes": "{likesCount} likes",
-    "xComments": "{commentsCount} comments",
-    "xReplies": "{repliesCount} replies",
+    "xLikes": "{likesCount, plural, one{1 like} other{{likesCount} likes}}",
+    "xComments": "{commentsCount, plural, one{1 comment} other{{commentsCount} comments}}",
+    "xReplies": "{repliesCount, plural, one{1 reply} other{{repliesCount} replies}}",
     "share": "Share",
     "category": "Category",
     "categories": "Categories",
@@ -82,6 +82,10 @@
     "removeFromFavorites": "Remove from favorites",
     "you": "You",
     "xFollowedY": "{follower} started following you.",
+    "xLikedYPost": "{user} liked your recipe.",
+    "xLikedYComment": "{user} liked your comment",
+    "xLikeYReply": "{user} liked your reply",
+    "xCommentedOnYourRecipe": "{user} commented on your recipe",
     "profileUpdated": "Profile updated",
     "fixErrorsAbove": "Fix errors and submit",
     "emptyTitle": "Oops!",
@@ -101,5 +105,6 @@
     "onboardingTwoTitle": "Food Ninja is where your comfort food lives",
     "onboardingTwoSummary": "Enjoy a fast and smooth food delivery at your doorstep.",
     "enterAValidEmail": "Enter a valid email.",
-    "passwordUpdated": "Password updated"
+    "passwordUpdated": "Password updated",
+    "loading": "LOADING"
 }

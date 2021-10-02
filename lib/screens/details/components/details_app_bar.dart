@@ -16,9 +16,11 @@ class DetailsAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       expandedHeight: 350,
+      toolbarHeight: 144,
+      pinned: true,
       leadingWidth: 72,
       leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
+          padding: const EdgeInsets.only(left: 16, bottom: 72, top: 16),
           child: ClipRRect(
               borderRadius: BorderRadius.circular(48),
               child: BackdropFilter(

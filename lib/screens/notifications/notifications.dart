@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hing/models/hing_notification/hing_notification.dart';
 import 'package:hing/providers/user_provider.dart';
+import 'package:hing/screens/components/empty_illustration.dart';
 import 'package:hing/screens/notifications/components/notification_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -63,6 +64,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     pagingController: _pagingController,
                     builderDelegate:
                         PagedChildBuilderDelegate<HingNotification>(
+                          noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
                             itemBuilder: (_, notification, index) =>
                                 NotificationItem(notification: notification)),
                     separatorBuilder: (_, __) => Divider(

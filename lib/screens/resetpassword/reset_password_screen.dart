@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/providers/user_provider.dart';
+import 'package:hing/screens/components/circular_indicator.dart';
 import 'package:provider/provider.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -83,30 +84,43 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             child: Container(
                 alignment: Alignment.bottomCenter,
                 padding: EdgeInsets.all(24),
-                child: ElevatedButton(
-                  onPressed: !isValidated
-                      ? null
-                      : () {
-                          final UserProvider userProvider =
-                              context.read<UserProvider>();
+                child: Consumer<UserProvider>(
+                    builder: (context, userProvider, child) => ElevatedButton(
+                          onPressed: !isValidated || userProvider.isLoading
+                              ? null
+                              : () {
+                                  final UserProvider userProvider =
+                                      context.read<UserProvider>();
 
-                          userProvider
-                              .sendVerificationCode(
-                                  email: _emailController.text)
-                              .then((success) => success
-                                  ? Navigator.of(context)
-                                      .pushNamed(kCreatePasswordRoute, arguments: _emailController.text)
-                                  : ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          content: Text(S
-                                              .of(context)
-                                              .somethingWentWrong))));
-                        },
-                  child: Text(S.of(context).sendInstructions),
-                  style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      minimumSize: Size(MediaQuery.of(context).size.width, 48)),
-                ))),
+                                  userProvider.setIsLoading(true);
+
+                                  userProvider
+                                      .sendVerificationCode(
+                                          email: _emailController.text)
+                                      .then((success) {
+                                    userProvider.setIsLoading(false);
+                                    
+                                    if (success) {
+                                      Navigator.of(context).pushNamed(
+                                          kCreatePasswordRoute,
+                                          arguments: _emailController.text);
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(S
+                                                  .of(context)
+                                                  .somethingWentWrong)));
+                                    }
+                                  });
+                                },
+                          child: userProvider.isLoading
+                              ? CircularIndicator()
+                              : Text(S.of(context).sendInstructions),
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(vertical: 24),
+                              minimumSize:
+                                  Size(MediaQuery.of(context).size.width, 48)),
+                        )))),
       ],
     ));
   }

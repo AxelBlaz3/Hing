@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
+import 'package:hing/screens/components/empty_illustration.dart';
 import 'package:hing/screens/home/components/feed_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -25,6 +26,7 @@ class _ProfileTabPostsContentState extends State<ProfileTabPostsContent> {
           padding: const EdgeInsets.only(bottom: 72, top: 24),
           pagingController: widget.pagingController,
           builderDelegate: PagedChildBuilderDelegate<Recipe>(
+            noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
               itemBuilder: (_, recipe, index) => FeedItem(
                   index: index,
                   recipe: recipe,

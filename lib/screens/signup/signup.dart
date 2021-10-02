@@ -88,7 +88,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           TextFormField(
                             validator: (text) => text == null || text.isEmpty
                                 ? S.of(context).emailCannotBeEmpty
-                                : !emailRegexPattern.hasMatch(text) ? S.of(context).enterAValidEmail: null,
+                                : !emailRegexPattern.hasMatch(text)
+                                    ? S.of(context).enterAValidEmail
+                                    : null,
                             controller: _emailController,
                             decoration: InputDecoration(
                                 hintText: S.of(context).email,
@@ -151,41 +153,56 @@ class _SignupScreenState extends State<SignupScreen> {
                           SizedBox(
                             height: 48,
                           ),
-                          ElevatedButton(
-                            onPressed: (!isValidated || !isTermsChecked)
-                                ? null
-                                : () {
-                                    final UserProvider authProvider =
-                                        context.read<UserProvider>();
+                          Consumer<UserProvider>(
+                              builder: (context, userProvider, child) =>
+                                  ElevatedButton(
+                                    onPressed: (!isValidated ||
+                                            !isTermsChecked ||
+                                            userProvider.isLoading)
+                                        ? null
+                                        : () {
+                                            userProvider.setIsLoading(true);
+                                            final UserProvider authProvider =
+                                                context.read<UserProvider>();
 
-                                    authProvider
-                                        .signup(
-                                            email: _emailController.text,
-                                            displayName:
-                                                _displayNameController.text,
-                                            password: _passwordController.text)
-                                        .then((response) => (response
-                                                is HingUser?)
-                                            ? Navigator.of(context)
-                                                .pushReplacementNamed(
-                                                    kHomeRoute)
-                                            : ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(response ==
-                                                            409
-                                                        ? S
-                                                            .of(context)
-                                                            .emailNotAvailable
-                                                        : S
-                                                            .of(context)
-                                                            .somethingWentWrong))));
-                                  },
-                            child: Text(S.of(context).createAccount),
-                            style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(vertical: 24),
-                                minimumSize: Size(
-                                    MediaQuery.of(context).size.width, 48)),
-                          ),
+                                            authProvider
+                                                .signup(
+                                                    email:
+                                                        _emailController.text,
+                                                    displayName:
+                                                        _displayNameController
+                                                            .text,
+                                                    password:
+                                                        _passwordController
+                                                            .text)
+                                                .then((response) {
+                                              userProvider.setIsLoading(false);
+                                              if (response is HingUser?) {
+                                                Navigator.of(context)
+                                                    .pushReplacementNamed(
+                                                        kHomeRoute);
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(response ==
+                                                                409
+                                                            ? S
+                                                                .of(context)
+                                                                .emailNotAvailable
+                                                            : S
+                                                                .of(context)
+                                                                .somethingWentWrong)));
+                                              }
+                                            });
+                                          },
+                                    child: Text(S.of(context).createAccount),
+                                    style: ElevatedButton.styleFrom(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 24),
+                                        minimumSize: Size(
+                                            MediaQuery.of(context).size.width,
+                                            48)),
+                                  )),
                           SizedBox(
                             height: 16,
                           ),

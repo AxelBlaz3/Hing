@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hing/generated/l10n.dart';
 import 'package:lottie/lottie.dart';
 
 class ToqueAnimation extends StatefulWidget {
@@ -48,7 +49,7 @@ class _ToqueAnimationState extends State<ToqueAnimation>
                 },
               ))),
       Text(
-        'LOADING',
+        S.of(context).loading,
         style: Theme.of(context).textTheme.subtitle2?.copyWith(
               fontSize: 10,
             ),

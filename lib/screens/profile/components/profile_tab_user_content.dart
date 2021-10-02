@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
+import 'package:hing/screens/components/empty_illustration.dart';
 import 'package:hing/screens/profile/components/user_item.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -30,6 +31,7 @@ class _ProfileTabUserContentState extends State<ProfileTabUserContent> {
         child: PagedListView(
             pagingController: widget.pagingController,
             builderDelegate: PagedChildBuilderDelegate<HingUser>(
+              noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
                 itemBuilder: (_, user, index) => UserItem(
                     user: user,
                     isFollowing: widget.shouldFetchFollowers,

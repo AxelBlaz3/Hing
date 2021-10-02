@@ -9,13 +9,18 @@ class UserProvider extends ChangeNotifier {
   final UserRepository userRepository;
 
   UserProvider({required this.userRepository});
-
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
   XFile? _editProfileImage;
-
   XFile? get editProfileImage => _editProfileImage;
 
   void setEditProfileImage(XFile? image) {
     _editProfileImage = image;
+    notifyListeners();
+  }
+
+  void setIsLoading(bool newState) {
+    _isLoading = newState;
     notifyListeners();
   }
 
@@ -40,8 +45,12 @@ class UserProvider extends ChangeNotifier {
     return await userRepository.sendVerificationCode(email: email);
   }
 
-  Future<bool> createNewPassword({required String email, required String password, required String code}) async {
-    return await userRepository.createNewPassword(email: email, password: password, code: code);
+  Future<bool> createNewPassword(
+      {required String email,
+      required String password,
+      required String code}) async {
+    return await userRepository.createNewPassword(
+        email: email, password: password, code: code);
   }
 
   Future<List<HingUser>> getFollowers(

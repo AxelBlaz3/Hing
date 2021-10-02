@@ -5,17 +5,17 @@ import 'package:hing/models/comment/comment.dart';
 import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class CommentHeader extends StatefulWidget {
+class ReplyHeader extends StatefulWidget {
   final bool isReply;
   final Comment comment;
-  const CommentHeader({Key? key, this.isReply = false, required this.comment})
+  const ReplyHeader({Key? key, this.isReply = false, required this.comment})
       : super(key: key);
 
   @override
-  _CommentHeaderState createState() => _CommentHeaderState();
+  _ReplyHeaderState createState() => _ReplyHeaderState();
 }
 
-class _CommentHeaderState extends State<CommentHeader> {
+class _ReplyHeaderState extends State<ReplyHeader> {
   @override
   Widget build(BuildContext context) {
     final commentCreatedAt =

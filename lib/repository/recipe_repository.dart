@@ -230,12 +230,14 @@ class RecipeRepository {
       final response = await http.put(Uri.parse(kAPILikeReplyRoute),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
           body: jsonEncode(<String, String>{
-            'comment_id': commentId,
+            'reply_id': commentId,
             'user_id': user!.id.oid
           }));
 
       return response.statusCode == HttpStatus.ok;
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     return false;
   }
 
@@ -245,7 +247,7 @@ class RecipeRepository {
       final response = await http.put(Uri.parse(kAPIUnLikeReplyRoute),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
           body: jsonEncode(<String, String>{
-            'comment_id': commentId,
+            'reply_id': commentId,
             'user_id': user!.id.oid
           }));
 

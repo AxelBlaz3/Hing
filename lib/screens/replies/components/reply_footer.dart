@@ -7,12 +7,12 @@ import 'package:hing/providers/comment_provider.dart';
 import 'package:hing/screens/home/components/feed_action_item.dart';
 import 'package:provider/provider.dart';
 
-class CommentFooter extends StatefulWidget {
+class ReplyFooter extends StatefulWidget {
   final bool isReply;
   final Recipe recipe;
   final Comment comment;
   final Function(Comment) refreshCallback;
-  const CommentFooter(
+  const ReplyFooter(
       {Key? key,
       required this.recipe,
       required this.comment,
@@ -21,10 +21,10 @@ class CommentFooter extends StatefulWidget {
       : super(key: key);
 
   @override
-  _CommentFooterState createState() => _CommentFooterState();
+  _ReplyFooterState createState() => _ReplyFooterState();
 }
 
-class _CommentFooterState extends State<CommentFooter> {
+class _ReplyFooterState extends State<ReplyFooter> {
   @override
   Widget build(BuildContext context) {
     return Row(

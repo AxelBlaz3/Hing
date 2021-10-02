@@ -60,30 +60,36 @@ class S {
     );
   }
 
-  /// `{likesCount} likes`
-  String xLikes(Object likesCount) {
-    return Intl.message(
-      '$likesCount likes',
+  /// `{likesCount, plural, one{1 like} other{{likesCount} likes}}`
+  String xLikes(num likesCount) {
+    return Intl.plural(
+      likesCount,
+      one: '1 like',
+      other: '$likesCount likes',
       name: 'xLikes',
       desc: '',
       args: [likesCount],
     );
   }
 
-  /// `{commentsCount} comments`
-  String xComments(Object commentsCount) {
-    return Intl.message(
-      '$commentsCount comments',
+  /// `{commentsCount, plural, one{1 comment} other{{commentsCount} comments}}`
+  String xComments(num commentsCount) {
+    return Intl.plural(
+      commentsCount,
+      one: '1 comment',
+      other: '$commentsCount comments',
       name: 'xComments',
       desc: '',
       args: [commentsCount],
     );
   }
 
-  /// `{repliesCount} replies`
-  String xReplies(Object repliesCount) {
-    return Intl.message(
-      '$repliesCount replies',
+  /// `{repliesCount, plural, one{1 reply} other{{repliesCount} replies}}`
+  String xReplies(num repliesCount) {
+    return Intl.plural(
+      repliesCount,
+      one: '1 reply',
+      other: '$repliesCount replies',
       name: 'xReplies',
       desc: '',
       args: [repliesCount],
@@ -880,6 +886,46 @@ class S {
     );
   }
 
+  /// `{user} liked your recipe.`
+  String xLikedYPost(Object user) {
+    return Intl.message(
+      '$user liked your recipe.',
+      name: 'xLikedYPost',
+      desc: '',
+      args: [user],
+    );
+  }
+
+  /// `{user} liked your comment`
+  String xLikedYComment(Object user) {
+    return Intl.message(
+      '$user liked your comment',
+      name: 'xLikedYComment',
+      desc: '',
+      args: [user],
+    );
+  }
+
+  /// `{user} liked your reply`
+  String xLikeYReply(Object user) {
+    return Intl.message(
+      '$user liked your reply',
+      name: 'xLikeYReply',
+      desc: '',
+      args: [user],
+    );
+  }
+
+  /// `{user} commented on your recipe`
+  String xCommentedOnYourRecipe(Object user) {
+    return Intl.message(
+      '$user commented on your recipe',
+      name: 'xCommentedOnYourRecipe',
+      desc: '',
+      args: [user],
+    );
+  }
+
   /// `Profile updated`
   String get profileUpdated {
     return Intl.message(
@@ -1075,6 +1121,16 @@ class S {
     return Intl.message(
       'Password updated',
       name: 'passwordUpdated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `LOADING`
+  String get loading {
+    return Intl.message(
+      'LOADING',
+      name: 'loading',
       desc: '',
       args: [],
     );

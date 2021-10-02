@@ -5,13 +5,13 @@ import 'package:hing/screens/comments/components/comment_body.dart';
 import 'package:hing/screens/comments/components/comment_footer.dart';
 import 'package:hing/screens/comments/components/comment_header.dart';
 
-class CommentItem extends StatefulWidget {
+class ReplyItem extends StatefulWidget {
   final bool isReply;
   final Recipe recipe;
   final Comment comment;
   final Function(Comment) refreshCallback;
 
-  const CommentItem(
+  const ReplyItem(
       {Key? key,
       this.isReply = false,
       required this.recipe,
@@ -20,10 +20,10 @@ class CommentItem extends StatefulWidget {
       : super(key: key);
 
   @override
-  _CommentItemState createState() => _CommentItemState();
+  _ReplyItemState createState() => _ReplyItemState();
 }
 
-class _CommentItemState extends State<CommentItem> {
+class _ReplyItemState extends State<ReplyItem> {
   @override
   Widget build(BuildContext context) {
     return InkWell(

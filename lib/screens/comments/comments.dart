@@ -6,6 +6,7 @@ import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/comment_provider.dart';
 import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/comments/components/comment_item.dart';
+import 'package:hing/screens/components/empty_illustration.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
@@ -76,9 +77,17 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 padding: EdgeInsets.only(bottom: 120),
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate<Comment>(
+                    noItemsFoundIndicatorBuilder: (_) =>
+                        const EmptyIllustration(),
                     animateTransitions: true,
-                    itemBuilder: (_, comment, index) =>
-                        CommentItem(recipe: widget.recipe, comment: comment)))),
+                    itemBuilder: (_, comment, index) => CommentItem(
+                        recipe: widget.recipe,
+                        comment: comment,
+                        refreshCallback: (updatedComment) {
+                          _pagingController.itemList = List.of(
+                              (_pagingController.itemList as List<Comment>)
+                                ..[index] = updatedComment);
+                        })))),
         SafeArea(
             child: Container(
                 alignment: Alignment.bottomCenter,
@@ -120,7 +129,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                                       1;
                                             widget
                                                 .refreshCallback(updatedRecipe);
-                                                
+
                                             context
                                                 .read<RecipeProvider>()
                                                 .notifyRecipeChanges();

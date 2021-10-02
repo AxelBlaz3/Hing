@@ -20,10 +20,10 @@ class Comment {
   bool isLiked;
   @HiveField(3)
   @JsonKey(name: 'likes_count')
-  final int likesCount;
+  int likesCount;
   @HiveField(4)
   @JsonKey(name: 'replies_count')
-  final int repliesCount;
+  int repliesCount;
   @HiveField(5)
   @JsonKey(name: 'recipe_id')
   final ObjectId recipeId;
@@ -42,6 +42,8 @@ class Comment {
       required this.recipeId,
       required this.user,
       required this.createdAt});
+
+  //Comment1();
 
   factory Comment.fromJson(Map<String, dynamic> json) =>
       _$CommentFromJson(json);

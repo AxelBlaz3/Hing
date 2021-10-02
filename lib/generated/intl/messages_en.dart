@@ -19,13 +19,24 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(commentsCount) => "${commentsCount} comments";
+  static String m0(user) => "${user} commented on your recipe";
 
-  static String m1(follower) => "${follower} started following you.";
+  static String m1(commentsCount) =>
+      "${Intl.plural(commentsCount, one: '1 comment', other: '${commentsCount} comments')}";
 
-  static String m2(likesCount) => "${likesCount} likes";
+  static String m2(follower) => "${follower} started following you.";
 
-  static String m3(repliesCount) => "${repliesCount} replies";
+  static String m3(user) => "${user} liked your reply";
+
+  static String m4(user) => "${user} liked your comment";
+
+  static String m5(user) => "${user} liked your recipe.";
+
+  static String m6(likesCount) =>
+      "${Intl.plural(likesCount, one: '1 like', other: '${likesCount} likes')}";
+
+  static String m7(repliesCount) =>
+      "${Intl.plural(repliesCount, one: '1 reply', other: '${repliesCount} replies')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -88,6 +99,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "italian": MessageLookupByLibrary.simpleMessage("ITALIAN"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
         "like": MessageLookupByLibrary.simpleMessage("Like"),
+        "loading": MessageLookupByLibrary.simpleMessage("LOADING"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginToYourAccount":
             MessageLookupByLibrary.simpleMessage("Login to your account"),
@@ -170,10 +182,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "uploadPhotoDesc": MessageLookupByLibrary.simpleMessage(
             "Supported formats PNG or JPG or MP4. Photos are usually 400x300 or 800x600 but not enforced."),
         "video": MessageLookupByLibrary.simpleMessage("Video"),
-        "xComments": m0,
-        "xFollowedY": m1,
-        "xLikes": m2,
-        "xReplies": m3,
+        "xCommentedOnYourRecipe": m0,
+        "xComments": m1,
+        "xFollowedY": m2,
+        "xLikeYReply": m3,
+        "xLikedYComment": m4,
+        "xLikedYPost": m5,
+        "xLikes": m6,
+        "xReplies": m7,
         "you": MessageLookupByLibrary.simpleMessage("You")
       };
 }

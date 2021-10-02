@@ -28,18 +28,28 @@ class _NotificationItemState extends State<NotificationItem> {
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: widget.notification.otherUser.image != null
-              ? CachedNetworkImage(
-                fit: BoxFit.cover,
-                  height: 36,
-                  width: 36,
-                  imageUrl: '$kBaseUrl/${widget.notification.otherUser.image}',
-                  errorWidget: (_, __, ___) => const UserPlaceholder(size: 24),
-                  placeholder: (_, __) => const UserPlaceholder(size: 24),
-                )
-              : const UserPlaceholder(size: 24),
-        ),
+              borderRadius: BorderRadius.circular(24),
+              child: widget.notification.otherUser.image != null
+                  ? CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      height: 36,
+                      width: 36,
+                      imageUrl:
+                          '$kBaseUrl/${widget.notification.otherUser.image}',
+                      errorWidget: (_, __, ___) => const UserPlaceholder(
+                        size: 24,
+                        backgroundSize: 20,
+                      ),
+                      placeholder: (_, __) => const UserPlaceholder(
+                        size: 24,
+                        backgroundSize: 20,
+                      ),
+                    )
+                  : const UserPlaceholder(
+                      size: 24,
+                      backgroundSize: 20,
+                    ),
+            ),
             SizedBox(
               width: 16,
             ),
@@ -51,8 +61,25 @@ class _NotificationItemState extends State<NotificationItem> {
                       ? S
                           .of(context)
                           .xFollowedY(widget.notification.otherUser.displayName)
-                      : S.of(context).xFollowedY(
-                          widget.notification.otherUser.displayName),
+                      : widget.notification.notificationType ==
+                              NotificationType.likePost.index
+                          ? S.of(context).xLikedYPost(
+                              widget.notification.otherUser.displayName)
+                          : widget.notification.notificationType ==
+                                  NotificationType.likeReply.index
+                              ? S.of(context).xLikeYReply(
+                                  widget.notification.otherUser.displayName)
+                              : widget.notification.notificationType ==
+                                      NotificationType.likeComment.index
+                                  ? S.of(context).xLikedYComment(
+                                      widget.notification.otherUser.displayName)
+                                  : widget.notification.notificationType ==
+                                          NotificationType.newComment.index
+                                      ? S.of(context).xCommentedOnYourRecipe(
+                                          widget.notification.otherUser
+                                              .displayName)
+                                      : S.of(context).xLikedYComment(widget
+                                          .notification.otherUser.displayName),
                   style: themeData.textTheme.bodyText2,
                   children: <TextSpan>[
                     TextSpan(

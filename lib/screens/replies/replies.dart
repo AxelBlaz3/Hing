@@ -7,6 +7,7 @@ import 'package:hing/models/reply/reply.dart';
 import 'package:hing/providers/comment_provider.dart';
 import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/comments/components/comment_item.dart';
+import 'package:hing/screens/components/empty_illustration.dart';
 import 'package:hing/screens/replies/components/dashed_line.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,11 @@ class RepliesScreen extends StatefulWidget {
   final Recipe recipe;
   final Comment comment;
   final bool isReply;
-  const RepliesScreen({Key? key, required this.recipe, required this.comment, required this.isReply})
+  const RepliesScreen(
+      {Key? key,
+      required this.recipe,
+      required this.comment,
+      required this.isReply})
       : super(key: key);
 
   @override
@@ -26,12 +31,15 @@ class _RepliesScreenState extends State<RepliesScreen> {
   final int _pageSize = 10;
   final PagingController<int, Reply> _pagingController =
       PagingController<int, Reply>(firstPageKey: 1);
+  late Comment comment;
 
   final _bodyController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+
+    comment = widget.comment;
 
     final CommentProvider _commentProvider =
         Provider.of(context, listen: false);
@@ -45,7 +53,7 @@ class _RepliesScreenState extends State<RepliesScreen> {
           .getRepliesForComment(commentId: widget.comment.id.oid, page: pageKey)
           .then((replies) => replies.length < _pageSize
               ? _pagingController.appendLastPage(replies)
-              : _pagingController.appendPage(replies, pageKey + 1));
+              : _pagingController.appendPage(replies, pageKey + 1));    
     });
   }
 
@@ -76,10 +84,16 @@ class _RepliesScreenState extends State<RepliesScreen> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CommentItem(
-                recipe: widget.recipe,
-                comment: widget.comment,
-              ),
+              Consumer<CommentProvider>(
+                  builder: (context, commentProvider, child) => CommentItem(
+                        recipe: widget.recipe,
+                        comment: comment,
+                        refreshCallback: (updatedReply) {
+                          comment = updatedReply;
+                          Provider.of<CommentProvider>(context, listen: false)
+                              .notifyCommentChanges();
+                        },
+                      )),
               const DashedLine(),
               Flexible(
                 child: PagedListView(
@@ -87,10 +101,21 @@ class _RepliesScreenState extends State<RepliesScreen> {
                     padding: EdgeInsets.only(left: 24),
                     shrinkWrap: true,
                     builderDelegate: PagedChildBuilderDelegate<Reply>(
+                        noItemsFoundIndicatorBuilder: (_) =>
+                            const EmptyIllustration(),
                         itemBuilder: (_, reply, index) => CommentItem(
-                            isReply: true,
-                            recipe: widget.recipe,
-                            comment: reply))),
+                              isReply: true,
+                              recipe: widget.recipe,
+                              comment: reply,
+                              refreshCallback: (updatedReply) {
+                                final oldReply =
+                                    _pagingController.itemList![index];    
+
+                                _pagingController.itemList = List.of(
+                                    (_pagingController.itemList as List<Reply>)
+                                      ..[index] = updatedReply as Reply);
+                              },
+                            ))),
               )
             ],
           ),

@@ -10,7 +10,7 @@ part 'reply.g.dart';
 
 @JsonSerializable()
 @HiveType(typeId: kCommentType)
-class Reply extends Comment{
+class Reply extends Comment {
   @HiveField(0)
   @JsonKey(name: '_id')
   final ObjectId id;

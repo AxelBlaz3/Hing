@@ -4,6 +4,7 @@ import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/user_provider.dart';
+import 'package:hing/screens/components/empty_illustration.dart';
 import 'package:hing/screens/home/components/feed_item.dart';
 import 'package:hing/screens/profile/components/my_profile_header.dart';
 import 'package:hing/screens/profile/components/profile_tab_delegate.dart';
@@ -176,7 +177,9 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                       tabTitles[index],
                                                       style: Theme.of(context)
                                                           .textTheme
-                                                          .button,
+                                                          .subtitle1
+                                                          ?.copyWith(
+                                                              fontSize: 14),
                                                     ),
                                                   ),
                                                 ),
@@ -190,7 +193,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                     () => _pagingControllers[index].refresh()),
                                 child: index == 0 || index == 1
                                     ? PagedListView<int, Recipe>.separated(
-                                      padding: const EdgeInsets.only(bottom: 72, top: 24),
+                                        padding: const EdgeInsets.only(
+                                            bottom: 72, top: 24),
                                         separatorBuilder: (_, index) => Divider(
                                               indent: 16.0,
                                               endIndent: 16.0,
@@ -206,6 +210,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         key: PageStorageKey(index),
                                         builderDelegate:
                                             PagedChildBuilderDelegate(
+                                              noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
                                                 itemBuilder:
                                                     (_, recipe, childIndex) =>
                                                         FeedItem(
@@ -266,6 +271,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                 index]
                                             as PagingController<int, HingUser>,
                                         builderDelegate: PagedChildBuilderDelegate(
+                                          noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
                                             itemBuilder: (_, user, childIndex) => UserItem(
                                                 user: user,
                                                 isFollowing: user.isFollowing!,

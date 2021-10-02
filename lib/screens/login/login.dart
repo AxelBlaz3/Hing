@@ -4,6 +4,7 @@ import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/providers/user_provider.dart';
+import 'package:hing/screens/components/circular_indicator.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -125,39 +126,60 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 height: 48,
                               ),
-                              ElevatedButton(
-                                onPressed: !isValidated
-                                    ? null
-                                    : () {
-                                        final UserProvider authProvider =
-                                            context.read<UserProvider>();
-                                        authProvider
-                                            .login(
-                                                email: _emailController.text,
-                                                password:
-                                                    _passwordController.text)
-                                            .then((response) => (response
-                                                    is HingUser?)
-                                                ? Navigator.of(context)
-                                                    .pushReplacementNamed(
-                                                        kHomeRoute)
-                                                : ScaffoldMessenger.of(context)
-                                                    .showSnackBar(SnackBar(
-                                                        content: Text(response ==
-                                                                403
-                                                            ? S
-                                                                .of(context)
-                                                                .incorrectCredentials
-                                                            : S
-                                                                .of(context)
-                                                                .somethingWentWrong))));
-                                      },
-                                child: Text(S.of(context).login),
-                                style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(vertical: 24),
-                                    minimumSize: Size(
-                                        MediaQuery.of(context).size.width, 48)),
-                              ),
+                              Consumer<UserProvider>(
+                                  builder: (context, userProvider, child) =>
+                                      ElevatedButton(
+                                        onPressed: !isValidated ||
+                                                userProvider.isLoading
+                                            ? null
+                                            : () {
+                                                final UserProvider
+                                                    authProvider = context
+                                                        .read<UserProvider>();
+
+                                                userProvider.setIsLoading(true);
+
+                                                authProvider
+                                                    .login(
+                                                        email: _emailController
+                                                            .text,
+                                                        password:
+                                                            _passwordController
+                                                                .text)
+                                                    .then((response) {
+                                                  userProvider
+                                                      .setIsLoading(false);
+                                                  if (response is HingUser?) {
+                                                    Navigator.of(context)
+                                                        .pushReplacementNamed(
+                                                            kHomeRoute);
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                            content: Text(response ==
+                                                                    403
+                                                                ? S
+                                                                    .of(context)
+                                                                    .incorrectCredentials
+                                                                : S
+                                                                    .of(context)
+                                                                    .somethingWentWrong)));
+                                                  }
+                                                });
+                                              },
+                                        child: userProvider.isLoading
+                                            ? CircularIndicator()
+                                            : Text(S.of(context).login),
+                                        style: ElevatedButton.styleFrom(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 24),
+                                            minimumSize: Size(
+                                                MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                48)),
+                                      )),
                               SizedBox(
                                 height: 16,
                               ),

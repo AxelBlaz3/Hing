@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/details/components/details_author_header.dart';
-import 'package:hing/screens/details/components/details_tabs.dart';
 import 'package:hing/screens/details/components/ingredients_list_item.dart';
 import 'package:hing/screens/home/components/feed_item_footer.dart';
 import 'package:provider/provider.dart';
@@ -31,64 +31,84 @@ class _DetailsScreenState extends State<DetailsScreen> {
             length: 2,
             child: Stack(
               children: [
-                NestedScrollView(
-                    headerSliverBuilder: (context, reverse) => [
-                          DetailsAppBar(
-                            index: index,
-                            recipe: recipe,
-                          ),
-                          SliverPadding(
-                              padding: EdgeInsets.all(16),
-                              sliver: SliverList(
-                                  delegate: SliverChildListDelegate([
-                                DetailsAuthorHeader(recipe: recipe),
-                                Text(
-                                  recipe.title,
-                                  style: Theme.of(context).textTheme.headline5,
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(24),
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary
-                                                .withOpacity(.1)),
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8, vertical: 8),
-                                        child: Text(
-                                          'MEXICAN',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .overline,
-                                        )),
-                                    Expanded(child: SizedBox())
-                                  ],
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 8),
-                                    child: DetailsTab())
-                              ])))
-                        ],
-                    body: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: TabBarView(children: [
-                          SingleChildScrollView(
-                              physics: NeverScrollableScrollPhysics(),
-                              child: Text(
+                SafeArea(
+                    top: false,
+                    child: CustomScrollView(
+                      slivers: [
+                        DetailsAppBar(
+                          index: index,
+                          recipe: recipe,
+                        ),
+                        SliverPadding(
+                            padding: EdgeInsets.all(16),
+                            sliver: SliverList(
+                                delegate: SliverChildListDelegate([
+                              DetailsAuthorHeader(recipe: recipe),
+                              Text(
+                                recipe.title,
+                                style: Theme.of(context).textTheme.headline5,
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(24),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(.1)),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 8),
+                                      child: Text(
+                                        getAllCategories(
+                                            context)[recipe.category - 1],
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .overline,
+                                      )),
+                                  Expanded(child: SizedBox())
+                                ],
+                              ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                              Text(
+                                S.of(context).description,
+                                style: Theme.of(context).textTheme.subtitle2,
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Text(
                                 recipe.description,
                                 style: Theme.of(context).textTheme.bodyText2,
-                              )),
-                          ListView.builder(
-                              itemCount: recipe.ingredients.length,
-                              itemBuilder: (_, index) => IngredientsListItem(
-                                  ingredient: recipe.ingredients[index]))
-                        ]))),
+                              ),
+                              SizedBox(
+                                height: 24,
+                              ),
+                              Text(
+                                S.of(context).ingredients,
+                                style: Theme.of(context).textTheme.subtitle2,
+                              ),
+                              SafeArea(
+                                  top: false,
+                                  child: ListView.builder(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 144, top: 16),
+                                      physics: NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: recipe.ingredients.length,
+                                      itemBuilder: (context, index) =>
+                                          IngredientsListItem(
+                                              ingredient:
+                                                  recipe.ingredients[index])))
+                            ])))
+                      ],
+                    )),
                 SafeArea(
                     child: Align(
                         alignment: Alignment.bottomCenter,
@@ -105,6 +125,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                             refreshCallback: refreshCallback,
                                             detailsCallback: (updatedRecipe) {
                                               recipe = updatedRecipe;
+                                              recipeProvider
+                                                  .notifyRecipeChanges();
                                             },
                                           )),
                                   Padding(

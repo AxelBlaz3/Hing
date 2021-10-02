@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/providers/user_provider.dart';
+import 'package:hing/screens/components/circular_indicator.dart';
 import 'package:provider/provider.dart';
 
 class CreatePasswordScreen extends StatefulWidget {
@@ -142,39 +143,48 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
             child: Container(
                 alignment: Alignment.bottomCenter,
                 padding: EdgeInsets.all(24),
-                child: ElevatedButton(
-                  onPressed: !isValidated
-                      ? null
-                      : () {
-                          final UserProvider userProvider =
-                              context.read<UserProvider>();
+                child: Consumer<UserProvider>(
+                    builder: (context, userProvider, child) => ElevatedButton(
+                          onPressed: !isValidated || userProvider.isLoading
+                              ? null
+                              : () {
+                                  final UserProvider userProvider =
+                                      context.read<UserProvider>();
 
-                          userProvider
-                              .createNewPassword(
-                                  email: widget.email,
-                                  password: _newPasswordController.text,
-                                  code: _codeController.text)
-                              .then((success) {
-                            if (success) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                          Text(S.of(context).passwordUpdated)));
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  kLoginRoute, (route) => false);
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(
-                                          S.of(context).somethingWentWrong)));
-                            }
-                          });
-                        },
-                  child: Text(S.of(context).resetPassword),
-                  style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      minimumSize: Size(MediaQuery.of(context).size.width, 48)),
-                ))),
+                                  userProvider.setIsLoading(true);
+                                  userProvider
+                                      .createNewPassword(
+                                          email: widget.email,
+                                          password: _newPasswordController.text,
+                                          code: _codeController.text)
+                                      .then((success) {
+                                    userProvider.setIsLoading(false);
+                                    if (success) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(S
+                                                  .of(context)
+                                                  .passwordUpdated)));
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil(
+                                              kLoginRoute, (route) => false);
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text(S
+                                                  .of(context)
+                                                  .somethingWentWrong)));
+                                    }
+                                  });
+                                },
+                          child: userProvider.isLoading
+                              ? CircularIndicator()
+                              : Text(S.of(context).resetPassword),
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.symmetric(vertical: 24),
+                              minimumSize:
+                                  Size(MediaQuery.of(context).size.width, 48)),
+                        )))),
       ],
     ));
   }
