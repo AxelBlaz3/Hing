@@ -26,6 +26,8 @@ class NewRecipeScreen extends StatefulWidget {
 class _NewRecipeScreenState extends State<NewRecipeScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  bool isValidated = false;
 
   @override
   void initState() {
@@ -70,7 +72,13 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                 padding:
                     EdgeInsets.only(bottom: 96, top: 24, left: 24, right: 24),
                 child: Form(
-                    key: widget.key,
+                    key: _formKey,
+                    onChanged: () {
+                      setState(() {
+                        isValidated =
+                            _formKey.currentState?.validate() ?? false;
+                      });
+                    },
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -168,69 +176,95 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                   alignment: Alignment.bottomCenter,
                   child: Hero(
                       tag: 'fab',
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          final RecipeProvider _recipeProvider =
-                              context.read<RecipeProvider>();
+                      child: Consumer<RecipeProvider>(
+                          builder: (context, recipeProvider, child) =>
+                              ElevatedButton(
+                                onPressed: !isValidated ||
+                                        (recipeProvider.pickedImage == null &&
+                                            recipeProvider.pickedVideo ==
+                                                null) ||
+                                        recipeProvider.ingredients.isEmpty
+                                    ? null
+                                    : () async {
+                                        final RecipeProvider _recipeProvider =
+                                            context.read<RecipeProvider>();
 
-                          if (_recipeProvider.ingredients.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text('Ingredients cannot be empty')));
-                            return;
-                          }
+                                        if (_recipeProvider
+                                            .ingredients.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(S
+                                                      .of(context)
+                                                      .ingredientsCannotBeEmpty)));
+                                          return;
+                                        }
 
-                          final recipe = {
-                            'title': _titleController.text,
-                            'description': _descriptionController.text,
-                            'category': _recipeProvider.category,
-                            'user_id': Hive.box<HingUser>(kUserBox)
-                                .get(kUserKey)
-                                ?.id
-                                .oid,
-                            'ingredients':
-                                jsonEncode(_recipeProvider.ingredients)
-                          };
+                                        final recipe = {
+                                          'title': _titleController.text,
+                                          'description':
+                                              _descriptionController.text,
+                                          'category': _recipeProvider.category,
+                                          'user_id':
+                                              Hive.box<HingUser>(kUserBox)
+                                                  .get(kUserKey)
+                                                  ?.id
+                                                  .oid,
+                                          'ingredients': jsonEncode(
+                                              _recipeProvider.ingredients)
+                                        };
 
-                          // Show publishing sheet.
-                          showModalBottomSheet(
-                              context: context,
-                              isScrollControlled: true,
-                              enableDrag: false,
-                              isDismissible: false,
-                              builder: (_) => SafeArea(
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(24),
-                                      child: const PublishingSheet())),
-                              backgroundColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(24))));
+                                        // Show publishing sheet.
+                                        showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            enableDrag: false,
+                                            isDismissible: false,
+                                            builder: (_) => SafeArea(
+                                                child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            24),
+                                                    child:
+                                                        const PublishingSheet())),
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.vertical(
+                                                        top: Radius.circular(
+                                                            24))));
 
-                          final isRecipeCreated = await _recipeProvider
-                              .createRecipe(recipe: recipe);
-                          if (!isRecipeCreated) {
-                            // Dimiss publishing sheet.
-                            Navigator.of(context).pop();
+                                        final isRecipeCreated =
+                                            await _recipeProvider.createRecipe(
+                                                recipe: recipe);
+                                        if (!isRecipeCreated) {
+                                          // Dimiss publishing sheet.
+                                          Navigator.of(context).pop();
 
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content:
-                                    Text(S.of(context).somethingWentWrong)));
-                            return;
-                          }
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                                  content: Text(S
+                                                      .of(context)
+                                                      .somethingWentWrong)));
+                                          return;
+                                        }
 
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text(S.of(context).newRecipeCreated)));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                content: Text(S
+                                                    .of(context)
+                                                    .newRecipeCreated)));
 
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                              kHomeRoute, (route) => false);
-                        },
-                        child: Text(S.of(context).publish),
-                        style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(vertical: 24),
-                            minimumSize:
-                                Size(MediaQuery.of(context).size.width, 48)),
-                      )))
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil(
+                                                kHomeRoute, (route) => false);
+                                      },
+                                child: Text(S.of(context).publish),
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(vertical: 24),
+                                    minimumSize: Size(
+                                        MediaQuery.of(context).size.width, 48)),
+                              ))))
             ]),
           ),
         ));

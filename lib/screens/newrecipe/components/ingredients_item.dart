@@ -44,7 +44,7 @@ class _IngredientsItemState extends State<IngredientsItem> {
                   final RecipeProvider _recipeProvider =
                       context.read<RecipeProvider>();
 
-                  if (_recipeProvider.ingredients.length > 1) {
+                  if (_recipeProvider.ingredients.isNotEmpty) {
                     _recipeProvider.removeIngredient(widget.index);
                   }
                 },

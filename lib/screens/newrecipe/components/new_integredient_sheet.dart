@@ -17,6 +17,7 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
   final TextEditingController _quantityController = TextEditingController();
   String? unitsValue = getQuantityUnits().first;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String error = '';
 
   @override
   void dispose() {
@@ -114,6 +115,23 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
                         SizedBox(
                           height: 24,
                         ),
+                        if (error.isNotEmpty)
+                          Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .errorColor
+                                      .withOpacity(.15),
+                                  borderRadius: BorderRadius.circular(8.0)),
+                              margin: const EdgeInsets.only(bottom: 16),
+                              padding: const EdgeInsets.all(8),
+                              child: Text(error,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption
+                                      ?.copyWith(
+                                          color:
+                                              Theme.of(context).errorColor))),
                         Row(
                           children: [
                             Expanded(
@@ -132,11 +150,29 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
                                           _quantityController.text),
                                       units: _recipeProvider.quantityUnits);
 
-                                  _recipeProvider.addNewIngredient(
-                                      ingredient: newIngredient);
+                                  final int index = _recipeProvider.ingredients
+                                      .indexWhere((ingredient) =>
+                                          ingredient.name ==
+                                              newIngredient.name &&
+                                          newIngredient.quantity ==
+                                              ingredient.quantity &&
+                                          ingredient.units ==
+                                              _recipeProvider.quantityUnits);
+                                  if (index == -1) {
+                                    _recipeProvider.addNewIngredient(
+                                        ingredient: newIngredient);
 
-                                  _itemController.text = '';
-                                  _quantityController.text = '';
+                                    _itemController.text = '';
+                                    _quantityController.text = '';
+                                    setState(() {
+                                      error = '';
+                                    });
+                                  } else {
+                                    setState(() {
+                                      error =
+                                          'That ingredient is already in the list.';
+                                    });
+                                  }
                                 }
                               },
                               child: Text(S.of(context).addMore),
@@ -149,10 +185,39 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
                             Expanded(
                                 child: ElevatedButton(
                                     onPressed: () {
-                                      context
-                                              .read<RecipeProvider>()
-                                              .quantityUnits =
+                                      final RecipeProvider recipeProvider =
+                                          context.read<RecipeProvider>();
+
+                                      // Check if the filled ingredient is already in list, if so, ignore adding it, add it otherwise.
+                                      final Ingredient newIngredient =
+                                          Ingredient(
+                                              name: _itemController.text,
+                                              quantity: double.parse(
+                                                  _quantityController.text),
+                                              units:
+                                                  recipeProvider.quantityUnits);
+
+                                      final int index = recipeProvider
+                                          .ingredients
+                                          .indexWhere((ingredient) =>
+                                              ingredient.name ==
+                                                  _itemController.text &&
+                                              double.parse(_quantityController
+                                                      .text) ==
+                                                  ingredient.quantity &&
+                                              ingredient.units ==
+                                                  recipeProvider.quantityUnits);
+                                      if (index == -1) {
+                                        recipeProvider.addNewIngredient(
+                                            ingredient: newIngredient);
+
+                                        _itemController.text = '';
+                                        _quantityController.text = '';
+                                      }
+
+                                      recipeProvider.quantityUnits =
                                           getQuantityUnits().first;
+
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(S.of(context).done),

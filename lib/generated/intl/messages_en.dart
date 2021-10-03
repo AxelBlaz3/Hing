@@ -96,6 +96,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "ingredientCannotBeEmptyError": MessageLookupByLibrary.simpleMessage(
             "Ingredient name cannot be empty"),
         "ingredients": MessageLookupByLibrary.simpleMessage("Ingredients"),
+        "ingredientsCannotBeEmpty":
+            MessageLookupByLibrary.simpleMessage("Ingredients cannot be empty"),
         "italian": MessageLookupByLibrary.simpleMessage("ITALIAN"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
         "like": MessageLookupByLibrary.simpleMessage("Like"),

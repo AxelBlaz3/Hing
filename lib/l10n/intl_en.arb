@@ -68,6 +68,7 @@
     "units": "Units",
     "newIngredient": "New Ingredient",
     "newIngredientSummary": "You can add more ingredients by clicking the ADD MORE button",
+    "ingredientsCannotBeEmpty": "Ingredients cannot be empty",
     "addMore": "ADD MORE",
     "done": "DONE",
     "ingredientCannotBeEmptyError": "Ingredient name cannot be empty",

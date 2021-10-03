@@ -746,6 +746,16 @@ class S {
     );
   }
 
+  /// `Ingredients cannot be empty`
+  String get ingredientsCannotBeEmpty {
+    return Intl.message(
+      'Ingredients cannot be empty',
+      name: 'ingredientsCannotBeEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `ADD MORE`
   String get addMore {
     return Intl.message(
