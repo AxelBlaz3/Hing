@@ -6,17 +6,17 @@ part of 'reply.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ReplyAdapter extends TypeAdapter<Reply> {
+class ReplyAdapter extends TypeAdapter<Replyy> {
   @override
   final int typeId = 5;
 
   @override
-  Reply read(BinaryReader reader) {
+  Replyy read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Reply(
+    return Replyy(
       id: fields[0] as ObjectId,
       body: fields[1] as String,
       isLiked: fields[2] as bool,
@@ -30,7 +30,7 @@ class ReplyAdapter extends TypeAdapter<Reply> {
   }
 
   @override
-  void write(BinaryWriter writer, Reply obj) {
+  void write(BinaryWriter writer, Replyy obj) {
     writer
       ..writeByte(9)
       ..writeByte(0)
@@ -68,8 +68,8 @@ class ReplyAdapter extends TypeAdapter<Reply> {
 // JsonSerializableGenerator
 // **************************************************************************
 
-Reply _$ReplyFromJson(Map<String, dynamic> json) {
-  return Reply(
+Replyy _$ReplyFromJson(Map<String, dynamic> json) {
+  return Replyy(
     id: ObjectId.fromJson(json['_id'] as Map<String, dynamic>),
     body: json['body'] as String,
     isLiked: json['is_liked'] as bool,
@@ -82,7 +82,7 @@ Reply _$ReplyFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$ReplyToJson(Reply instance) => <String, dynamic>{
+Map<String, dynamic> _$ReplyToJson(Replyy instance) => <String, dynamic>{
       '_id': instance.id,
       'body': instance.body,
       'is_liked': instance.isLiked,

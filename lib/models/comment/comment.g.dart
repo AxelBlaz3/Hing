@@ -25,13 +25,14 @@ class CommentAdapter extends TypeAdapter<Comment> {
       recipeId: fields[5] as ObjectId,
       user: fields[6] as HingUser,
       createdAt: fields[7] as Timestamp,
+      commentId: fields[8] as ObjectId?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Comment obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class CommentAdapter extends TypeAdapter<Comment> {
       ..writeByte(6)
       ..write(obj.user)
       ..writeByte(7)
-      ..write(obj.createdAt);
+      ..write(obj.createdAt)
+      ..writeByte(8)
+      ..write(obj.commentId);
   }
 
   @override
@@ -75,6 +78,9 @@ Comment _$CommentFromJson(Map<String, dynamic> json) {
     recipeId: ObjectId.fromJson(json['recipe_id'] as Map<String, dynamic>),
     user: HingUser.fromJson(json['user'] as Map<String, dynamic>),
     createdAt: Timestamp.fromJson(json['created_at'] as Map<String, dynamic>),
+    commentId: json['comment_id'] == null
+        ? null
+        : ObjectId.fromJson(json['comment_id'] as Map<String, dynamic>),
   );
 }
 
@@ -87,4 +93,5 @@ Map<String, dynamic> _$CommentToJson(Comment instance) => <String, dynamic>{
       'recipe_id': instance.recipeId,
       'user': instance.user,
       'created_at': instance.createdAt,
+      'comment_id': instance.commentId,
     };

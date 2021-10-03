@@ -32,6 +32,9 @@ class Comment {
   @HiveField(7)
   @JsonKey(name: 'created_at')
   final Timestamp createdAt;
+  @HiveField(8)
+  @JsonKey(name: 'comment_id')
+  final ObjectId? commentId;
 
   Comment(
       {required this.id,
@@ -41,7 +44,8 @@ class Comment {
       required this.repliesCount,
       required this.recipeId,
       required this.user,
-      required this.createdAt});
+      required this.createdAt,
+      this.commentId});
 
   //Comment1();
 

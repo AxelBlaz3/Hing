@@ -10,7 +10,7 @@ part 'reply.g.dart';
 
 @JsonSerializable()
 @HiveType(typeId: kCommentType)
-class Reply extends Comment {
+class Replyy extends Comment {
   @HiveField(0)
   @JsonKey(name: '_id')
   final ObjectId id;
@@ -37,7 +37,7 @@ class Reply extends Comment {
   @JsonKey(name: 'comment_id')
   final ObjectId commentId;
 
-  Reply(
+  Replyy(
       {required this.id,
       required this.body,
       required this.isLiked,
@@ -48,7 +48,7 @@ class Reply extends Comment {
       required this.createdAt,
       required this.commentId}) : super(isLiked: isLiked, createdAt: createdAt, id: id, body: body, user: user, recipeId: recipeId, repliesCount: repliesCount, likesCount: likesCount);
 
-  factory Reply.fromJson(Map<String, dynamic> json) =>
+  factory Replyy.fromJson(Map<String, dynamic> json) =>
       _$ReplyFromJson(json);
 
   Map<String, dynamic> toJson() => _$ReplyToJson(this);

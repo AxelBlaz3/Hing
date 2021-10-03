@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/comment/comment.dart';
 import 'package:hing/models/recipe/recipe.dart';
-import 'package:hing/models/reply/reply.dart';
 import 'package:hing/providers/comment_provider.dart';
 import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/comments/components/comment_item.dart';
@@ -29,8 +28,8 @@ class RepliesScreen extends StatefulWidget {
 
 class _RepliesScreenState extends State<RepliesScreen> {
   final int _pageSize = 10;
-  final PagingController<int, Reply> _pagingController =
-      PagingController<int, Reply>(firstPageKey: 1);
+  final PagingController<int, Comment> _pagingController =
+      PagingController<int, Comment>(firstPageKey: 1);
   late Comment comment;
 
   final _bodyController = TextEditingController();
@@ -53,7 +52,7 @@ class _RepliesScreenState extends State<RepliesScreen> {
           .getRepliesForComment(commentId: widget.comment.id.oid, page: pageKey)
           .then((replies) => replies.length < _pageSize
               ? _pagingController.appendLastPage(replies)
-              : _pagingController.appendPage(replies, pageKey + 1));    
+              : _pagingController.appendPage(replies, pageKey + 1));
     });
   }
 
@@ -98,22 +97,23 @@ class _RepliesScreenState extends State<RepliesScreen> {
               Flexible(
                 child: PagedListView(
                     pagingController: _pagingController,
-                    padding: EdgeInsets.only(left: 24),
+                    padding: EdgeInsets.only(left: 24, bottom: 88),
                     shrinkWrap: true,
-                    builderDelegate: PagedChildBuilderDelegate<Reply>(
+                    builderDelegate: PagedChildBuilderDelegate<Comment>(
                         noItemsFoundIndicatorBuilder: (_) =>
                             const EmptyIllustration(),
-                        itemBuilder: (_, reply, index) => CommentItem(
-                              isReply: true,
+                        itemBuilder: (_, comment, index) => CommentItem(
+                              isReply: comment.commentId != null,
                               recipe: widget.recipe,
-                              comment: reply,
+                              comment: comment,
                               refreshCallback: (updatedReply) {
                                 final oldReply =
-                                    _pagingController.itemList![index];    
+                                    _pagingController.itemList![index];
 
                                 _pagingController.itemList = List.of(
-                                    (_pagingController.itemList as List<Reply>)
-                                      ..[index] = updatedReply as Reply);
+                                    (_pagingController.itemList
+                                        as List<Comment>)
+                                      ..[index] = updatedReply);
                               },
                             ))),
               )
@@ -139,15 +139,17 @@ class _RepliesScreenState extends State<RepliesScreen> {
                                                 commentProvider =
                                                 context.read<CommentProvider>();
 
-                                            final Reply?
-                                                reply =
+                                            final Comment? reply =
                                                 await commentProvider
                                                     .postNewReply(
-                                                        commentId:
-                                                            widget
-                                                                .comment.id.oid,
+                                                        commentId: widget
+                                                            .comment.id.oid,
                                                         recipeId: widget
                                                             .recipe.id.oid,
+                                                        isCommentReply: widget
+                                                                .comment
+                                                                .commentId ==
+                                                            null,
                                                         body: _bodyController
                                                             .text);
 
@@ -158,6 +160,12 @@ class _RepliesScreenState extends State<RepliesScreen> {
                                                 reply,
                                                 ..._pagingController.itemList!
                                               ]);
+
+                                              // Update comment in current screen.
+                                              comment = comment
+                                                ..repliesCount =
+                                                    comment.repliesCount + 1;
+
                                               final Recipe updatedRecipe =
                                                   widget.recipe
                                                     ..commentsCount = widget

@@ -5,7 +5,6 @@ import 'package:hing/constants.dart';
 import 'package:hing/models/comment/comment.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
-import 'package:hing/models/reply/reply.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -67,7 +66,7 @@ class RecipeRepository {
     return <Comment>[];
   }
 
-  Future<List<Reply>> getRepliesForComment(
+  Future<List<Comment>> getRepliesForComment(
       {required String commentId, int page = 1}) async {
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
@@ -76,8 +75,8 @@ class RecipeRepository {
 
       if (response.statusCode == HttpStatus.ok) {
         final List repliesJson = jsonDecode(response.body);
-        final List<Reply> replies =
-            List<Reply>.from(repliesJson.map((reply) => Reply.fromJson(reply)))
+        final List<Comment> replies =
+            List<Comment>.from(repliesJson.map((reply) => Comment.fromJson(reply)))
                 .toList();
 
         return replies;
@@ -85,7 +84,7 @@ class RecipeRepository {
     } catch (e) {
       print('Exception occured when fetching comments - $e');
     }
-    return <Reply>[];
+    return <Comment>[];
   }
 
   Future<Comment?> postNewComment(
@@ -109,23 +108,25 @@ class RecipeRepository {
     }
   }
 
-  Future<Reply?> postNewReply(
+  Future<Comment?> postNewReply(
       {required String commentId,
       required String recipeId,
+      required bool isCommentReply,
       required String body}) async {
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
       final response = await http.post(Uri.parse(kAPIPostNewReplyRoute),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-          body: jsonEncode(<String, String>{
+          body: jsonEncode(<String, dynamic>{
             'body': body,
             'user_id': user!.id.oid,
             'recipe_id': recipeId,
+            'is_comment_reply': isCommentReply,
             'comment_id': commentId
           }));
 
       if (response.statusCode == HttpStatus.created) {
-        final Reply reply = Reply.fromJson(jsonDecode(response.body));
+        final Comment reply = Comment.fromJson(jsonDecode(response.body));
         return reply;
       }
     } catch (e) {

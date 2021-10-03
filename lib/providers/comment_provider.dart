@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hing/models/comment/comment.dart';
-import 'package:hing/models/reply/reply.dart';
 import 'package:hing/repository/recipe_repository.dart';
 
 class CommentProvider extends ChangeNotifier {
@@ -27,7 +26,7 @@ class CommentProvider extends ChangeNotifier {
         recipeId: recipeId, page: page);
   }
 
-  Future<List<Reply>> getRepliesForComment(
+  Future<List<Comment>> getRepliesForComment(
       {required String commentId, int page = 1}) async {
     return await recipeRepository.getRepliesForComment(
         commentId: commentId, page: page);
@@ -39,12 +38,13 @@ class CommentProvider extends ChangeNotifier {
         recipeId: recipeId, body: body);
   }
 
-  Future<Reply?> postNewReply(
+  Future<Comment?> postNewReply(
       {required String commentId,
       required String recipeId,
+      required bool isCommentReply,
       required String body}) async {
     return await recipeRepository.postNewReply(
-        commentId: commentId, body: body, recipeId: recipeId);
+        commentId: commentId, body: body, recipeId: recipeId, isCommentReply: isCommentReply);
   }
 
   Future<bool> likeComment({required String commentId}) async {
