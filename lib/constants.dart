@@ -9,7 +9,7 @@ const String kOnBoardingPrefKey = 'HING.ONBOARDING_KEY';
 final emailRegexPattern = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
-const String kBaseUrl = 'http://192.168.1.48:4999';
+const String kBaseUrl = 'http://192.168.43.87:4999';
 const int kAPIVersion = 1;
 const String kAPIPrefix = 'api/v$kAPIVersion';
 const String kAPILoginRoute = '$kBaseUrl/$kAPIPrefix/user/login';

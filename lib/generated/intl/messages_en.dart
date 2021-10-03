@@ -170,6 +170,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Something went wrong."),
         "termsAndConditions":
             MessageLookupByLibrary.simpleMessage("Terms & Conditions"),
+        "thatAccountDoesntExists": MessageLookupByLibrary.simpleMessage(
+            "That account doesn\'t exist."),
         "title": MessageLookupByLibrary.simpleMessage("Title"),
         "typeYourCommentHere":
             MessageLookupByLibrary.simpleMessage("Type your comment here"),

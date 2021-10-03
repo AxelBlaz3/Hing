@@ -4,9 +4,7 @@ import 'package:hing/constants.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/screens/components/error_illustration.dart';
 import 'package:hing/screens/components/toque_placeholder.dart';
-import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class FeedItemBody extends StatefulWidget {
   final int index;

@@ -134,12 +134,51 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         EdgeInsets.symmetric(horizontal: 16),
                                     child: ElevatedButton(
                                         onPressed: () {
-                                          refreshCallback(recipe
-                                            ..isFavorite = !recipe.isFavorite);
+                                          final RecipeProvider recipeProvider =
+                                              context.read<RecipeProvider>();
+                                          if (!recipe.isFavorite) {
+                                            recipeProvider
+                                                .addRecipeToFavorites(
+                                                    recipeId: recipe.id.oid)
+                                                .then((success) {
+                                              if (success) {
+                                                refreshCallback(recipe
+                                                  ..isFavorite =
+                                                      !recipe.isFavorite);
 
-                                          context
-                                              .read<RecipeProvider>()
-                                              .notifyRecipeChanges();
+                                                context
+                                                    .read<RecipeProvider>()
+                                                    .notifyRecipeChanges();
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(S
+                                                            .of(context)
+                                                            .somethingWentWrong)));
+                                              }
+                                            });
+                                          } else {
+                                            recipeProvider
+                                                .removeRecipeFromFavorites(
+                                                    recipeId: recipe.id.oid)
+                                                .then((success) {
+                                              if (success) {
+                                                refreshCallback(recipe
+                                                  ..isFavorite =
+                                                      !recipe.isFavorite);
+
+                                                context
+                                                    .read<RecipeProvider>()
+                                                    .notifyRecipeChanges();
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(S
+                                                            .of(context)
+                                                            .somethingWentWrong)));
+                                              }
+                                            });
+                                          }
                                         },
                                         child: Consumer<RecipeProvider>(
                                             builder: (context, recipeProvider,

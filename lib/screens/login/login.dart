@@ -127,59 +127,64 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 48,
                               ),
                               Consumer<UserProvider>(
-                                  builder: (context, userProvider, child) =>
-                                      ElevatedButton(
-                                        onPressed: !isValidated ||
-                                                userProvider.isLoading
-                                            ? null
-                                            : () {
-                                                final UserProvider
-                                                    authProvider = context
-                                                        .read<UserProvider>();
+                                  builder:
+                                      (context, userProvider, child) =>
+                                          ElevatedButton(
+                                            onPressed:
+                                                !isValidated ||
+                                                        userProvider.isLoading
+                                                    ? null
+                                                    : () {
+                                                        final UserProvider
+                                                            authProvider =
+                                                            context.read<
+                                                                UserProvider>();
 
-                                                userProvider.setIsLoading(true);
+                                                        userProvider
+                                                            .setIsLoading(true);
 
-                                                authProvider
-                                                    .login(
-                                                        email: _emailController
-                                                            .text,
-                                                        password:
-                                                            _passwordController
-                                                                .text)
-                                                    .then((response) {
-                                                  userProvider
-                                                      .setIsLoading(false);
-                                                  if (response is HingUser?) {
-                                                    Navigator.of(context)
-                                                        .pushReplacementNamed(
-                                                            kHomeRoute);
-                                                  } else {
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(SnackBar(
-                                                            content: Text(response ==
-                                                                    403
-                                                                ? S
+                                                        authProvider
+                                                            .login(
+                                                                email:
+                                                                    _emailController
+                                                                        .text,
+                                                                password:
+                                                                    _passwordController
+                                                                        .text)
+                                                            .then((response) {
+                                                          userProvider
+                                                              .setIsLoading(
+                                                                  false);
+                                                          if (response
+                                                              is HingUser?) {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pushReplacementNamed(
+                                                                    kHomeRoute);
+                                                          } else {
+                                                            ScaffoldMessenger
                                                                     .of(context)
-                                                                    .incorrectCredentials
-                                                                : S
-                                                                    .of(context)
-                                                                    .somethingWentWrong)));
-                                                  }
-                                                });
-                                              },
-                                        child: userProvider.isLoading
-                                            ? CircularIndicator()
-                                            : Text(S.of(context).login),
-                                        style: ElevatedButton.styleFrom(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 24),
-                                            minimumSize: Size(
-                                                MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                48)),
-                                      )),
+                                                                .showSnackBar(SnackBar(
+                                                                    content: Text(response == 403
+                                                                        ? S.of(context).incorrectCredentials
+                                                                        : response == 404
+                                                                            ? S.of(context).thatAccountDoesntExists
+                                                                            : S.of(context).somethingWentWrong)));
+                                                          }
+                                                        });
+                                                      },
+                                            child: userProvider.isLoading
+                                                ? CircularIndicator()
+                                                : Text(S.of(context).login),
+                                            style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 24),
+                                                minimumSize: Size(
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width,
+                                                    48)),
+                                          )),
                               SizedBox(
                                 height: 16,
                               ),

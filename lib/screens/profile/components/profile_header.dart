@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:hing/constants.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/screens/profile/components/profile_details.dart';
 import 'package:hing/screens/profile/components/profile_photo.dart';

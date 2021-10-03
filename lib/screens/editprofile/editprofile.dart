@@ -10,7 +10,6 @@ import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:hing/screens/editprofile/components/profile_placeholder.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {

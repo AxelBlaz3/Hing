@@ -106,5 +106,6 @@
     "onboardingTwoSummary": "Enjoy a fast and smooth food delivery at your doorstep.",
     "enterAValidEmail": "Enter a valid email.",
     "passwordUpdated": "Password updated",
-    "loading": "LOADING"
+    "loading": "LOADING",
+    "thatAccountDoesntExists": "That account doesn't exist."
 }
