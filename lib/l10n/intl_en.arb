@@ -107,5 +107,6 @@
     "enterAValidEmail": "Enter a valid email.",
     "passwordUpdated": "Password updated",
     "loading": "LOADING",
-    "thatAccountDoesntExists": "That account doesn't exist."
+    "thatAccountDoesntExists": "That account doesn't exist.",
+    "notifications": "Notifications"
 }

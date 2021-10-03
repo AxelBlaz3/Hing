@@ -117,6 +117,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "next": MessageLookupByLibrary.simpleMessage("Next"),
         "noRecipesFound": MessageLookupByLibrary.simpleMessage(
             "No recipes found here. Be the first to post under this category."),
+        "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
         "onboardingOneSummary": MessageLookupByLibrary.simpleMessage(
             "Here you can find a chef or dish for every taste and color. Enjoy!"),
         "onboardingOneTitle":

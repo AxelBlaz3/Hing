@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_notification/hing_notification.dart';
 import 'package:hing/providers/user_provider.dart';
 import 'package:hing/screens/components/empty_illustration.dart';
@@ -51,7 +52,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               floatHeaderSlivers: true,
               headerSliverBuilder: (context, innerScroll) => [
                     SliverAppBar(
-                      title: Text('Notifications'),
+                      title: Text(
+                        S.of(context).notifications,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                       floating: true,
                       leading: BackButton(
                         color: Theme.of(context).colorScheme.onSurface,
@@ -64,7 +68,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     pagingController: _pagingController,
                     builderDelegate:
                         PagedChildBuilderDelegate<HingNotification>(
-                          noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
+                            noItemsFoundIndicatorBuilder: (_) =>
+                                const EmptyIllustration(),
                             itemBuilder: (_, notification, index) =>
                                 NotificationItem(notification: notification)),
                     separatorBuilder: (_, __) => Divider(
