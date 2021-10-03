@@ -44,7 +44,11 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () {
-          context.read<RecipeProvider>().ingredients..clear();
+          final RecipeProvider recipeProvider = context.read<RecipeProvider>();
+          recipeProvider
+            ..ingredients.clear()
+            ..setPickedVideo(null)
+            ..pickedImage = null;
           return Future.value(true);
         },
         child: Scaffold(
@@ -218,8 +222,8 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(S.of(context).newRecipeCreated)));
 
-                          Navigator.of(context)
-                              .pushNamedAndRemoveUntil(kHomeRoute, (route) => false);
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              kHomeRoute, (route) => false);
                         },
                         child: Text(S.of(context).publish),
                         style: ElevatedButton.styleFrom(
