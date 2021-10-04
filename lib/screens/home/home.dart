@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen>
                                                 updatedRecipes;
                                           }),
                                   noItemsFoundIndicatorBuilder: (_) =>
-                                      const EmptyIllustration()),
+                                      EmptyIllustration(assetPath: 'assets/no_recipes_illustration.png', title: S.of(context).noRecipesTitle, summary: S.of(context).noRecipesFound,)),
                             ),
                           )))
                       .values

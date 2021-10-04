@@ -121,7 +121,8 @@ class _CommentFooterState extends State<CommentFooter> {
             Navigator.of(context).pushNamed(kRepliesRoute, arguments: {
               'recipe': widget.recipe,
               'comment': widget.comment,
-              'is_reply': widget.isReply
+              'is_reply': widget.isReply,
+              'refresh_callback': widget.refreshCallback
             });
           },
         ),

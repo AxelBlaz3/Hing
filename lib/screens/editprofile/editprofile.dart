@@ -214,6 +214,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                   image: userProvider.editProfileImage)
                               .then((success) {
                             if (success) {
+                              // Notify about user update
+                              context.read<UserProvider>().notifyUserChanges();
+                              
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content:

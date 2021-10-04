@@ -188,7 +188,7 @@ class UserRepository {
         final responseBody = jsonDecode(await response.stream.bytesToString());
         final HingUser cachedUser = Hive.box<HingUser>(kUserBox).get(kUserKey)!;
         Hive.box<HingUser>(kUserBox)
-            .put(kUserKey, cachedUser..image = responseBody['image']);
+            .put(kUserKey, cachedUser..image = responseBody['image']..displayName=displayName);
         return true;
       }
       return false;

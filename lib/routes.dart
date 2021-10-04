@@ -43,7 +43,9 @@ class RouteGenerator {
                       as Map<String, dynamic>)['recipe'] as Recipe,
                   comment: (settings.arguments!
                       as Map<String, dynamic>)['comment'] as Comment,
-                  isReply: (settings.arguments! as Map<String, dynamic>)['is_reply'] as bool? ?? false
+                  isReply: (settings.arguments! as Map<String, dynamic>)['is_reply'] as bool? ?? false,
+                  refreshCallback: (settings.arguments!
+                      as Map<String, dynamic>)['refresh_callback'],
                 ));
       case kCommentsRoute:
         return MaterialPageRoute(

@@ -957,10 +957,10 @@ class S {
   }
 
   /// `Oops!`
-  String get emptyTitle {
+  String get noRecipesTitle {
     return Intl.message(
       'Oops!',
-      name: 'emptyTitle',
+      name: 'noRecipesTitle',
       desc: '',
       args: [],
     );
@@ -971,6 +971,126 @@ class S {
     return Intl.message(
       'No recipes found here. Be the first to post under this category.',
       name: 'noRecipesFound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Users following you will appear here.`
+  String get noFollowersSummary {
+    return Intl.message(
+      'Users following you will appear here.',
+      name: 'noFollowersSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Users being followed by you appear here.`
+  String get noFollowingSummary {
+    return Intl.message(
+      'Users being followed by you appear here.',
+      name: 'noFollowingSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No followers yet.`
+  String get noOtherUserFollowersSummary {
+    return Intl.message(
+      'No followers yet.',
+      name: 'noOtherUserFollowersSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No following yet.`
+  String get noOtherUserFollowingSummary {
+    return Intl.message(
+      'No following yet.',
+      name: 'noOtherUserFollowingSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No posts yet`
+  String get noPostsTitle {
+    return Intl.message(
+      'No posts yet',
+      name: 'noPostsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Recipes published by you will appear here.`
+  String get noPostsSummary {
+    return Intl.message(
+      'Recipes published by you will appear here.',
+      name: 'noPostsSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No notifications yet. Any updates will appear here.`
+  String get noNotificationsSummary {
+    return Intl.message(
+      'No notifications yet. Any updates will appear here.',
+      name: 'noNotificationsSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No comments yet`
+  String get noCommentsTitle {
+    return Intl.message(
+      'No comments yet',
+      name: 'noCommentsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No replies yet`
+  String get noRepliesTitle {
+    return Intl.message(
+      'No replies yet',
+      name: 'noRepliesTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Let others know how tasty this recipe is.`
+  String get noCommentsSummary {
+    return Intl.message(
+      'Let others know how tasty this recipe is.',
+      name: 'noCommentsSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Let others know how tasty this recipe is.`
+  String get noRepliesSummary {
+    return Intl.message(
+      'Let others know how tasty this recipe is.',
+      name: 'noRepliesSummary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No one here. Come back later`
+  String get noUsersSummary {
+    return Intl.message(
+      'No one here. Come back later',
+      name: 'noUsersSummary',
       desc: '',
       args: [],
     );

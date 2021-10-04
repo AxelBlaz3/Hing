@@ -121,9 +121,11 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 preferredSize: Size.fromHeight(96),
                                 child: Padding(
                                     padding: const EdgeInsets.all(16),
-                                    child: MyProfileHeader(
-                                      user: widget.user,
-                                    )),
+                                    child: 
+                                    Consumer<UserProvider>(builder: (context, userProvider, child) =>
+                                    MyProfileHeader(
+                                      user: userProvider.currentUser
+                                    ))),
                               ),
                               actions: [
                                 PopupMenuButton(
@@ -210,7 +212,17 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                         key: PageStorageKey(index),
                                         builderDelegate:
                                             PagedChildBuilderDelegate(
-                                              noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
+                                                noItemsFoundIndicatorBuilder:
+                                                    (_) => EmptyIllustration(
+                                                          assetPath:
+                                                              'assets/no_recipes_illustration.png',
+                                                          title: S
+                                                              .of(context)
+                                                              .noPostsTitle,
+                                                          summary: S
+                                                              .of(context)
+                                                              .noPostsSummary,
+                                                        ),
                                                 itemBuilder:
                                                     (_, recipe, childIndex) =>
                                                         FeedItem(
@@ -271,7 +283,16 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                 index]
                                             as PagingController<int, HingUser>,
                                         builderDelegate: PagedChildBuilderDelegate(
-                                          noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
+                                            noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(
+                                                  assetPath:
+                                                      'assets/no_users_illustration.png',
+                                                  title: S
+                                                      .of(context)
+                                                      .noRecipesTitle,
+                                                  summary: S
+                                                      .of(context)
+                                                      .noUsersSummary,
+                                                ),
                                             itemBuilder: (_, user, childIndex) => UserItem(
                                                 user: user,
                                                 isFollowing: user.isFollowing!,

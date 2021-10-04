@@ -15,11 +15,13 @@ class RepliesScreen extends StatefulWidget {
   final Recipe recipe;
   final Comment comment;
   final bool isReply;
+  final Function(Comment) refreshCallback;
   const RepliesScreen(
       {Key? key,
       required this.recipe,
       required this.comment,
-      required this.isReply})
+      required this.isReply,
+      required this.refreshCallback})
       : super(key: key);
 
   @override
@@ -95,27 +97,35 @@ class _RepliesScreenState extends State<RepliesScreen> {
                       )),
               const DashedLine(),
               Flexible(
-                child: PagedListView(
-                    pagingController: _pagingController,
-                    padding: EdgeInsets.only(left: 24, bottom: 88),
-                    shrinkWrap: true,
-                    builderDelegate: PagedChildBuilderDelegate<Comment>(
-                        noItemsFoundIndicatorBuilder: (_) =>
-                            const EmptyIllustration(),
-                        itemBuilder: (_, comment, index) => CommentItem(
-                              isReply: comment.commentId != null,
-                              recipe: widget.recipe,
-                              comment: comment,
-                              refreshCallback: (updatedReply) {
-                                final oldReply =
-                                    _pagingController.itemList![index];
+                child: RefreshIndicator(
+                    onRefresh: () =>
+                        Future.sync(() => _pagingController.refresh()),
+                    child: PagedListView(
+                        pagingController: _pagingController,
+                        padding: EdgeInsets.only(left: 24, bottom: 88),
+                        shrinkWrap: true,
+                        builderDelegate: PagedChildBuilderDelegate<Comment>(
+                            noItemsFoundIndicatorBuilder: (_) =>
+                                EmptyIllustration(
+                                  assetPath:
+                                      'assets/no_recipes_illustration.png',
+                                  title: S.of(context).noRepliesTitle,
+                                  summary: S.of(context).noRepliesSummary,
+                                ),
+                            itemBuilder: (_, comment, index) => CommentItem(
+                                  isReply: comment.commentId != null,
+                                  recipe: widget.recipe,
+                                  comment: comment,
+                                  refreshCallback: (updatedReply) {
+                                    final oldReply =
+                                        _pagingController.itemList![index];
 
-                                _pagingController.itemList = List.of(
-                                    (_pagingController.itemList
-                                        as List<Comment>)
-                                      ..[index] = updatedReply);
-                              },
-                            ))),
+                                    _pagingController.itemList = List.of(
+                                        (_pagingController.itemList
+                                            as List<Comment>)
+                                          ..[index] = updatedReply);
+                                  },
+                                )))),
               )
             ],
           ),
@@ -131,71 +141,85 @@ class _RepliesScreenState extends State<RepliesScreen> {
                                 hintText: S.of(context).typeYourReplyHere,
                                 hintStyle:
                                     Theme.of(context).textTheme.bodyText2,
-                                suffixIcon: IconButton(
-                                    onPressed: commentProvider.isCommentEmpty
-                                        ? null
-                                        : () async {
-                                            final CommentProvider
-                                                commentProvider =
-                                                context.read<CommentProvider>();
-
-                                            final Comment? reply =
-                                                await commentProvider
-                                                    .postNewReply(
-                                                        commentId: widget
-                                                            .comment.id.oid,
-                                                        recipeId: widget
-                                                            .recipe.id.oid,
-                                                        isCommentReply: widget
-                                                                .comment
-                                                                .commentId ==
-                                                            null,
-                                                        body: _bodyController
-                                                            .text);
-
-                                            if (reply != null) {
-                                              _bodyController.text = '';
-                                              _pagingController.itemList =
-                                                  List.of([
-                                                reply,
-                                                ..._pagingController.itemList!
-                                              ]);
-
-                                              // Update comment in current screen.
-                                              comment = comment
-                                                ..repliesCount =
-                                                    comment.repliesCount + 1;
-
-                                              final Recipe updatedRecipe =
-                                                  widget.recipe
-                                                    ..commentsCount = widget
-                                                            .comment
-                                                            .repliesCount +
-                                                        1;
-                                              context
-                                                  .read<CommentProvider>()
-                                                  .notifyCommentChanges();
-
-                                              context
-                                                  .read<RecipeProvider>()
-                                                  .notifyRecipeChanges();
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                      content: Text('Retry')));
-                                            }
-                                          },
-                                    icon: SvgPicture.asset(
-                                      'assets/send.svg',
+                                suffixIcon: Container(
+                                    margin: const EdgeInsets.only(right: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(24),
                                       color: commentProvider.isCommentEmpty
-                                          ? Theme.of(context)
-                                              .colorScheme
-                                              .onSurface
-                                              .withOpacity(.25)
+                                          ? Colors.transparent
                                           : Theme.of(context)
                                               .colorScheme
                                               .primary,
-                                    )),
+                                    ),
+                                    child: IconButton(
+                                        onPressed: commentProvider
+                                                .isCommentEmpty
+                                            ? null
+                                            : () async {
+                                                final CommentProvider
+                                                    commentProvider =
+                                                    context.read<
+                                                        CommentProvider>();
+
+                                                final Comment? reply =
+                                                    await commentProvider
+                                                        .postNewReply(
+                                                            commentId:
+                                                                widget.comment
+                                                                    .id.oid,
+                                                            recipeId: widget
+                                                                .recipe.id.oid,
+                                                            isCommentReply: widget
+                                                                    .comment
+                                                                    .commentId ==
+                                                                null,
+                                                            body:
+                                                                _bodyController
+                                                                    .text);
+
+                                                if (reply != null) {
+                                                  _bodyController.text = '';
+                                                  _pagingController.itemList =
+                                                      List.of([
+                                                    reply,
+                                                    ..._pagingController
+                                                        .itemList!
+                                                  ]);
+
+                                                  // Update comment in current screen.
+                                                  comment = comment
+                                                    ..repliesCount =
+                                                        comment.repliesCount +
+                                                            1;
+
+                                                  widget
+                                                      .refreshCallback(comment);
+
+                                                  context
+                                                      .read<CommentProvider>()
+                                                      .notifyCommentChanges();
+
+                                                  context
+                                                      .read<RecipeProvider>()
+                                                      .notifyRecipeChanges();
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                          content:
+                                                              Text('Retry')));
+                                                }
+                                              },
+                                        icon: SvgPicture.asset(
+                                            'assets/send.svg',
+                                            color:
+                                                commentProvider.isCommentEmpty
+                                                    ? Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface
+                                                        .withOpacity(.25)
+                                                    : Theme.of(context)
+                                                        .colorScheme
+                                                        .onSurface))),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(40),
                                 ),

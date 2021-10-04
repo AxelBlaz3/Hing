@@ -76,7 +76,6 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Email cannot be empty."),
         "emailNotAvailable": MessageLookupByLibrary.simpleMessage(
             "That email is not available."),
-        "emptyTitle": MessageLookupByLibrary.simpleMessage("Oops!"),
         "enterAValidEmail":
             MessageLookupByLibrary.simpleMessage("Enter a valid email."),
         "favorites": MessageLookupByLibrary.simpleMessage("Favorites"),
@@ -117,8 +116,32 @@ class MessageLookup extends MessageLookupByLibrary {
         "newRecipeCreated":
             MessageLookupByLibrary.simpleMessage("New recipe created."),
         "next": MessageLookupByLibrary.simpleMessage("Next"),
+        "noCommentsSummary": MessageLookupByLibrary.simpleMessage(
+            "Let others know how tasty this recipe is."),
+        "noCommentsTitle":
+            MessageLookupByLibrary.simpleMessage("No comments yet"),
+        "noFollowersSummary": MessageLookupByLibrary.simpleMessage(
+            "Users following you will appear here."),
+        "noFollowingSummary": MessageLookupByLibrary.simpleMessage(
+            "Users being followed by you appear here."),
+        "noNotificationsSummary": MessageLookupByLibrary.simpleMessage(
+            "No notifications yet. Any updates will appear here."),
+        "noOtherUserFollowersSummary":
+            MessageLookupByLibrary.simpleMessage("No followers yet."),
+        "noOtherUserFollowingSummary":
+            MessageLookupByLibrary.simpleMessage("No following yet."),
+        "noPostsSummary": MessageLookupByLibrary.simpleMessage(
+            "Recipes published by you will appear here."),
+        "noPostsTitle": MessageLookupByLibrary.simpleMessage("No posts yet"),
         "noRecipesFound": MessageLookupByLibrary.simpleMessage(
             "No recipes found here. Be the first to post under this category."),
+        "noRecipesTitle": MessageLookupByLibrary.simpleMessage("Oops!"),
+        "noRepliesSummary": MessageLookupByLibrary.simpleMessage(
+            "Let others know how tasty this recipe is."),
+        "noRepliesTitle":
+            MessageLookupByLibrary.simpleMessage("No replies yet"),
+        "noUsersSummary": MessageLookupByLibrary.simpleMessage(
+            "No one here. Come back later"),
         "notifications": MessageLookupByLibrary.simpleMessage("Notifications"),
         "onboardingOneSummary": MessageLookupByLibrary.simpleMessage(
             "Here you can find a chef or dish for every taste and color. Enjoy!"),

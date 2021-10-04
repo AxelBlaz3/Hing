@@ -69,7 +69,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     builderDelegate:
                         PagedChildBuilderDelegate<HingNotification>(
                             noItemsFoundIndicatorBuilder: (_) =>
-                                const EmptyIllustration(),
+                                EmptyIllustration(assetPath: 'assets/no_notifications_illustration.png', title: S.of(context).noRecipesTitle, summary: S.of(context).noNotificationsSummary,),
                             itemBuilder: (_, notification, index) =>
                                 NotificationItem(notification: notification)),
                     separatorBuilder: (_, __) => Divider(

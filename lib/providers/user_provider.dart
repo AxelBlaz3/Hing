@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hing/constants.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/models/hing_notification/hing_notification.dart';
 import 'package:hing/repository/user_repository.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -13,6 +15,8 @@ class UserProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   XFile? _editProfileImage;
   XFile? get editProfileImage => _editProfileImage;
+
+  HingUser get currentUser => Hive.box<HingUser>(kUserBox).get(kUserKey)!;
 
   void setEditProfileImage(XFile? image) {
     _editProfileImage = image;

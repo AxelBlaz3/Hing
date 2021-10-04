@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/screens/components/empty_illustration.dart';
@@ -26,7 +27,7 @@ class _ProfileTabPostsContentState extends State<ProfileTabPostsContent> {
           padding: const EdgeInsets.only(bottom: 72, top: 24),
           pagingController: widget.pagingController,
           builderDelegate: PagedChildBuilderDelegate<Recipe>(
-            noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
+            noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(assetPath: 'assets/no_users_illustration.png', title: S.of(context).noRecipesTitle, summary: S.of(context).noUsersSummary,),
               itemBuilder: (_, recipe, index) => FeedItem(
                   index: index,
                   recipe: recipe,

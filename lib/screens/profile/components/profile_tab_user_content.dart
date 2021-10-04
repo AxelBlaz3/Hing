@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/screens/components/empty_illustration.dart';
 import 'package:hing/screens/profile/components/user_item.dart';
@@ -31,7 +32,7 @@ class _ProfileTabUserContentState extends State<ProfileTabUserContent> {
         child: PagedListView(
             pagingController: widget.pagingController,
             builderDelegate: PagedChildBuilderDelegate<HingUser>(
-              noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration(),
+              noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(assetPath: 'assets/no_users_illustration.png', title: S.of(context).noRecipesTitle, summary: S.of(context).noUsersSummary,),
                 itemBuilder: (_, user, index) => UserItem(
                     user: user,
                     isFollowing: widget.shouldFetchFollowers,

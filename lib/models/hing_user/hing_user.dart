@@ -17,7 +17,7 @@ class HingUser {
   String? image;
   @HiveField(3)
   @JsonKey(name: 'display_name')
-  final String displayName;
+  String displayName;
   @HiveField(4)
   final String? accessToken;
   @HiveField(5)

@@ -77,8 +77,11 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 padding: EdgeInsets.only(bottom: 120),
                 pagingController: _pagingController,
                 builderDelegate: PagedChildBuilderDelegate<Comment>(
-                    noItemsFoundIndicatorBuilder: (_) =>
-                        const EmptyIllustration(),
+                    noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(
+                          assetPath: 'assets/no_recipes_illustration.png',
+                          title: S.of(context).noCommentsTitle,
+                          summary: S.of(context).noRecipesTitle,
+                        ),
                     animateTransitions: true,
                     itemBuilder: (_, comment, index) => CommentItem(
                         recipe: widget.recipe,
@@ -99,55 +102,65 @@ class _CommentsScreenState extends State<CommentsScreen> {
                           decoration: InputDecoration(
                               hintText: S.of(context).typeYourCommentHere,
                               hintStyle: Theme.of(context).textTheme.bodyText2,
-                              suffixIcon: IconButton(
-                                  onPressed: commentProvider.isCommentEmpty
-                                      ? null
-                                      : () async {
-                                          final CommentProvider
-                                              commentProvider =
-                                              context.read<CommentProvider>();
+                              suffixIcon: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(24),
+                                      color: commentProvider.isCommentEmpty
+                                          ? Colors.transparent
+                                          : Theme.of(context)
+                                              .colorScheme
+                                              .primary),
+                                  child: IconButton(
+                                      onPressed: commentProvider.isCommentEmpty
+                                          ? null
+                                          : () async {
+                                              final CommentProvider
+                                                  commentProvider = context
+                                                      .read<CommentProvider>();
 
-                                          final Comment? comment =
-                                              await commentProvider
-                                                  .postNewComment(
-                                                      recipeId:
-                                                          widget.recipe.id.oid,
-                                                      body:
-                                                          _bodyController.text);
+                                              final Comment? comment =
+                                                  await commentProvider
+                                                      .postNewComment(
+                                                          recipeId: widget
+                                                              .recipe.id.oid,
+                                                          body: _bodyController
+                                                              .text);
 
-                                          if (comment != null) {
-                                            _bodyController.text = '';
-                                            _pagingController.itemList =
-                                                List.of([
-                                              comment,
-                                              ..._pagingController.itemList!
-                                            ]);
-                                            final Recipe updatedRecipe = widget
-                                                .recipe
-                                              ..commentsCount =
-                                                  widget.recipe.commentsCount +
-                                                      1;
-                                            widget
-                                                .refreshCallback(updatedRecipe);
+                                              if (comment != null) {
+                                                _bodyController.text = '';
+                                                _pagingController.itemList =
+                                                    List.of([
+                                                  comment,
+                                                  ..._pagingController.itemList!
+                                                ]);
+                                                final Recipe updatedRecipe =
+                                                    widget.recipe
+                                                      ..commentsCount = widget
+                                                              .recipe
+                                                              .commentsCount +
+                                                          1;
+                                                widget.refreshCallback(
+                                                    updatedRecipe);
 
-                                            context
-                                                .read<RecipeProvider>()
-                                                .notifyRecipeChanges();
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text('Retry')));
-                                          }
-                                        },
-                                  icon: SvgPicture.asset(
-                                    'assets/send.svg',
-                                    color: commentProvider.isCommentEmpty
-                                        ? Theme.of(context)
-                                            .colorScheme
-                                            .onSurface
-                                            .withOpacity(.25)
-                                        : Theme.of(context).colorScheme.primary,
-                                  )),
+                                                context
+                                                    .read<RecipeProvider>()
+                                                    .notifyRecipeChanges();
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content:
+                                                            Text('Retry')));
+                                              }
+                                            },
+                                      icon: SvgPicture.asset('assets/send.svg',
+                                          color: commentProvider.isCommentEmpty
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface
+                                                  .withOpacity(.25)
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface))),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(40),
                               ),
