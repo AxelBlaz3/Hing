@@ -7,6 +7,7 @@ import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/feed_provider.dart';
 import 'package:hing/screens/components/empty_illustration.dart';
+import 'package:hing/screens/components/toque_loading.dart';
 import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:hing/screens/home/components/feed_item.dart';
 import 'package:hing/screens/home/components/home_tab_delegate.dart';
@@ -126,6 +127,10 @@ class _HomeScreenState extends State<HomeScreen>
                               pagingController: _pagingControllers[key],
                               builderDelegate: PagedChildBuilderDelegate<
                                       Recipe>(
+                                  newPageProgressIndicatorBuilder: (context) =>
+                                      const ToqueLoading(
+                                        size: 24,
+                                      ),
                                   itemBuilder: (context, recipe, index) =>
                                       FeedItem(
                                           index: index,
@@ -138,7 +143,8 @@ class _HomeScreenState extends State<HomeScreen>
                                             _pagingControllers[key].itemList =
                                                 updatedRecipes;
                                           }),
-                                          noItemsFoundIndicatorBuilder: (_) => const EmptyIllustration()),
+                                  noItemsFoundIndicatorBuilder: (_) =>
+                                      const EmptyIllustration()),
                             ),
                           )))
                       .values

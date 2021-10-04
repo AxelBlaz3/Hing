@@ -23,13 +23,16 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
       accessToken: fields[4] as String?,
       image: fields[2] as String?,
       isFollowing: fields[5] as bool?,
-    );
+    )
+      ..postsCount = fields[6] as int?
+      ..followingCount = fields[7] as int?
+      ..followersCount = fields[8] as int?;
   }
 
   @override
   void write(BinaryWriter writer, HingUser obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +44,13 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
       ..writeByte(4)
       ..write(obj.accessToken)
       ..writeByte(5)
-      ..write(obj.isFollowing);
+      ..write(obj.isFollowing)
+      ..writeByte(6)
+      ..write(obj.postsCount)
+      ..writeByte(7)
+      ..write(obj.followingCount)
+      ..writeByte(8)
+      ..write(obj.followersCount);
   }
 
   @override
@@ -67,7 +76,10 @@ HingUser _$HingUserFromJson(Map<String, dynamic> json) {
     accessToken: json['accessToken'] as String?,
     image: json['image'] as String?,
     isFollowing: json['is_following'] as bool?,
-  );
+  )
+    ..postsCount = json['posts_count'] as int?
+    ..followingCount = json['following_count'] as int?
+    ..followersCount = json['followers_count'] as int?;
 }
 
 Map<String, dynamic> _$HingUserToJson(HingUser instance) => <String, dynamic>{
@@ -77,4 +89,7 @@ Map<String, dynamic> _$HingUserToJson(HingUser instance) => <String, dynamic>{
       'display_name': instance.displayName,
       'accessToken': instance.accessToken,
       'is_following': instance.isFollowing,
+      'posts_count': instance.postsCount,
+      'following_count': instance.followingCount,
+      'followers_count': instance.followersCount,
     };

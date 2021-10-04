@@ -33,8 +33,8 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
         padding: EdgeInsets.only(bottom: 24, left: 24, right: 24, top: 32),
         child: SafeArea(
             child: SingleChildScrollView(
-                // padding: EdgeInsets.only(
-                //     bottom: MediaQuery.of(context).viewInsets.bottom),
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
                 child: Form(
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     key: _formKey,
@@ -64,6 +64,7 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
                           children: [
                             Expanded(
                               child: TextFormField(
+                                keyboardType: TextInputType.number,
                                 controller: _quantityController,
                                 validator: (text) => text == null ||
                                         text.isEmpty
@@ -185,6 +186,11 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
                             Expanded(
                                 child: ElevatedButton(
                                     onPressed: () {
+                                      if (_itemController.text.isEmpty &&
+                                          _quantityController.text.isEmpty) {
+                                        Navigator.of(context).pop();
+                                      }
+
                                       final RecipeProvider recipeProvider =
                                           context.read<RecipeProvider>();
 

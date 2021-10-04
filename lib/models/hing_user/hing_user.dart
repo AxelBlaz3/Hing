@@ -23,6 +23,15 @@ class HingUser {
   @HiveField(5)
   @JsonKey(name: 'is_following')
   bool? isFollowing = false;
+  @HiveField(6)
+  @JsonKey(name: 'posts_count')
+  int? postsCount = 0;
+  @HiveField(7)
+  @JsonKey(name: 'following_count')
+  int? followingCount = 0;
+  @HiveField(8)
+  @JsonKey(name: 'followers_count')
+  int? followersCount = 0;
 
   HingUser(
       {required this.id,

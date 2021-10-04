@@ -4,7 +4,8 @@ import 'package:lottie/lottie.dart';
 
 class ToqueAnimation extends StatefulWidget {
   final double? size;
-  const ToqueAnimation({Key? key, this.size}) : super(key: key);
+  final bool shouldShowLoadingText;
+  const ToqueAnimation({Key? key, this.size, this.shouldShowLoadingText = true}) : super(key: key);
 
   @override
   _ToqueAnimationState createState() => _ToqueAnimationState();
@@ -48,15 +49,17 @@ class _ToqueAnimationState extends State<ToqueAnimation>
                     ..forward();
                 },
               ))),
-      Text(
-        S.of(context).loading,
-        style: Theme.of(context).textTheme.subtitle2?.copyWith(
-              fontSize: 10,
-            ),
-      ),
-      SizedBox(
-        height: 72,
-      )
+      if (widget.shouldShowLoadingText)
+        Text(
+          S.of(context).loading,
+          style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                fontSize: 10,
+              ),
+        ),
+      if (widget.shouldShowLoadingText)  
+        SizedBox(
+          height: 72,
+        )
     ]);
   }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hing/generated/l10n.dart';
+import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/screens/profile/components/tab_item.dart';
 
 class ProfileTabs extends StatefulWidget {
-  const ProfileTabs({Key? key}) : super(key: key);
+  final HingUser user;
+  const ProfileTabs({Key? key, required this.user}) : super(key: key);
 
   @override
   _ProfileTabsState createState() => _ProfileTabsState();
@@ -27,13 +30,16 @@ class _ProfileTabsState extends State<ProfileTabs> {
         // indicatorPadding: const EdgeInsets.all(0),
         tabs: [
           ProfileTabItem(
-            text: 'Posts',
+            text: S.of(context).posts,
+            count: widget.user.postsCount!
           ),
           ProfileTabItem(
-            text: 'Following',
+            text: S.of(context).following,
+            count: widget.user.followingCount!
           ),
           ProfileTabItem(
-            text: 'Followers',
+            text: S.of(context).followers,
+            count: widget.user.followersCount!
           ),
         ],
       ),

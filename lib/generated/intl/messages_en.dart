@@ -184,6 +184,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "units": MessageLookupByLibrary.simpleMessage("Units"),
         "update": MessageLookupByLibrary.simpleMessage("Update"),
         "uploadAPhoto": MessageLookupByLibrary.simpleMessage("UPLOAD A PHOTO"),
+        "uploadPhoto": MessageLookupByLibrary.simpleMessage("UPLOAD PHOTO"),
         "uploadPhotoDesc": MessageLookupByLibrary.simpleMessage(
             "Supported formats PNG or JPG or MP4. Photos are usually 400x300 or 800x600 but not enforced."),
         "video": MessageLookupByLibrary.simpleMessage("Video"),

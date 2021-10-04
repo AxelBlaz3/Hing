@@ -109,5 +109,6 @@
     "passwordUpdated": "Password updated",
     "loading": "LOADING",
     "thatAccountDoesntExists": "That account doesn't exist.",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "uploadPhoto": "UPLOAD PHOTO"
 }

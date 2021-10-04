@@ -70,12 +70,14 @@ class RecipeProvider extends ChangeNotifier {
     _pickedImage = null;
     _pickedVideo = newVideoFile;
 
-    VideoPlayerController videoPlayerController =
-        VideoPlayerController.file(File(_pickedVideo!.path));
-    await videoPlayerController.initialize();
-    _controller = videoPlayerController;
-    _controller!.play();
-    notifyListeners();
+    if (_pickedVideo != null) {
+      VideoPlayerController videoPlayerController =
+          VideoPlayerController.file(File(_pickedVideo!.path));
+      await videoPlayerController.initialize();
+      _controller = videoPlayerController;
+      _controller!.play();
+      notifyListeners();
+    }
   }
 
   void notifyRecipeChanges() {
@@ -87,13 +89,11 @@ class RecipeProvider extends ChangeNotifier {
         recipe, this._pickedImage ?? this.pickedVideo);
   }
 
-  Future<bool> likeRecipe(
-      {required String recipeId}) async {
+  Future<bool> likeRecipe({required String recipeId}) async {
     return await recipeRepository.likeRecipe(recipeId: recipeId);
   }
 
-  Future<bool> unLikeRecipe(
-      {required String recipeId}) async {
+  Future<bool> unLikeRecipe({required String recipeId}) async {
     return await recipeRepository.unLikeRecipe(recipeId: recipeId);
   }
 

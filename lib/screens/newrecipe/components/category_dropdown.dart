@@ -24,7 +24,7 @@ class CategoryDropDown extends StatelessWidget {
                   underline: SizedBox(),
                   value: recipeProvider.category,
                   hint: Text(S.of(context).category),
-                  items: allCategories
+                  items: getAllCategories(context)
                       .asMap()
                       .entries
                       .map((category) => DropdownMenuItem(

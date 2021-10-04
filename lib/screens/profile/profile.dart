@@ -130,7 +130,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Consumer<UserProvider>(
                               builder: (_, userProvider, __) =>
                                   ProfileHeader(user: user)),
-                          ProfileTabs(),
+                          Consumer<UserProvider>(
+                              builder: (_, userProvider, __) =>
+                                  ProfileTabs(user: user)),
                         ],
                       ),
                     )
@@ -148,7 +150,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       // Check if updatedUser is the current user's profile page. If so, update the user.
                       if (updatedUser.id.oid == user.id.oid) {
-                        user = user..isFollowing = updatedUser.isFollowing!;
+                        user = updatedUser;
                         Provider.of<UserProvider>(context, listen: false)
                             .notifyUserChanges();
                       }
@@ -162,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       // Check if updatedUser is the current user's profile page. If so, update the user.
                       if (updatedUser.id.oid == user.id.oid) {
-                        user = user..isFollowing = updatedUser.isFollowing!;
+                        user = updatedUser;
                         Provider.of<UserProvider>(context, listen: false)
                             .notifyUserChanges();
                       }

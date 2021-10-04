@@ -91,44 +91,71 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                               Hive.box<HingUser>(kUserBox).get(kUserKey)!;
 
                           return GestureDetector(
-                            onTap: () async {
-                              final UserProvider userProvider =
-                                  context.read<UserProvider>();
+                              onTap: () async {
+                                final UserProvider userProvider =
+                                    context.read<UserProvider>();
 
-                              final XFile? image = await ImagePicker()
-                                  .pickImage(source: ImageSource.gallery);
+                                final XFile? image = await ImagePicker()
+                                    .pickImage(source: ImageSource.gallery);
 
-                              userProvider.setEditProfileImage(image);
-                            },
-                            child: widget.user.image == null &&
-                                    userProvider.editProfileImage == null
-                                ? const ProfilePlaceholder()
-                                : ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: userProvider.editProfileImage != null
-                                        ? Image.file(
-                                            File(userProvider
-                                                .editProfileImage!.path),
-                                            fit: BoxFit.cover,
-                                            height: 96,
-                                            width: 96,
-                                          )
-                                        : CachedNetworkImage(
-                                            imageUrl: '$kBaseUrl/${user.image}',
-                                            fit: BoxFit.cover,
-                                            height: 96,
-                                            width: 96,
-                                            placeholder: (_, __) =>
-                                                const UserPlaceholder(
-                                              size: 32,
-                                            ),
-                                            errorWidget: (_, __, ___) =>
-                                                const UserPlaceholder(
-                                              size: 32,
-                                            ),
-                                          )),
-                          );
+                                userProvider.setEditProfileImage(image);
+                              },
+                              child: Stack(children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 8, right: 8),
+                                  child: widget.user.image == null &&
+                                          userProvider.editProfileImage == null
+                                      ? const ProfilePlaceholder()
+                                      : ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(16),
+                                          child: userProvider
+                                                      .editProfileImage !=
+                                                  null
+                                              ? Image.file(
+                                                  File(userProvider
+                                                      .editProfileImage!.path),
+                                                  fit: BoxFit.cover,
+                                                  height: 96,
+                                                  width: 96,
+                                                )
+                                              : CachedNetworkImage(
+                                                  imageUrl:
+                                                      '$kBaseUrl/${user.image}',
+                                                  fit: BoxFit.cover,
+                                                  height: 96,
+                                                  width: 96,
+                                                  placeholder: (_, __) =>
+                                                      const UserPlaceholder(
+                                                    size: 32,
+                                                  ),
+                                                  errorWidget: (_, __, ___) =>
+                                                      const UserPlaceholder(
+                                                    size: 32,
+                                                  ),
+                                                )),
+                                ),
+                                Positioned(
+                                    right: 0,
+                                    bottom: 0,
+                                    child: CircleAvatar(
+                                        radius: 16,
+                                        backgroundColor: Colors.grey[200],
+                                        child: Icon(Icons.edit_rounded,
+                                            size: 16,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSurface)))
+                              ]));
                         }),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Text(
+                          S.of(context).uploadPhoto,
+                          style: Theme.of(context).textTheme.subtitle2,
+                        ),
                         SizedBox(
                           height: 48,
                         ),

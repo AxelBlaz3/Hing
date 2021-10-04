@@ -9,7 +9,7 @@ import 'package:hing/screens/newrecipe/components/ingredients_list.dart';
 import 'package:hing/screens/newrecipe/components/media_picker.dart';
 import 'package:hing/screens/newrecipe/components/new_integredient_sheet.dart';
 import 'package:hing/screens/newrecipe/components/preview_media.dart';
-import 'package:hing/screens/newrecipe/publishing_sheet.dart';
+import 'package:hing/screens/components/toque_loading.dart';
 import 'package:hing/theme/colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -225,7 +225,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                                                         const EdgeInsets.all(
                                                             24),
                                                     child:
-                                                        const PublishingSheet())),
+                                                        const ToqueLoading())),
                                             backgroundColor: Theme.of(context)
                                                 .scaffoldBackgroundColor,
                                             shape: RoundedRectangleBorder(

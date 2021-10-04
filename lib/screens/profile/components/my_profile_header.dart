@@ -38,7 +38,11 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
             Navigator.of(context)
                 .pushNamed(kEditProfileRoute, arguments: widget.user);
           },
-          icon: SvgPicture.asset('assets/edit.svg'),
+          icon: SvgPicture.asset(
+            'assets/edit.svg',
+            height: 20,
+            width: 20,
+          ),
         )
       ],
     );
