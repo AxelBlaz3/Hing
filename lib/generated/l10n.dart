@@ -936,6 +936,16 @@ class S {
     );
   }
 
+  /// `{user} replied to your comment`
+  String xRepliedToYourComment(Object user) {
+    return Intl.message(
+      '$user replied to your comment',
+      name: 'xRepliedToYourComment',
+      desc: '',
+      args: [user],
+    );
+  }
+
   /// `Profile updated`
   String get profileUpdated {
     return Intl.message(

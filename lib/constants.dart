@@ -42,7 +42,10 @@ const String kAPIUnFollowUserRoute = '$kBaseUrl/$kAPIPrefix/user/unfollow';
 const String kAPIUpdateUserRoute = '$kBaseUrl/$kAPIPrefix/user/update';
 const String kAPISendVerificationEmailRoute =
     '$kBaseUrl/$kAPIPrefix/user/send/resetcode';
-const String kAPICreatePasswordRoute = '$kBaseUrl/$kAPIPrefix/user/create/password';
+const String kAPICreatePasswordRoute =
+    '$kBaseUrl/$kAPIPrefix/user/create/password';
+const String kAPIUpdateFirebaseTokenRoute =
+    '$kBaseUrl/$kAPIPrefix/user/update/token';
 
 // Route names
 const String kLoginRoute = '/login';

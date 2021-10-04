@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/models/hing_notification/hing_notification.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
@@ -20,8 +21,15 @@ class UserRepository {
 
       if (response.statusCode == HttpStatus.ok) {
         final hingUser = HingUser.fromJson(jsonDecode(response.body));
-        // Cache logged in user
+
         await Hive.box<HingUser>(kUserBox).put(kUserKey, hingUser);
+        // Update firebase token and cache logged in user.
+        final String? firebaseToken =
+            await FirebaseMessaging.instance.getToken();
+
+        if (firebaseToken != null) {
+          await updateFirebaseToken(firebaseToken: firebaseToken);
+        }
         return hingUser;
       } else
         return response.statusCode;
@@ -44,8 +52,14 @@ class UserRepository {
 
     if (response.statusCode == HttpStatus.created) {
       final hingUser = HingUser.fromJson(jsonDecode(response.body));
-      // Cache logged in user
+
       await Hive.box<HingUser>(kUserBox).put(kUserKey, hingUser);
+      // Update firebase token and cache signed up user.
+      final String? firebaseToken = await FirebaseMessaging.instance.getToken();
+
+      if (firebaseToken != null) {
+        await updateFirebaseToken(firebaseToken: firebaseToken);
+      }
       return hingUser;
     } else
       return response.statusCode;
@@ -68,8 +82,7 @@ class UserRepository {
       required String password,
       required String code}) async {
     try {
-      final response = await http.put(
-          Uri.parse(kAPICreatePasswordRoute),
+      final response = await http.put(Uri.parse(kAPICreatePasswordRoute),
           headers: {HttpHeaders.contentTypeHeader: "application/json"},
           body: jsonEncode(<String, String>{
             'email': email,
@@ -187,11 +200,29 @@ class UserRepository {
         // Update cached user 'image' with new image.
         final responseBody = jsonDecode(await response.stream.bytesToString());
         final HingUser cachedUser = Hive.box<HingUser>(kUserBox).get(kUserKey)!;
-        Hive.box<HingUser>(kUserBox)
-            .put(kUserKey, cachedUser..image = responseBody['image']..displayName=displayName);
+        Hive.box<HingUser>(kUserBox).put(
+            kUserKey,
+            cachedUser
+              ..image = responseBody['image']
+              ..displayName = displayName);
         return true;
       }
       return false;
+    } catch (e) {}
+    return false;
+  }
+
+  Future<bool> updateFirebaseToken({required String firebaseToken}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.put(Uri.parse(kAPIUpdateFirebaseTokenRoute),
+          headers: {HttpHeaders.contentTypeHeader: "application/json"},
+          body: jsonEncode(<String, String>{
+            'firebase_token': firebaseToken,
+            'user_id': user!.id.oid
+          }));
+
+      return response.statusCode == HttpStatus.ok;
     } catch (e) {}
     return false;
   }

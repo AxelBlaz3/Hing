@@ -87,6 +87,7 @@
     "xLikedYComment": "{user} liked your comment",
     "xLikeYReply": "{user} liked your reply",
     "xCommentedOnYourRecipe": "{user} commented on your recipe",
+    "xRepliedToYourComment": "{user} replied to your comment",
     "profileUpdated": "Profile updated",
     "fixErrorsAbove": "Fix errors and submit",
     "noRecipesTitle": "Oops!",

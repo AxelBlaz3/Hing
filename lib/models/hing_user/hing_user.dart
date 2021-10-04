@@ -32,6 +32,9 @@ class HingUser {
   @HiveField(8)
   @JsonKey(name: 'followers_count')
   int? followersCount = 0;
+  @HiveField(9)
+  @JsonKey(name: 'firebase_token')
+  String? firebaseToken;
 
   HingUser(
       {required this.id,

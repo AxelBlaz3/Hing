@@ -3,9 +3,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hing/constants.dart';
+import 'package:hing/enums/notification_type.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/object_id/object_id.dart';
+import 'package:hing/notification_service.dart';
 import 'package:hing/providers/user_provider.dart';
 import 'package:hing/providers/comment_provider.dart';
 import 'package:hing/providers/feed_provider.dart';
@@ -59,25 +61,51 @@ void main() async {
 class HingApp extends StatefulWidget {
   final bool isLoggedIn;
   final bool isOnBoardingDone;
-  const HingApp({Key? key, required this.isLoggedIn, required this.isOnBoardingDone}) : super(key: key);
+  const HingApp(
+      {Key? key, required this.isLoggedIn, required this.isOnBoardingDone})
+      : super(key: key);
 
   @override
   _HingAppState createState() => _HingAppState();
 }
 
 class _HingAppState extends State<HingApp> {
-  Future<void> _initializeFirebase() async {
+  Future<void> _initializeFirebase(BuildContext context) async {
+    NotificationService().init();
+
     await Firebase.initializeApp();
 
-    FirebaseMessaging.onMessage.listen((message) {
-      print(message.notification);
+    final String? firebaseToken = await FirebaseMessaging.instance.getToken();
+
+    HingUser? user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+    if (firebaseToken != null) {
+      if (user?.firebaseToken != firebaseToken) {
+        if (user != null) {
+          await Hive.box<HingUser>(kUserBox)
+              .put(kUserKey, user..firebaseToken = firebaseToken);
+
+          context
+              .read<UserProvider>()
+              .updateFirebaseToken(firebaseToken: firebaseToken);
+        }
+      }
+    }
+
+    FirebaseMessaging.instance.onTokenRefresh.listen((token) async {
+      HingUser? user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      if (user != null) {
+        await Hive.box<HingUser>(kUserBox)
+            .put(kUserKey, user..firebaseToken = token);
+
+        context.read<UserProvider>().updateFirebaseToken(firebaseToken: token);
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: _initializeFirebase(),
+        future: _initializeFirebase(context),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             print(snapshot.error);
@@ -97,7 +125,13 @@ class _HingAppState extends State<HingApp> {
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: S.delegate.supportedLocales,
-            home: widget.isLoggedIn ? HomeScreen() : widget.isOnBoardingDone ? LoginScreen() : OnboardingScreen(index: 1,),
+            home: widget.isLoggedIn
+                ? HomeScreen()
+                : widget.isOnBoardingDone
+                    ? LoginScreen()
+                    : OnboardingScreen(
+                        index: 1,
+                      ),
           );
         });
   }

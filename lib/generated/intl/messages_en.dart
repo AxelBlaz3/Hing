@@ -35,7 +35,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m6(likesCount) =>
       "${Intl.plural(likesCount, one: '1 like', other: '${likesCount} likes')}";
 
-  static String m7(repliesCount) =>
+  static String m7(user) => "${user} replied to your comment";
+
+  static String m8(repliesCount) =>
       "${Intl.plural(repliesCount, one: '1 reply', other: '${repliesCount} replies')}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -218,7 +220,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "xLikedYComment": m4,
         "xLikedYPost": m5,
         "xLikes": m6,
-        "xReplies": m7,
+        "xRepliedToYourComment": m7,
+        "xReplies": m8,
         "you": MessageLookupByLibrary.simpleMessage("You")
       };
 }

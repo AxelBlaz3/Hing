@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hing/constants.dart';
+import 'package:hing/enums/notification_type.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
@@ -14,6 +16,8 @@ import 'package:hing/screens/home/components/home_tab_delegate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
+
+import '../../notification_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -33,6 +37,10 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
 
+    FirebaseMessaging.onMessage.listen(pushNotificationHandler);
+
+    FirebaseMessaging.onBackgroundMessage(backgroundPushNotificationHandler);
+
     _pagingControllers.addAll(List.generate(
         kTotalCategories + 1, (index) => PagingController(firstPageKey: 1)));
 
@@ -51,6 +59,40 @@ class _HomeScreenState extends State<HomeScreen>
         });
       });
     });
+  }
+
+  void pushNotificationHandler(RemoteMessage message) {
+    final payload = message.data;
+    final int notificationType = int.parse(payload['type']);
+    String? body;
+
+    if (notificationType == NotificationType.likePost.index) {
+      body =
+          '${S.of(context).xLikedYPost(payload["display_name"])} - ${payload["recipe"]}';
+    } else if (notificationType == NotificationType.likeComment.index) {
+      body =
+          '${S.of(context).xLikedYComment(payload["display_name"])} - ${payload["comment"]}';
+    } else if (notificationType == NotificationType.likeReply.index) {
+      body =
+          '${S.of(context).xLikeYReply(payload["display_name"])} - ${payload["reply"]}';
+    } else if (notificationType == NotificationType.newFollower.index) {
+      body = '${S.of(context).xFollowedY(payload["display_name"])}';
+    } else if (notificationType == NotificationType.newComment.index) {
+      body =
+          '${S.of(context).xCommentedOnYourRecipe(payload["display_name"])} - ${payload["comment"]}';
+    } else if (notificationType == NotificationType.newReply.index) {
+      body =
+          '${S.of(context).xRepliedToYourComment(payload["display_name"])} - ${payload["comment"]}';
+    }
+
+    if (body != null) {
+      NotificationService().showNotifications(null, body, payload);
+      print('Push notification - ${message.data}');
+    }
+  }
+
+  Future<void> backgroundPushNotificationHandler(RemoteMessage message) async {
+    pushNotificationHandler(message);
   }
 
   @override
@@ -144,7 +186,12 @@ class _HomeScreenState extends State<HomeScreen>
                                                 updatedRecipes;
                                           }),
                                   noItemsFoundIndicatorBuilder: (_) =>
-                                      EmptyIllustration(assetPath: 'assets/no_recipes_illustration.png', title: S.of(context).noRecipesTitle, summary: S.of(context).noRecipesFound,)),
+                                      EmptyIllustration(
+                                        assetPath:
+                                            'assets/no_recipes_illustration.png',
+                                        title: S.of(context).noRecipesTitle,
+                                        summary: S.of(context).noRecipesFound,
+                                      )),
                             ),
                           )))
                       .values
