@@ -79,6 +79,8 @@ class RecipeProvider extends ChangeNotifier {
       _controller = videoPlayerController;
       _controller!.play();
       notifyListeners();
+    } else {
+      _controller?.dispose();
     }
   }
 
@@ -121,7 +123,8 @@ class RecipeProvider extends ChangeNotifier {
       String ingredients = '';
 
       for (final ingredient in recipe.ingredients) {
-        ingredients += "• ${ingredient.name} (${ingredient.quantity}${ingredient.units})\n";
+        ingredients +=
+            "• ${ingredient.name} (${ingredient.quantity}${ingredient.units})\n";
       }
 
       await Share.shareFiles([recipeImage.path],

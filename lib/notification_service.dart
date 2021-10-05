@@ -28,7 +28,7 @@ class NotificationService {
   Future<void> init() async {
     //Initialization Settings for Android
     final AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('ic_notification.png');
+        AndroidInitializationSettings('ic_notification');
 
     //Initialization Settings for iOS
     final IOSInitializationSettings initializationSettingsIOS =

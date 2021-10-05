@@ -42,27 +42,33 @@ class UserRepository {
       {required String displayName,
       required String email,
       required String password}) async {
-    final response = await http.post(Uri.parse(kAPISignupRoute),
-        headers: {HttpHeaders.contentTypeHeader: "application/json"},
-        body: jsonEncode(<String, String>{
-          'email': email,
-          'display_name': displayName,
-          'password': password
-        }));
+    try {
+      final response = await http.post(Uri.parse(kAPISignupRoute),
+          headers: {HttpHeaders.contentTypeHeader: "application/json"},
+          body: jsonEncode(<String, String>{
+            'email': email,
+            'display_name': displayName,
+            'password': password
+          }));
 
-    if (response.statusCode == HttpStatus.created) {
-      final hingUser = HingUser.fromJson(jsonDecode(response.body));
+      if (response.statusCode == HttpStatus.created) {
+        final hingUser = HingUser.fromJson(jsonDecode(response.body));
 
-      await Hive.box<HingUser>(kUserBox).put(kUserKey, hingUser);
-      // Update firebase token and cache signed up user.
-      final String? firebaseToken = await FirebaseMessaging.instance.getToken();
+        await Hive.box<HingUser>(kUserBox).put(kUserKey, hingUser);
+        // Update firebase token and cache signed up user.
+        final String? firebaseToken =
+            await FirebaseMessaging.instance.getToken();
 
-      if (firebaseToken != null) {
-        await updateFirebaseToken(firebaseToken: firebaseToken);
+        if (firebaseToken != null) {
+          await updateFirebaseToken(firebaseToken: firebaseToken);
+        }
+        return hingUser;
+      } else {
+        return response.statusCode;
       }
-      return hingUser;
-    } else
-      return response.statusCode;
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<bool> sendVerificationCode({required String email}) async {
@@ -195,7 +201,6 @@ class UserRepository {
       }
 
       final response = await request.send();
-
       if (response.statusCode == HttpStatus.ok) {
         // Update cached user 'image' with new image.
         final responseBody = jsonDecode(await response.stream.bytesToString());
@@ -208,7 +213,9 @@ class UserRepository {
         return true;
       }
       return false;
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
     return false;
   }
 

@@ -102,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen>
             Navigator.of(context).pushNamed(kUploadRecipe);
           },
           backgroundColor: Theme.of(context).colorScheme.primary,
-          heroTag: 'fab',
           child: SvgPicture.asset('assets/edit.svg'),
         ),
         body: DefaultTabController(
