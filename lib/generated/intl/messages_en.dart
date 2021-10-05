@@ -30,7 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m4(user) => "${user} liked your comment";
 
-  static String m5(user) => "${user} liked your recipe.";
+  static String m5(user) => "${user} liked your recipe";
 
   static String m6(likesCount) =>
       "${Intl.plural(likesCount, one: '1 like', other: '${likesCount} likes')}";

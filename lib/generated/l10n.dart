@@ -896,10 +896,10 @@ class S {
     );
   }
 
-  /// `{user} liked your recipe.`
+  /// `{user} liked your recipe`
   String xLikedYPost(Object user) {
     return Intl.message(
-      '$user liked your recipe.',
+      '$user liked your recipe',
       name: 'xLikedYPost',
       desc: '',
       args: [user],

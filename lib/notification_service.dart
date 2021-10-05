@@ -28,7 +28,7 @@ class NotificationService {
   Future<void> init() async {
     //Initialization Settings for Android
     final AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/app_icon');
+        AndroidInitializationSettings('ic_notification.png');
 
     //Initialization Settings for iOS
     final IOSInitializationSettings initializationSettingsIOS =
@@ -49,7 +49,9 @@ class NotificationService {
     );
   }
 
-  AndroidNotificationDetails _androidNotificationDetails =
+  Future<void> showNotifications(
+      String? title, String? body, dynamic payload) async {
+        AndroidNotificationDetails _androidNotificationDetails =
       AndroidNotificationDetails(
     'hing',
     'Like notifications',
@@ -57,6 +59,7 @@ class NotificationService {
     playSound: true,
     priority: Priority.high,
     importance: Importance.high,
+    styleInformation: BigTextStyleInformation(body!)
   );
 
   IOSNotificationDetails _iosNotificationDetails = IOSNotificationDetails(
@@ -68,8 +71,6 @@ class NotificationService {
       subtitle: null,
       threadIdentifier: 'Hing');
 
-  Future<void> showNotifications(
-      String? title, String? body, dynamic payload) async {
     NotificationDetails platformChannelSpecifics = NotificationDetails(
         android: _androidNotificationDetails, iOS: _iosNotificationDetails);
 

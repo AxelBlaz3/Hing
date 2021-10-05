@@ -95,8 +95,9 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
           recipe: widget.recipe,
           iconPath: 'assets/share.svg',
           countLabel: S.of(context).share,
-          onPressed: () {
+          onPressed: () async {
             // Navigator.of(context).pushNamed(kCommentsRoute);
+            await context.read<RecipeProvider>().shareRecipe(context, widget.recipe);
           },
         )),
       ],

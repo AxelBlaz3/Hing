@@ -16,7 +16,6 @@ import 'package:hing/screens/home/components/home_tab_delegate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
-
 import '../../notification_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -65,34 +64,32 @@ class _HomeScreenState extends State<HomeScreen>
     final payload = message.data;
     final int notificationType = int.parse(payload['type']);
     String? body;
+    String? title;
 
     if (notificationType == NotificationType.likePost.index) {
-      body =
-          '${S.of(context).xLikedYPost(payload["display_name"])} - ${payload["recipe"]}';
+      title = '${payload["recipe"]}';
+      body = '${payload["display_name"]} liked your recipe.';
     } else if (notificationType == NotificationType.likeComment.index) {
-      body =
-          '${S.of(context).xLikedYComment(payload["display_name"])} - ${payload["comment"]}';
+      title = '${payload["display_name"]} liked your comment.';
+      body = '${payload["comment"]}';
     } else if (notificationType == NotificationType.likeReply.index) {
-      body =
-          '${S.of(context).xLikeYReply(payload["display_name"])} - ${payload["reply"]}';
+      title = '${payload["display_name"]} liked your reply.';
+      body = '${payload["reply"]}';
     } else if (notificationType == NotificationType.newFollower.index) {
-      body = '${S.of(context).xFollowedY(payload["display_name"])}';
+      body = '${payload["display_name"]} started following you.';
     } else if (notificationType == NotificationType.newComment.index) {
+      title = '${payload["display_name"]} commented';
       body =
-          '${S.of(context).xCommentedOnYourRecipe(payload["display_name"])} - ${payload["comment"]}';
+          '${payload["comment"]}';
     } else if (notificationType == NotificationType.newReply.index) {
+      title = '${payload["display_name"]} replied';
       body =
-          '${S.of(context).xRepliedToYourComment(payload["display_name"])} - ${payload["comment"]}';
+          '${payload["comment"]}';
     }
 
     if (body != null) {
-      NotificationService().showNotifications(null, body, payload);
-      print('Push notification - ${message.data}');
+      NotificationService().showNotifications(title, body, payload);
     }
-  }
-
-  Future<void> backgroundPushNotificationHandler(RemoteMessage message) async {
-    pushNotificationHandler(message);
   }
 
   @override
@@ -252,5 +249,37 @@ class _HomeAppBarState extends State<HomeAppBar> {
                     placeholder: (_, __) => const UserPlaceholder(),
                   ))),
         ]);
+  }
+}
+
+Future<void> backgroundPushNotificationHandler(RemoteMessage message) async {
+  final payload = message.data;
+  final int notificationType = int.parse(payload['type']);
+  String? body;
+  String? title;
+
+  if (notificationType == NotificationType.likePost.index) {
+    title = '${payload["recipe"]}';
+    body = '${payload["display_name"]} liked your recipe.';
+  } else if (notificationType == NotificationType.likeComment.index) {
+    title = '${payload["display_name"]} liked your comment.';
+    body = '${payload["comment"]}';
+  } else if (notificationType == NotificationType.likeReply.index) {
+    title = '${payload["display_name"]} liked your reply.';
+    body = '${payload["reply"]}';
+  } else if (notificationType == NotificationType.newFollower.index) {
+    body = '${payload["display_name"]} started following you.';
+  } else if (notificationType == NotificationType.newComment.index) {
+    title = '${payload["display_name"]} commented';
+    body =
+        '${payload["comment"]}';
+  } else if (notificationType == NotificationType.newReply.index) {
+    title = '${payload["display_name"]} replied';
+    body =
+        '${payload["comment"]}';
+  }
+
+  if (body != null) {
+    NotificationService().showNotifications(title, body, payload);
   }
 }

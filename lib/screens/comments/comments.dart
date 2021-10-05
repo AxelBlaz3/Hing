@@ -103,6 +103,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                               hintText: S.of(context).typeYourCommentHere,
                               hintStyle: Theme.of(context).textTheme.bodyText2,
                               suffixIcon: Container(
+                                  margin: const EdgeInsets.only(right: 8),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(24),
                                       color: commentProvider.isCommentEmpty

@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/models/ingredient/ingredient.dart';
+import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/repository/recipe_repository.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
 class RecipeProvider extends ChangeNotifier {
@@ -103,5 +105,32 @@ class RecipeProvider extends ChangeNotifier {
 
   Future<bool> removeRecipeFromFavorites({required String recipeId}) async {
     return await recipeRepository.removeRecipeFromFavorites(recipeId: recipeId);
+  }
+
+  Future<void> shareRecipe(BuildContext context, Recipe recipe) async {
+    File? recipeImage = await recipeRepository
+        .getRecipeImage('$kBaseUrl/${recipe.media.first.mediaPath}');
+
+    if (recipeImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Something went wrong, retry.')));
+      return;
+    }
+
+    try {
+      String ingredients = '';
+
+      for (final ingredient in recipe.ingredients) {
+        ingredients += "• ${ingredient.name} (${ingredient.quantity}${ingredient.units})\n";
+      }
+
+      await Share.shareFiles([recipeImage.path],
+          subject: recipe.title,
+          text:
+              '${recipe.title}\n\nDescription\n${recipe.description}\n\nIngredients\n$ingredients\n\nThis recipe is shared from Hing.');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Something went wrong, retry.')));
+    }
   }
 }

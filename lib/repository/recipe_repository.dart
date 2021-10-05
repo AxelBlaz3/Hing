@@ -8,6 +8,7 @@ import 'package:hing/models/recipe/recipe.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class RecipeRepository {
   Future<bool> createNewRecipe(Map<String, dynamic> recipe, XFile? file) async {
@@ -75,9 +76,8 @@ class RecipeRepository {
 
       if (response.statusCode == HttpStatus.ok) {
         final List repliesJson = jsonDecode(response.body);
-        final List<Comment> replies =
-            List<Comment>.from(repliesJson.map((reply) => Comment.fromJson(reply)))
-                .toList();
+        final List<Comment> replies = List<Comment>.from(
+            repliesJson.map((reply) => Comment.fromJson(reply))).toList();
 
         return replies;
       }
@@ -255,5 +255,16 @@ class RecipeRepository {
       return response.statusCode == HttpStatus.ok;
     } catch (e) {}
     return false;
+  }
+
+  Future<File?> getRecipeImage(String imageUrl) async {
+    try {
+      final response = await http.get((Uri.parse(imageUrl)));
+
+      final documentDirectory = (await getExternalStorageDirectory())!.path;
+      File imgFile = new File('$documentDirectory/recipe_image.png');
+      imgFile.writeAsBytesSync(response.bodyBytes);
+      return imgFile;
+    } catch (e) {}
   }
 }

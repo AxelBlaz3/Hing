@@ -83,7 +83,7 @@
     "removeFromFavorites": "Remove from favorites",
     "you": "You",
     "xFollowedY": "{follower} started following you.",
-    "xLikedYPost": "{user} liked your recipe.",
+    "xLikedYPost": "{user} liked your recipe",
     "xLikedYComment": "{user} liked your comment",
     "xLikeYReply": "{user} liked your reply",
     "xCommentedOnYourRecipe": "{user} commented on your recipe",
