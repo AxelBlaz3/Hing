@@ -79,12 +79,10 @@ class _HomeScreenState extends State<HomeScreen>
       body = '${payload["display_name"]} started following you.';
     } else if (notificationType == NotificationType.newComment.index) {
       title = '${payload["display_name"]} commented';
-      body =
-          '${payload["comment"]}';
+      body = '${payload["comment"]}';
     } else if (notificationType == NotificationType.newReply.index) {
       title = '${payload["display_name"]} replied';
-      body =
-          '${payload["comment"]}';
+      body = '${payload["comment"]}';
     }
 
     if (body != null) {
@@ -270,12 +268,10 @@ Future<void> backgroundPushNotificationHandler(RemoteMessage message) async {
     body = '${payload["display_name"]} started following you.';
   } else if (notificationType == NotificationType.newComment.index) {
     title = '${payload["display_name"]} commented';
-    body =
-        '${payload["comment"]}';
+    body = '${payload["comment"]}';
   } else if (notificationType == NotificationType.newReply.index) {
     title = '${payload["display_name"]} replied';
-    body =
-        '${payload["comment"]}';
+    body = '${payload["comment"]}';
   }
 
   if (body != null) {
