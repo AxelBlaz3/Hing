@@ -21,13 +21,15 @@ class HingNotificationAdapter extends TypeAdapter<HingNotification> {
       createdAt: fields[1] as Timestamp,
       otherUser: fields[2] as HingUser,
       notificationType: fields[3] as int,
+      recipeNotification: fields[4] as RecipeNotification?,
+      commentNotification: fields[5] as CommentNotification?,
     );
   }
 
   @override
   void write(BinaryWriter writer, HingNotification obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +37,11 @@ class HingNotificationAdapter extends TypeAdapter<HingNotification> {
       ..writeByte(2)
       ..write(obj.otherUser)
       ..writeByte(3)
-      ..write(obj.notificationType);
+      ..write(obj.notificationType)
+      ..writeByte(4)
+      ..write(obj.recipeNotification)
+      ..writeByte(5)
+      ..write(obj.commentNotification);
   }
 
   @override
@@ -59,6 +65,12 @@ HingNotification _$HingNotificationFromJson(Map<String, dynamic> json) {
     createdAt: Timestamp.fromJson(json['created_at'] as Map<String, dynamic>),
     otherUser: HingUser.fromJson(json['other_user'] as Map<String, dynamic>),
     notificationType: json['type'] as int,
+    recipeNotification: json['recipe'] == null
+        ? null
+        : RecipeNotification.fromJson(json['recipe'] as Map<String, dynamic>),
+    commentNotification: json['comment'] == null
+        ? null
+        : CommentNotification.fromJson(json['comment'] as Map<String, dynamic>),
   );
 }
 
@@ -68,4 +80,6 @@ Map<String, dynamic> _$HingNotificationToJson(HingNotification instance) =>
       'created_at': instance.createdAt,
       'other_user': instance.otherUser,
       'type': instance.notificationType,
+      'recipe': instance.recipeNotification,
+      'comment': instance.commentNotification,
     };

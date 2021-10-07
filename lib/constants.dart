@@ -9,7 +9,7 @@ const String kOnBoardingPrefKey = 'HING.ONBOARDING_KEY';
 final emailRegexPattern = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
-// const String kBaseUrl = 'http://192.168.1.48:4999';
+// const String kBaseUrl = 'http://192.168.1.48:5050';
 const String kBaseUrl = 'https://hing.wielabs.tech';
 const int kAPIVersion = 1;
 const String kAPIPrefix = 'api/v$kAPIVersion';
@@ -109,6 +109,8 @@ const int kMediaType = 4;
 const int kCommentType = 5;
 const int kTimestampType = 6;
 const int kHingNotificationType = 7;
+const int kCommentNotificationType = 8;
+const int kRecipeNotificationType = 9;
 
 // Hive boxes
 const String kUserBox = 'userBox';

@@ -1,5 +1,6 @@
 import 'package:hing/constants.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
+import 'package:hing/models/hing_notification/model_notification.dart';
 import 'package:hing/models/object_id/object_id.dart';
 import 'package:hing/models/timestamp/timestamp.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -22,12 +23,20 @@ class HingNotification {
   @HiveField(3)
   @JsonKey(name: 'type')
   final int notificationType;
+  @HiveField(4)
+  @JsonKey(name: 'recipe')
+  final RecipeNotification? recipeNotification;
+  @HiveField(5)
+  @JsonKey(name: 'comment')
+  final CommentNotification? commentNotification;
 
   HingNotification(
       {required this.id,
       required this.createdAt,
       required this.otherUser,
-      required this.notificationType});
+      required this.notificationType,
+      required this.recipeNotification,
+      required this.commentNotification});
 
   factory HingNotification.fromJson(Map<String, dynamic> json) =>
       _$HingNotificationFromJson(json);

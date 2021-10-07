@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final int index;
@@ -13,8 +14,10 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+
   @override
   Widget build(BuildContext context) {
+    //  print('Deep link - ${ModalRoute.of(context)?.settings.arguments}');
     return Scaffold(
         body: Stack(
       alignment: Alignment.topCenter,
@@ -65,7 +68,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           // Update shared preferences and set onBoardingDone to true.
                           (await SharedPreferences.getInstance())
                               .setBool(kOnBoardingPrefKey, true);
-                              
+
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               kLoginRoute, (route) => false);
                         }

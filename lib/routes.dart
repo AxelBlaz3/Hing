@@ -72,7 +72,7 @@ class RouteGenerator {
       case kNotificationRoute:
         return MaterialPageRoute(builder: (_) => NotificationsScreen());
       case kCreatePasswordRoute:
-        return MaterialPageRoute(builder: (_) => CreatePasswordScreen(email: settings.arguments as String));  
+        return MaterialPageRoute(builder: (_) => CreatePasswordScreen(email: settings.arguments as String));
       default:
         throw Exception(
             'Unknown route ${settings.name}. Make sure to add the route to RouteGenerator before navigating.');

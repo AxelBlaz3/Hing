@@ -3,7 +3,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hing/constants.dart';
-import 'package:hing/enums/notification_type.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/object_id/object_id.dart';
@@ -23,6 +22,7 @@ import 'package:hing/theme/theme.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
 
 void main() async {
   final UserRepository _userRepository = UserRepository();
@@ -104,35 +104,42 @@ class _HingAppState extends State<HingApp> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: _initializeFirebase(context),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            print(snapshot.error);
-            return Center(
-                child: CircularProgressIndicator(
-              color: kOnSurfaceColor,
-            ));
-          }
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: HingTheme.getHingThemeData(ThemeData.light()),
-            onGenerateRoute: RouteGenerator.onGenerateRoutes,
-            localizationsDelegates: [
-              S.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: S.delegate.supportedLocales,
-            home: widget.isLoggedIn
-                ? HomeScreen()
-                : widget.isOnBoardingDone
-                    ? LoginScreen()
-                    : OnboardingScreen(
-                        index: 1,
-                      ),
-          );
-        });
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: HingTheme.getHingThemeData(ThemeData.light()),
+        onGenerateRoute: RouteGenerator.onGenerateRoutes,
+        localizationsDelegates: [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        home: FutureBuilder(
+            future: _initializeFirebase(context),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                print(snapshot.error);
+                return Center(
+                    child: CircularProgressIndicator(
+                  color: kOnSurfaceColor,
+                ));
+              }
+
+              Future.microtask(() {
+                getInitialLink().then((value) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text('LINK - ${value}')));
+                });
+              });
+
+              return widget.isLoggedIn
+                  ? HomeScreen()
+                  : widget.isOnBoardingDone
+                      ? LoginScreen()
+                      : OnboardingScreen(
+                          index: 1,
+                        );
+            }));
   }
 }
