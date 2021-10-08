@@ -896,6 +896,36 @@ class S {
     );
   }
 
+  /// ` started following you.`
+  String get startedFollowingYou {
+    return Intl.message(
+      ' started following you.',
+      name: 'startedFollowingYou',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` liked your comment `
+  String get likedYourComment {
+    return Intl.message(
+      ' liked your comment ',
+      name: 'likedYourComment',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` liked your reply `
+  String get likedYourReply {
+    return Intl.message(
+      ' liked your reply ',
+      name: 'likedYourReply',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{user} liked your recipe`
   String xLikedYPost(Object user) {
     return Intl.message(
@@ -916,6 +946,16 @@ class S {
     );
   }
 
+  /// ` liked your recipe `
+  String get likedYourRecipe {
+    return Intl.message(
+      ' liked your recipe ',
+      name: 'likedYourRecipe',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `{user} liked your reply`
   String xLikeYReply(Object user) {
     return Intl.message(
@@ -933,6 +973,26 @@ class S {
       name: 'xCommentedOnYourRecipe',
       desc: '',
       args: [user],
+    );
+  }
+
+  /// ` commented on your recipe `
+  String get commentedOnYourRecipe {
+    return Intl.message(
+      ' commented on your recipe ',
+      name: 'commentedOnYourRecipe',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// ` replied to your comment `
+  String get repliedToYourComment {
+    return Intl.message(
+      ' replied to your comment ',
+      name: 'repliedToYourComment',
+      desc: '',
+      args: [],
     );
   }
 

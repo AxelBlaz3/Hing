@@ -29,6 +29,9 @@ class HingNotification {
   @HiveField(5)
   @JsonKey(name: 'comment')
   final CommentNotification? commentNotification;
+  @HiveField(6)
+  @JsonKey(name: 'reply')
+  final CommentNotification? replyNotification;
 
   HingNotification(
       {required this.id,
@@ -36,7 +39,8 @@ class HingNotification {
       required this.otherUser,
       required this.notificationType,
       required this.recipeNotification,
-      required this.commentNotification});
+      required this.commentNotification,
+      required this.replyNotification});
 
   factory HingNotification.fromJson(Map<String, dynamic> json) =>
       _$HingNotificationFromJson(json);

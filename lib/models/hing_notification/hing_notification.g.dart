@@ -23,13 +23,14 @@ class HingNotificationAdapter extends TypeAdapter<HingNotification> {
       notificationType: fields[3] as int,
       recipeNotification: fields[4] as RecipeNotification?,
       commentNotification: fields[5] as CommentNotification?,
+      replyNotification: fields[6] as CommentNotification?,
     );
   }
 
   @override
   void write(BinaryWriter writer, HingNotification obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +42,9 @@ class HingNotificationAdapter extends TypeAdapter<HingNotification> {
       ..writeByte(4)
       ..write(obj.recipeNotification)
       ..writeByte(5)
-      ..write(obj.commentNotification);
+      ..write(obj.commentNotification)
+      ..writeByte(6)
+      ..write(obj.replyNotification);
   }
 
   @override
@@ -71,6 +74,9 @@ HingNotification _$HingNotificationFromJson(Map<String, dynamic> json) {
     commentNotification: json['comment'] == null
         ? null
         : CommentNotification.fromJson(json['comment'] as Map<String, dynamic>),
+    replyNotification: json['reply'] == null
+        ? null
+        : CommentNotification.fromJson(json['reply'] as Map<String, dynamic>),
   );
 }
 
@@ -82,4 +88,5 @@ Map<String, dynamic> _$HingNotificationToJson(HingNotification instance) =>
       'type': instance.notificationType,
       'recipe': instance.recipeNotification,
       'comment': instance.commentNotification,
+      'reply': instance.replyNotification,
     };

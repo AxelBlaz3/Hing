@@ -57,6 +57,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "codeIsEmpty":
             MessageLookupByLibrary.simpleMessage("Code cannot be empty."),
         "comment": MessageLookupByLibrary.simpleMessage("Comment"),
+        "commentedOnYourRecipe":
+            MessageLookupByLibrary.simpleMessage(" commented on your recipe "),
         "comments": MessageLookupByLibrary.simpleMessage("Comments"),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("Confirm password"),
@@ -102,6 +104,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "italian": MessageLookupByLibrary.simpleMessage("ITALIAN"),
         "item": MessageLookupByLibrary.simpleMessage("Item"),
         "like": MessageLookupByLibrary.simpleMessage("Like"),
+        "likedYourComment":
+            MessageLookupByLibrary.simpleMessage(" liked your comment "),
+        "likedYourRecipe":
+            MessageLookupByLibrary.simpleMessage(" liked your recipe "),
+        "likedYourReply":
+            MessageLookupByLibrary.simpleMessage(" liked your reply "),
         "loading": MessageLookupByLibrary.simpleMessage("LOADING"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginToYourAccount":
@@ -182,6 +190,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "quantity_hint": MessageLookupByLibrary.simpleMessage("1"),
         "removeFromFavorites":
             MessageLookupByLibrary.simpleMessage("Remove from favorites"),
+        "repliedToYourComment":
+            MessageLookupByLibrary.simpleMessage(" replied to your comment "),
         "replies": MessageLookupByLibrary.simpleMessage("Replies"),
         "reply": MessageLookupByLibrary.simpleMessage("Reply"),
         "resetNewPasswordSummary": MessageLookupByLibrary.simpleMessage(
@@ -196,6 +206,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "share": MessageLookupByLibrary.simpleMessage("Share"),
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Something went wrong."),
+        "startedFollowingYou":
+            MessageLookupByLibrary.simpleMessage(" started following you."),
         "termsAndConditions":
             MessageLookupByLibrary.simpleMessage("Terms & Conditions"),
         "thatAccountDoesntExists": MessageLookupByLibrary.simpleMessage(

@@ -22,7 +22,6 @@ import 'package:hing/theme/theme.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uni_links/uni_links.dart';
 
 void main() async {
   final UserRepository _userRepository = UserRepository();
@@ -119,19 +118,11 @@ class _HingAppState extends State<HingApp> {
             future: _initializeFirebase(context),
             builder: (context, snapshot) {
               if (snapshot.hasError) {
-                print(snapshot.error);
                 return Center(
                     child: CircularProgressIndicator(
                   color: kOnSurfaceColor,
                 ));
               }
-
-              Future.microtask(() {
-                getInitialLink().then((value) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text('LINK - ${value}')));
-                });
-              });
 
               return widget.isLoggedIn
                   ? HomeScreen()

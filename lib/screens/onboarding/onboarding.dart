@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uni_links/uni_links.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final int index;
