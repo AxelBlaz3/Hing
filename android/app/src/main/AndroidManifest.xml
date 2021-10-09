@@ -2,6 +2,14 @@
     package="com.example.hing">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <queries>
+      <!-- If your app opens https URLs -->
+      <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="https" />
+      </intent>
+    </queries>
     
    <application
         android:label="Hing"
@@ -35,6 +43,16 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+            <intent-filter>
+              <action android:name="android.intent.action.VIEW" />
+              <category android:name="android.intent.category.DEFAULT" />
+              <category android:name="android.intent.category.BROWSABLE" />
+              <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
+              <data
+                android:scheme="https"
+                android:host="hing.page.link" />
+          </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

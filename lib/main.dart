@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -70,6 +71,7 @@ class HingApp extends StatefulWidget {
 
 class _HingAppState extends State<HingApp> {
   Future<void> _initializeFirebase(BuildContext context) async {
+    initDynamicLinks(context);
     NotificationService().init();
 
     await Firebase.initializeApp();
@@ -114,23 +116,52 @@ class _HingAppState extends State<HingApp> {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
-        home: FutureBuilder(
-            future: _initializeFirebase(context),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(
-                    child: CircularProgressIndicator(
-                  color: kOnSurfaceColor,
-                ));
-              }
+        home: Builder(
+            builder: (context) => FutureBuilder(
+                future: _initializeFirebase(context),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                        child: CircularProgressIndicator(
+                      color: kOnSurfaceColor,
+                    ));
+                  }
 
-              return widget.isLoggedIn
-                  ? HomeScreen()
-                  : widget.isOnBoardingDone
-                      ? LoginScreen()
-                      : OnboardingScreen(
-                          index: 1,
-                        );
-            }));
+                  return widget.isLoggedIn
+                      ? HomeScreen()
+                      : widget.isOnBoardingDone
+                          ? LoginScreen()
+                          : OnboardingScreen(
+                              index: 1,
+                            );
+                })));
+  }
+
+  void initDynamicLinks(BuildContext context) async {
+    FirebaseDynamicLinks.instance.onLink(
+        onSuccess: (PendingDynamicLinkData? dynamicLink) async {
+      final Uri? deepLink = dynamicLink?.link;
+
+      if (deepLink != null) {
+        if (deepLink.path == '/recipe') {
+          Navigator.of(context).pushNamed(kDetailsRoute,
+              arguments: deepLink.queryParameters['recipe_id']);
+          // Navigator.pushNamed(context, kDetailsRoute,
+          //     arguments: deepLink.queryParameters['id']);
+        }
+      }
+    }, onError: (OnLinkErrorException e) async {
+      print('onLinkError');
+      print(e.message);
+    });
+
+    final PendingDynamicLinkData? data =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    final Uri? deepLink = data?.link;
+
+    if (deepLink != null) {
+      Navigator.of(context)
+          .pushNamed(kDetailsRoute, arguments: deepLink.queryParameters['recipe_id']);
+    }
   }
 }

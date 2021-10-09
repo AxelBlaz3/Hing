@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/models/ingredient/ingredient.dart';
@@ -16,6 +18,21 @@ class RecipeProvider extends ChangeNotifier {
   VideoPlayerController? _controller;
   String _units = getQuantityUnits().first;
   int _category = 1;
+
+  DynamicLinkParameters getDynamicLinkForShare(String recipeId) {
+    return DynamicLinkParameters(
+        uriPrefix: 'https://hing.page.link',
+        link: Uri.parse('https://hing.page.link/recipe?recipe_id=$recipeId'),
+        androidParameters: AndroidParameters(
+          packageName: 'com.wielabs.hing',
+          minimumVersion: 1,
+        ),
+        iosParameters: IosParameters(
+          bundleId: 'com.wielabs.hing',
+          minimumVersion: '1.0.0',
+          appStoreId: '123456789',
+        ));
+  }
 
   RecipeProvider({required this.recipeRepository});
 
@@ -109,31 +126,35 @@ class RecipeProvider extends ChangeNotifier {
     return await recipeRepository.removeRecipeFromFavorites(recipeId: recipeId);
   }
 
-  Future<void> shareRecipe(BuildContext context, Recipe recipe) async {
-    File? recipeImage = await recipeRepository
-        .getRecipeImage('$kBaseUrl/${recipe.media.first.mediaPath}');
-
-    if (recipeImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Something went wrong, retry.')));
-      return;
-    }
-
-    try {
-      String ingredients = '';
-
-      for (final ingredient in recipe.ingredients) {
-        ingredients +=
-            "• ${ingredient.name} (${ingredient.quantity}${ingredient.units})\n";
-      }
-
-      await Share.shareFiles([recipeImage.path],
-          subject: recipe.title,
-          text:
-              '${recipe.title}\n\nDescription\n${recipe.description}\n\nIngredients\n$ingredients\n\nThis recipe is shared from Hing.');
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Something went wrong, retry.')));
-    }
+  Future<Recipe?> getRecipe({required String recipeId}) async {
+    return await recipeRepository.getRecipe(recipeId: recipeId);
   }
+
+  // Future<void> shareRecipe(BuildContext context, Recipe recipe) async {
+  //   File? recipeImage = await recipeRepository
+  //       .getRecipeImage('$kBaseUrl/${recipe.media.first.mediaPath}');
+
+  //   if (recipeImage == null) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Something went wrong, retry.')));
+  //     return;
+  //   }
+
+  //   try {
+  //     String ingredients = '';
+
+  //     for (final ingredient in recipe.ingredients) {
+  //       ingredients +=
+  //           "• ${ingredient.name} (${ingredient.quantity}${ingredient.units})\n";
+  //     }
+
+  //     await Share.shareFiles([recipeImage.path],
+  //         subject: recipe.title,
+  //         text:
+  //             '${recipe.title}\n\nDescription\n${recipe.description}\n\nIngredients\n$ingredients\n\nThis recipe is shared from Hing.');
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('Something went wrong, retry.')));
+  //   }
+  // }
 }
