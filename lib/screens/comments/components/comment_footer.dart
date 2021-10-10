@@ -5,6 +5,7 @@ import 'package:hing/models/comment/comment.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/comment_provider.dart';
 import 'package:hing/screens/home/components/feed_action_item.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CommentFooter extends StatefulWidget {
@@ -115,7 +116,7 @@ class _CommentFooterState extends State<CommentFooter> {
           iconPath: 'assets/chat.svg',
           recipe: widget.recipe,
           countLabel: widget.comment.repliesCount > 0
-              ? S.of(context).xReplies(widget.comment.repliesCount)
+              ? S.of(context).xRepliesLabel(NumberFormat.compact().format(widget.comment.repliesCount))
               : S.of(context).reply,
           onPressed: () {
             Navigator.of(context).pushNamed(kRepliesRoute, arguments: {

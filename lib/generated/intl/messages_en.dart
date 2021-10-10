@@ -24,21 +24,27 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m1(commentsCount) =>
       "${Intl.plural(commentsCount, one: '1 comment', other: '${commentsCount} comments')}";
 
-  static String m2(follower) => "${follower} started following you.";
+  static String m2(howMany) => "${howMany} comments";
 
-  static String m3(user) => "${user} liked your reply";
+  static String m3(follower) => "${follower} started following you.";
 
-  static String m4(user) => "${user} liked your comment";
+  static String m4(user) => "${user} liked your reply";
 
-  static String m5(user) => "${user} liked your recipe";
+  static String m5(user) => "${user} liked your comment";
 
-  static String m6(likesCount) =>
+  static String m6(user) => "${user} liked your recipe";
+
+  static String m7(likesCount) =>
       "${Intl.plural(likesCount, one: '1 like', other: '${likesCount} likes')}";
 
-  static String m7(user) => "${user} replied to your comment";
+  static String m8(howMany) => "${howMany} likes";
 
-  static String m8(repliesCount) =>
+  static String m9(user) => "${user} replied to your comment";
+
+  static String m10(repliesCount) =>
       "${Intl.plural(repliesCount, one: '1 reply', other: '${repliesCount} replies')}";
+
+  static String m11(howMany) => "${howMany} replies";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -60,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "commentedOnYourRecipe":
             MessageLookupByLibrary.simpleMessage(" commented on your recipe "),
         "comments": MessageLookupByLibrary.simpleMessage("Comments"),
+        "commentsLabel": MessageLookupByLibrary.simpleMessage("comments"),
         "confirmPassword":
             MessageLookupByLibrary.simpleMessage("Confirm password"),
         "congrats": MessageLookupByLibrary.simpleMessage("Congrats"),
@@ -193,6 +200,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "repliedToYourComment":
             MessageLookupByLibrary.simpleMessage(" replied to your comment "),
         "replies": MessageLookupByLibrary.simpleMessage("Replies"),
+        "repliesLabel": MessageLookupByLibrary.simpleMessage("replies"),
         "reply": MessageLookupByLibrary.simpleMessage("Reply"),
         "resetNewPasswordSummary": MessageLookupByLibrary.simpleMessage(
             "Enter the email associated with your account and We\'ll send an email with instructions to reset your password."),
@@ -227,13 +235,16 @@ class MessageLookup extends MessageLookupByLibrary {
         "video": MessageLookupByLibrary.simpleMessage("Video"),
         "xCommentedOnYourRecipe": m0,
         "xComments": m1,
-        "xFollowedY": m2,
-        "xLikeYReply": m3,
-        "xLikedYComment": m4,
-        "xLikedYPost": m5,
-        "xLikes": m6,
-        "xRepliedToYourComment": m7,
-        "xReplies": m8,
+        "xCommentsLabel": m2,
+        "xFollowedY": m3,
+        "xLikeYReply": m4,
+        "xLikedYComment": m5,
+        "xLikedYPost": m6,
+        "xLikes": m7,
+        "xLikesLabel": m8,
+        "xRepliedToYourComment": m9,
+        "xReplies": m10,
+        "xRepliesLabel": m11,
         "you": MessageLookupByLibrary.simpleMessage("You")
       };
 }

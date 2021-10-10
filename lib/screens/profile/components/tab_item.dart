@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProfileTabItem extends StatefulWidget {
   final String text;
@@ -17,7 +18,7 @@ class _ProfileTabItemState extends State<ProfileTabItem> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          '${widget.count}',
+          '${NumberFormat.compact().format(widget.count)}',
           style: Theme.of(context).textTheme.subtitle1?.copyWith(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).colorScheme.onBackground),

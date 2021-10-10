@@ -5,6 +5,7 @@ import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/home/components/feed_action_item.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -35,7 +36,7 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
               ? 'assets/star_filled.svg'
               : 'assets/star.svg',
           countLabel: widget.recipe.likesCount > 0
-              ? S.of(context).xLikes(widget.recipe.likesCount)
+              ? S.of(context).xLikesLabel(NumberFormat.compact().format(widget.recipe.likesCount))
               : S.of(context).like,
           onPressed: () {
             final RecipeProvider recipeProvider =
@@ -82,7 +83,7 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
           recipe: widget.recipe,
           iconPath: 'assets/message.svg',
           countLabel: widget.recipe.commentsCount > 0
-              ? S.of(context).xComments(widget.recipe.commentsCount)
+              ? S.of(context).xCommentsLabel(NumberFormat.compact().format(widget.recipe.commentsCount))
               : S.of(context).comment,
           onPressed: () {
             Navigator.of(context).pushNamed(kCommentsRoute, arguments: {

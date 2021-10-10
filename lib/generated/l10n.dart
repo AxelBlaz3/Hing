@@ -96,6 +96,56 @@ class S {
     );
   }
 
+  /// `{howMany} likes`
+  String xLikesLabel(Object howMany) {
+    return Intl.message(
+      '$howMany likes',
+      name: 'xLikesLabel',
+      desc: '',
+      args: [howMany],
+    );
+  }
+
+  /// `{howMany} comments`
+  String xCommentsLabel(Object howMany) {
+    return Intl.message(
+      '$howMany comments',
+      name: 'xCommentsLabel',
+      desc: '',
+      args: [howMany],
+    );
+  }
+
+  /// `{howMany} replies`
+  String xRepliesLabel(Object howMany) {
+    return Intl.message(
+      '$howMany replies',
+      name: 'xRepliesLabel',
+      desc: '',
+      args: [howMany],
+    );
+  }
+
+  /// `comments`
+  String get commentsLabel {
+    return Intl.message(
+      'comments',
+      name: 'commentsLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `replies`
+  String get repliesLabel {
+    return Intl.message(
+      'replies',
+      name: 'repliesLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Share`
   String get share {
     return Intl.message(
