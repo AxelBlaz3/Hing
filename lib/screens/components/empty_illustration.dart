@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hing/generated/l10n.dart';
 
 class EmptyIllustration extends StatelessWidget {
   final String assetPath;

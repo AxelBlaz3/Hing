@@ -117,9 +117,6 @@ class _RepliesScreenState extends State<RepliesScreen> {
                                   recipe: widget.recipe,
                                   comment: comment,
                                   refreshCallback: (updatedReply) {
-                                    final oldReply =
-                                        _pagingController.itemList![index];
-
                                     _pagingController.itemList = List.of(
                                         (_pagingController.itemList
                                             as List<Comment>)

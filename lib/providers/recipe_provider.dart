@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -8,7 +7,6 @@ import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/repository/recipe_repository.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:video_player/video_player.dart';
 
 class RecipeProvider extends ChangeNotifier {
@@ -19,10 +17,11 @@ class RecipeProvider extends ChangeNotifier {
   String _units = getQuantityUnits().first;
   int _category = 1;
 
-  DynamicLinkParameters getDynamicLinkForShare(String recipeId) {
+  DynamicLinkParameters getDynamicLinkForShare({required Recipe recipe}) {
     return DynamicLinkParameters(
         uriPrefix: 'https://hing.page.link',
-        link: Uri.parse('https://hing.page.link/recipe?recipe_id=$recipeId'),
+        link: Uri.parse(
+            'https://hing.page.link/recipe?recipe_id=${recipe.id.oid}'),
         androidParameters: AndroidParameters(
           packageName: 'com.wielabs.hing',
           minimumVersion: 1,
@@ -31,7 +30,11 @@ class RecipeProvider extends ChangeNotifier {
           bundleId: 'com.wielabs.hing',
           minimumVersion: '1.0.0',
           appStoreId: '123456789',
-        ));
+        ),
+        socialMetaTagParameters: SocialMetaTagParameters(
+            title: recipe.title,
+            description: recipe.description,
+            imageUrl: Uri.parse('$kBaseUrl/${recipe.media.first.mediaPath}')));
   }
 
   RecipeProvider({required this.recipeRepository});

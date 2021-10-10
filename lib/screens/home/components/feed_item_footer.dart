@@ -7,7 +7,6 @@ import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/home/components/feed_action_item.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class FeedItemFooter extends StatefulWidget {
   final Recipe recipe;
@@ -106,7 +105,7 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                 context.read<RecipeProvider>();
 
             final ShortDynamicLink recipeLink = (await recipeProvider
-                .getDynamicLinkForShare(widget.recipe.id.oid)
+                .getDynamicLinkForShare(recipe: widget.recipe)
                 .buildShortLink());
 
             await Share.share(recipeLink.shortUrl.toString());
