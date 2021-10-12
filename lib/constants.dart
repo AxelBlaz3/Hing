@@ -94,7 +94,7 @@ List<String> getMyProfileTabTitles(BuildContext context) => <String>[
     ];
 
 List<String> getQuantityUnits() =>
-    ['gms', 'kg', 'ml', 'mg', 'litres', 'tbsp', 'pcs'];
+    ['gms', 'kg', 'ml', 'mg', 'litres', 'tbsp', 'pcs', 'cups'];
 
 // Hive types
 const int kObjectIdType = 0;
