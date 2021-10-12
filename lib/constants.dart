@@ -96,11 +96,6 @@ List<String> getMyProfileTabTitles(BuildContext context) => <String>[
 List<String> getQuantityUnits() =>
     ['gms', 'kg', 'ml', 'mg', 'litres', 'tbsp', 'pcs'];
 
-const List<String> detailTabs = <String>[
-  "DESCRIPTION",
-  "INGREDIENTS",
-];
-
 // Hive types
 const int kObjectIdType = 0;
 const int kHingUserType = 1;
