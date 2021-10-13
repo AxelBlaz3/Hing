@@ -34,23 +34,29 @@ class _LoadingScreenState extends State<LoadingScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Padding(padding: const EdgeInsets.all(24), child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        LottieBuilder.asset(
-          'assets/toque_animation.json',
-          height: 144,
-          width: 144,
-          controller: _animationController,
-          onLoaded: (composition) {
-            _animationController
-              ..duration = composition.duration
-              ..forward();
-          },
-        ),
-        Text(S.of(context).loading, style: Theme.of(context).textTheme.subtitle2,)
-      ],
-    ));
+    return Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            LottieBuilder.asset(
+              'assets/toque_animation.json',
+              height: 144,
+              width: 144,
+              controller: _animationController,
+              onLoaded: (composition) {
+                _animationController
+                  ..duration = composition.duration
+                  ..forward();
+              },
+            ),
+            Text(
+              S.of(context).loading,
+              style: Theme.of(context).textTheme.subtitle2,
+            )
+          ],
+        ));
   }
 }

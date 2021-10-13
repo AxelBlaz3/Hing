@@ -1415,6 +1415,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Server is down, try again later.`
+  String get serverIsUnavailable {
+    return Intl.message(
+      'Server is down, try again later.',
+      name: 'serverIsUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check your connection and try again.`
+  String get checkYourConnection {
+    return Intl.message(
+      'Check your connection and try again.',
+      name: 'checkYourConnection',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

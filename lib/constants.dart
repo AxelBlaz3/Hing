@@ -113,3 +113,6 @@ const String kUserBox = 'userBox';
 
 // Hive keys
 const String kUserKey = 'userKey';
+
+// Miscellaneous
+const int SOCKET_EXCEPTION_CODE = -1;

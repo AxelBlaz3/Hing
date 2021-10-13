@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hing/constants.dart';
@@ -165,11 +167,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                                             ScaffoldMessenger
                                                                     .of(context)
                                                                 .showSnackBar(SnackBar(
-                                                                    content: Text(response == 403
+                                                                    content: Text(response == HttpStatus.forbidden
                                                                         ? S.of(context).incorrectCredentials
-                                                                        : response == 404
+                                                                        : response == HttpStatus.notFound
                                                                             ? S.of(context).thatAccountDoesntExists
-                                                                            : S.of(context).somethingWentWrong)));
+                                                                            : response == 521 ? S.of(context).serverIsUnavailable : response == SOCKET_EXCEPTION_CODE ? S.of(context).checkYourConnection : S.of(context).somethingWentWrong)));
                                                           }
                                                         });
                                                       },

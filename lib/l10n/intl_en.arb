@@ -134,5 +134,7 @@
     "loading": "LOADING",
     "thatAccountDoesntExists": "That account doesn't exist.",
     "notifications": "Notifications",
-    "uploadPhoto": "UPLOAD PHOTO"
+    "uploadPhoto": "UPLOAD PHOTO",
+    "serverIsUnavailable": "Server is down, try again later.",
+    "checkYourConnection": "Check your connection and try again."
 }

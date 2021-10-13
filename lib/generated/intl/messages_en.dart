@@ -58,6 +58,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "categories": MessageLookupByLibrary.simpleMessage("Categories"),
         "category": MessageLookupByLibrary.simpleMessage("Category"),
+        "checkYourConnection": MessageLookupByLibrary.simpleMessage(
+            "Check your connection and try again."),
         "chinese": MessageLookupByLibrary.simpleMessage("CHINESE"),
         "code": MessageLookupByLibrary.simpleMessage("Code"),
         "codeIsEmpty":
@@ -211,6 +213,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Reset your password"),
         "sendInstructions":
             MessageLookupByLibrary.simpleMessage("Send Instructions"),
+        "serverIsUnavailable": MessageLookupByLibrary.simpleMessage(
+            "Server is down, try again later."),
         "share": MessageLookupByLibrary.simpleMessage("Share"),
         "somethingWentWrong":
             MessageLookupByLibrary.simpleMessage("Something went wrong."),
