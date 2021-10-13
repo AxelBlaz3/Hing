@@ -271,8 +271,8 @@ class RecipeRepository {
   Future<Recipe?> getRecipe({required String recipeId}) async {
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
-      final response =
-          await http.get(Uri.parse('$kAPIGetRecipeRoute?recipe_id=$recipeId&user_id=${user?.id.oid}'));
+      final response = await http.get(Uri.parse(
+          '$kAPIGetRecipeRoute?recipe_id=$recipeId&user_id=${user?.id.oid}'));
 
       if (response.statusCode == 200) {
         final Recipe recipe = Recipe.fromJson(jsonDecode(response.body));

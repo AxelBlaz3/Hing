@@ -35,8 +35,9 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
           iconPath: widget.recipe.isLiked!
               ? 'assets/star_filled.svg'
               : 'assets/star.svg',
-          countLabel: widget.recipe.likesCount > 0
-              ? S.of(context).xLikesLabel(NumberFormat.compact().format(widget.recipe.likesCount))
+          countLabel: widget.recipe.likesCount == 1
+          ? S.of(context).xLikes(widget.recipe.likesCount)
+              : widget.recipe.likesCount > 1 ? S.of(context).xLikesLabel(NumberFormat.compact().format(widget.recipe.likesCount))
               : S.of(context).like,
           onPressed: () {
             final RecipeProvider recipeProvider =
@@ -82,8 +83,9 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
             child: FeedActionItem(
           recipe: widget.recipe,
           iconPath: 'assets/message.svg',
-          countLabel: widget.recipe.commentsCount > 0
-              ? S.of(context).xCommentsLabel(NumberFormat.compact().format(widget.recipe.commentsCount))
+          countLabel: widget.recipe.commentsCount == 1
+          ? S.of(context).xComments(widget.recipe.commentsCount)
+              : widget.recipe.commentsCount > 1 ? S.of(context).xCommentsLabel(NumberFormat.compact().format(widget.recipe.commentsCount))
               : S.of(context).comment,
           onPressed: () {
             Navigator.of(context).pushNamed(kCommentsRoute, arguments: {

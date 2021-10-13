@@ -39,9 +39,10 @@ class _CommentFooterState extends State<CommentFooter> {
                       ? 'assets/star_filled.svg'
                       : 'assets/star.svg',
                   recipe: widget.recipe,
-                  countLabel: widget.comment.likesCount > 0
-                      ? S.of(context).xLikes(widget.comment.likesCount)
-                      : S.of(context).like,
+                  countLabel: widget.comment.likesCount == 1
+          ? S.of(context).xLikes(widget.comment.likesCount)
+              : widget.comment.likesCount > 1 ? S.of(context).xLikesLabel(NumberFormat.compact().format(widget.comment.likesCount))
+              : S.of(context).like,
                   onPressed: () {
                     final CommentProvider commentProvider =
                         context.read<CommentProvider>();
@@ -115,8 +116,9 @@ class _CommentFooterState extends State<CommentFooter> {
         FeedActionItem(
           iconPath: 'assets/chat.svg',
           recipe: widget.recipe,
-          countLabel: widget.comment.repliesCount > 0
-              ? S.of(context).xRepliesLabel(NumberFormat.compact().format(widget.comment.repliesCount))
+          countLabel: widget.comment.repliesCount == 1
+          ? S.of(context).xReplies(widget.comment.repliesCount)
+              : widget.comment.repliesCount > 1 ? S.of(context).xRepliesLabel(NumberFormat.compact().format(widget.comment.repliesCount))
               : S.of(context).reply,
           onPressed: () {
             Navigator.of(context).pushNamed(kRepliesRoute, arguments: {
