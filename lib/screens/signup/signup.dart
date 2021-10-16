@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/providers/user_provider.dart';
+import 'package:hing/screens/components/circular_indicator.dart';
 import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -185,17 +188,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(SnackBar(
                                                         content: Text(response ==
-                                                                409
+                                                                HttpStatus.conflict
                                                             ? S
                                                                 .of(context)
                                                                 .emailNotAvailable
-                                                            : S
+                                                            : response == SOCKET_EXCEPTION_CODE ? S.of(context).checkYourConnection : response == 521 ? S.of(context).serverIsUnavailable : S
                                                                 .of(context)
                                                                 .somethingWentWrong)));
                                               }
                                             });
                                           },
-                                    child: Text(S.of(context).createAccount),
+                                    child: userProvider.isLoading ? const CircularIndicator() : Text(S.of(context).createAccount),
                                     style: ElevatedButton.styleFrom(
                                         padding:
                                             EdgeInsets.symmetric(vertical: 24),

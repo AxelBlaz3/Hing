@@ -68,6 +68,8 @@ class UserRepository {
       } else {
         return response.statusCode;
       }
+    } on SocketException {
+      return SOCKET_EXCEPTION_CODE;
     } catch (e) {
       print(e);
     }

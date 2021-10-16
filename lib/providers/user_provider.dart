@@ -18,15 +18,16 @@ class UserProvider extends ChangeNotifier {
 
   HingUser get currentUser => Hive.box<HingUser>(kUserBox).get(kUserKey)!;
 
-
   void setEditProfileImage(XFile? image) {
     _editProfileImage = image;
     notifyListeners();
   }
 
-  void setIsLoading(bool newState) {
+  void setIsLoading(bool newState, {bool notify = true}) {
     _isLoading = newState;
-    notifyListeners();
+    if (notify) {
+      notifyListeners();
+    }
   }
 
   void notifyUserChanges() {
@@ -97,8 +98,7 @@ class UserProvider extends ChangeNotifier {
         email: email, displayName: displayName, image: image);
   }
 
-  Future<bool> updateFirebaseToken(
-      {required String firebaseToken}) async {
+  Future<bool> updateFirebaseToken({required String firebaseToken}) async {
     return await userRepository.updateFirebaseToken(
         firebaseToken: firebaseToken);
   }

@@ -164,19 +164,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                                                 .pushReplacementNamed(
                                                                     kHomeRoute);
                                                           } else {
-                                                            ScaffoldMessenger
-                                                                    .of(context)
-                                                                .showSnackBar(SnackBar(
-                                                                    content: Text(response == HttpStatus.forbidden
-                                                                        ? S.of(context).incorrectCredentials
-                                                                        : response == HttpStatus.notFound
-                                                                            ? S.of(context).thatAccountDoesntExists
-                                                                            : response == 521 ? S.of(context).serverIsUnavailable : response == SOCKET_EXCEPTION_CODE ? S.of(context).checkYourConnection : S.of(context).somethingWentWrong)));
+                                                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                                content: Text(response == HttpStatus.forbidden
+                                                                    ? S.of(context).incorrectCredentials
+                                                                    : response == HttpStatus.notFound
+                                                                        ? S.of(context).thatAccountDoesntExists
+                                                                        : response == 521
+                                                                            ? S.of(context).serverIsUnavailable
+                                                                            : response == SOCKET_EXCEPTION_CODE
+                                                                                ? S.of(context).checkYourConnection
+                                                                                : S.of(context).somethingWentWrong)));
                                                           }
                                                         });
                                                       },
                                             child: userProvider.isLoading
-                                                ? CircularIndicator()
+                                                ? const CircularIndicator()
                                                 : Text(S.of(context).login),
                                             style: ElevatedButton.styleFrom(
                                                 padding: EdgeInsets.symmetric(
