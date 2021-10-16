@@ -6,6 +6,7 @@ import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/screens/components/error_illustration.dart';
 import 'package:hing/screens/components/toque_placeholder.dart';
 import 'package:video_player/video_player.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import '../../../constants.dart';
 
@@ -88,11 +89,20 @@ class _DetailsAppBarState extends State<DetailsAppBar> {
                           _videoPlayerController!.play();
                       },
                       child: _videoPlayerController?.value.isInitialized ?? false
-                          ? AspectRatio(
-                              aspectRatio:
-                                  _videoPlayerController!.value.aspectRatio,
-                              child:
-                                  VideoPlayer(_videoPlayerController!..play()))
+                          ? VisibilityDetector(
+                              key: Key(widget.index.toString()),
+                              onVisibilityChanged: (visibilityInfo) {
+                                if (visibilityInfo.visibleFraction == 1.0) {
+                                  _videoPlayerController!.play();
+                                } else {
+                                  _videoPlayerController!.pause();
+                                }
+                              },
+                              child: AspectRatio(
+                                  aspectRatio:
+                                      _videoPlayerController!.value.aspectRatio,
+                                  child: VideoPlayer(
+                                      _videoPlayerController!..play())))
                           : Container(
                               height: 208,
                               color: Theme.of(context)

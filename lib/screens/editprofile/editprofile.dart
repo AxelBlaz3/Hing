@@ -24,7 +24,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     with TickerProviderStateMixin<EditProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   late AnimationController _controller;
 
   @override
@@ -32,7 +31,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     super.initState();
 
     _nameController.text = widget.user.displayName;
-    _emailController.text = widget.user.email ?? '';
 
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
@@ -49,7 +47,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     super.dispose();
 
     _nameController.dispose();
-    _emailController.dispose();
   }
 
   @override
@@ -177,14 +174,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             alignment: Alignment.centerLeft,
                             padding: EdgeInsets.symmetric(vertical: 8),
                             child: Text(S.of(context).email)),
-                        TextFormField(
-                          controller: _emailController,
-                          validator: (text) => text == null || text.isEmpty
-                              ? S.of(context).emailCannotBeEmpty
-                              : null,
-                          decoration:
-                              InputDecoration(hintText: 'jack@gmail.com'),
-                        ),
                         SizedBox(
                           height: 24,
                         ),
@@ -210,7 +199,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           userProvider
                               .updateUser(
                                   displayName: _nameController.text,
-                                  email: _emailController.text,
                                   image: userProvider.editProfileImage)
                               .then((success) {
                             if (success) {

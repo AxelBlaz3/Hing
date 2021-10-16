@@ -90,12 +90,9 @@ class UserProvider extends ChangeNotifier {
     return await userRepository.getNotifications(page: page);
   }
 
-  Future<bool> updateUser(
-      {required String displayName,
-      required String email,
-      XFile? image}) async {
+  Future<bool> updateUser({required String displayName, XFile? image}) async {
     return await userRepository.updateUser(
-        email: email, displayName: displayName, image: image);
+        displayName: displayName, image: image);
   }
 
   Future<bool> updateFirebaseToken({required String firebaseToken}) async {

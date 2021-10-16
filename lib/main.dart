@@ -24,6 +24,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'enums/notification_type.dart';
+
 void main() async {
   final UserRepository _userRepository = UserRepository();
   final RecipeRepository _recipeRepository = RecipeRepository();
@@ -56,6 +58,11 @@ void main() async {
     ],
     child: HingApp(isLoggedIn: isLoggedIn, isOnBoardingDone: isOnboardingDone),
   ));
+
+  FirebaseMessaging.onMessage.listen(pushNotificationHandler);
+
+  FirebaseMessaging.onBackgroundMessage(backgroundPushNotificationHandler);
+
 }
 
 class HingApp extends StatefulWidget {
@@ -165,3 +172,33 @@ class _HingAppState extends State<HingApp> {
     }
   }
 }
+
+void pushNotificationHandler(RemoteMessage message) {
+    final payload = message.data;
+    final int notificationType = int.parse(payload['type']);
+    String? body;
+    String? title;
+
+    if (notificationType == NotificationType.likePost.index) {
+      title = '${payload["recipe"]}';
+      body = '${payload["display_name"]} liked your recipe.';
+    } else if (notificationType == NotificationType.likeComment.index) {
+      title = '${payload["display_name"]} liked your comment.';
+      body = '${payload["comment"]}';
+    } else if (notificationType == NotificationType.likeReply.index) {
+      title = '${payload["display_name"]} liked your reply.';
+      body = '${payload["reply"]}';
+    } else if (notificationType == NotificationType.newFollower.index) {
+      body = '${payload["display_name"]} started following you.';
+    } else if (notificationType == NotificationType.newComment.index) {
+      title = '${payload["display_name"]} commented';
+      body = '${payload["comment"]}';
+    } else if (notificationType == NotificationType.newReply.index) {
+      title = '${payload["display_name"]} replied';
+      body = '${payload["comment"]}';
+    }
+
+    if (body != null) {
+      NotificationService().showNotifications(title, body, payload);
+    }
+  }

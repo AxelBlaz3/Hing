@@ -185,10 +185,7 @@ class UserRepository {
     return [];
   }
 
-  Future<bool> updateUser(
-      {required String email,
-      required String displayName,
-      XFile? image}) async {
+  Future<bool> updateUser({required String displayName, XFile? image}) async {
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
       final request =
@@ -196,7 +193,6 @@ class UserRepository {
 
       request
         ..fields['display_name'] = displayName
-        ..fields['email'] = email
         ..fields['user_id'] = user!.id.oid;
 
       if (image != null) {

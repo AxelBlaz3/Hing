@@ -148,7 +148,7 @@ class NewFollowerNotification extends StatelessWidget {
             ),
             TextSpan(
                 text:
-                    '. ${timeago.format(DateTime.fromMillisecondsSinceEpoch(notification.createdAt.date), locale: 'en_short')}',
+                    ' ${timeago.format(DateTime.fromMillisecondsSinceEpoch(notification.createdAt.date), locale: 'en_short')}',
                 style: Theme.of(context).textTheme.caption),
           ]),
         ))
