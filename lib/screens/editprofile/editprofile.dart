@@ -175,14 +175,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         ),
                         SizedBox(
                           height: 16,
-                        ),
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Text(S.of(context).email)),
-                        SizedBox(
-                          height: 24,
-                        ),
+                        )
                       ],
                     )),
               )),
