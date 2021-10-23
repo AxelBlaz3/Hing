@@ -15,6 +15,14 @@ class UserProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
   XFile? _editProfileImage;
   XFile? get editProfileImage => _editProfileImage;
+  bool _showNotificationBadge = false;
+
+  void setShowNotificationBadge(bool newState) {
+    _showNotificationBadge = newState;
+    notifyListeners();
+  }
+
+  bool get shouldShowNotificationBadge => _showNotificationBadge;
 
   HingUser get currentUser => Hive.box<HingUser>(kUserBox).get(kUserKey)!;
 

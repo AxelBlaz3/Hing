@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/screens/profile/components/tab_item.dart';
+import 'package:hing/theme/colors.dart';
 
 class ProfileTabs extends StatefulWidget {
   final HingUser user;
@@ -24,23 +25,18 @@ class _ProfileTabsState extends State<ProfileTabs> {
       child: TabBar(
         //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         indicator: BoxDecoration(
-            color: Theme.of(context).colorScheme.onSurface,
-            borderRadius: BorderRadius.circular(16)),
+            color: kOnSurfaceColor, borderRadius: BorderRadius.circular(16)),
         indicatorSize: TabBarIndicatorSize.tab,
         // indicatorPadding: const EdgeInsets.all(0),
         tabs: [
           ProfileTabItem(
-            text: S.of(context).posts,
-            count: widget.user.postsCount!
-          ),
+              text: S.of(context).posts, count: widget.user.postsCount!),
           ProfileTabItem(
-            text: S.of(context).following,
-            count: widget.user.followingCount!
-          ),
+              text: S.of(context).following,
+              count: widget.user.followingCount!),
           ProfileTabItem(
-            text: S.of(context).followers,
-            count: widget.user.followersCount!
-          ),
+              text: S.of(context).followers,
+              count: widget.user.followersCount!),
         ],
       ),
     );

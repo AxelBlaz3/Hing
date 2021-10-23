@@ -97,54 +97,60 @@ class _EditProfileScreenState extends State<EditProfileScreen>
 
                                 userProvider.setEditProfileImage(image);
                               },
-                              child: Stack(children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      bottom: 8, right: 8),
-                                  child: widget.user.image == null &&
-                                          userProvider.editProfileImage == null
-                                      ? const ProfilePlaceholder()
-                                      : ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          child: userProvider
-                                                      .editProfileImage !=
+                              child: Stack(
+                                  alignment: Alignment.bottomRight,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8, right: 8),
+                                      child: widget.user.image == null &&
+                                              userProvider.editProfileImage ==
                                                   null
-                                              ? Image.file(
-                                                  File(userProvider
-                                                      .editProfileImage!.path),
-                                                  fit: BoxFit.cover,
-                                                  height: 96,
-                                                  width: 96,
-                                                )
-                                              : CachedNetworkImage(
-                                                  imageUrl:
-                                                      '$kBaseUrl/${user.image}',
-                                                  fit: BoxFit.cover,
-                                                  height: 96,
-                                                  width: 96,
-                                                  placeholder: (_, __) =>
-                                                      const UserPlaceholder(
-                                                    size: 32,
-                                                  ),
-                                                  errorWidget: (_, __, ___) =>
-                                                      const UserPlaceholder(
-                                                    size: 32,
-                                                  ),
-                                                )),
-                                ),
-                                Positioned(
-                                    right: 0,
-                                    bottom: 0,
-                                    child: CircleAvatar(
+                                          ? const ProfilePlaceholder()
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              child: userProvider
+                                                          .editProfileImage !=
+                                                      null
+                                                  ? Image.file(
+                                                      File(userProvider
+                                                          .editProfileImage!
+                                                          .path),
+                                                      fit: BoxFit.cover,
+                                                      height: 96,
+                                                      width: 96,
+                                                    )
+                                                  : CachedNetworkImage(
+                                                      imageUrl:
+                                                          '$kBaseUrl/${user.image}',
+                                                      fit: BoxFit.cover,
+                                                      height: 96,
+                                                      width: 96,
+                                                      placeholder: (_, __) =>
+                                                          const UserPlaceholder(
+                                                        size: 32,
+                                                      ),
+                                                      errorWidget: (_, __,
+                                                              ___) =>
+                                                          const UserPlaceholder(
+                                                        size: 32,
+                                                      ),
+                                                    )),
+                                    ),
+                                    CircleAvatar(
                                         radius: 16,
-                                        backgroundColor: Colors.grey[200],
+                                        backgroundColor: MediaQuery.of(context)
+                                                    .platformBrightness ==
+                                                Brightness.light
+                                            ? Colors.grey[200]
+                                            : Theme.of(context).cardColor,
                                         child: Icon(Icons.edit_rounded,
                                             size: 16,
                                             color: Theme.of(context)
                                                 .colorScheme
-                                                .onSurface)))
-                              ]));
+                                                .onSurface))
+                                  ]));
                         }),
                         SizedBox(
                           height: 16,
@@ -204,7 +210,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             if (success) {
                               // Notify about user update
                               context.read<UserProvider>().notifyUserChanges();
-                              
+
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content:

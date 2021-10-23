@@ -8,11 +8,13 @@ import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/feed_provider.dart';
+import 'package:hing/providers/user_provider.dart';
 import 'package:hing/screens/components/empty_illustration.dart';
 import 'package:hing/screens/components/toque_loading.dart';
 import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:hing/screens/home/components/feed_item.dart';
 import 'package:hing/screens/home/components/home_tab_delegate.dart';
+import 'package:hing/theme/colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +102,11 @@ class _HomeScreenState extends State<HomeScreen>
                                       style: Theme.of(context)
                                           .textTheme
                                           .subtitle1
-                                          ?.copyWith(fontSize: 14.0)),
+                                          ?.copyWith(
+                                              fontSize: 14.0,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .onSurface)),
                                 ),
                               )))
                           .toList(),
@@ -121,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen>
                                 height: 4,
                                 color: Theme.of(context)
                                     .colorScheme
-                                    .primary
+                                    .onBackground
                                     .withOpacity(.75),
                               ),
                               padding: EdgeInsets.only(bottom: 120),
@@ -177,7 +183,11 @@ class _HomeAppBarState extends State<HomeAppBar> {
 
     return SliverAppBar(
         automaticallyImplyLeading: false,
-        title: SvgPicture.asset('assets/logo.svg'),
+        title: SvgPicture.asset(
+          MediaQuery.of(context).platformBrightness == Brightness.light
+              ? 'assets/logo.svg'
+              : 'assets/logo_dark.svg',
+        ),
         bottom: PreferredSize(
             preferredSize: Size.fromHeight(56),
             child: Container(
@@ -192,8 +202,17 @@ class _HomeAppBarState extends State<HomeAppBar> {
               onPressed: () {
                 Navigator.of(context).pushNamed(kNotificationRoute);
               },
-              icon:
-                  SizedBox(child: SvgPicture.asset('assets/notification.svg'))),
+              icon: Stack(alignment: Alignment.topRight, children: [
+                SvgPicture.asset('assets/notification.svg',
+                    color: Theme.of(context).textTheme.caption!.color),
+                Consumer<UserProvider>(
+                    builder: (context, userProvider, child) =>
+                        userProvider.shouldShowNotificationBadge
+                            ? CircleAvatar(
+                                backgroundColor: Theme.of(context).errorColor,
+                                radius: 4.0)
+                            : const SizedBox.shrink())
+              ])),
           IconButton(
               onPressed: () async {
                 final HingUser? user =

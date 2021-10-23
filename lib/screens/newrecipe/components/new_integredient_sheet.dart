@@ -83,7 +83,9 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
                                       vertical: 8, horizontal: 16),
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
-                                      color: Colors.white),
+                                      color: Theme.of(context)
+                                          .inputDecorationTheme
+                                          .fillColor),
                                   child: Consumer<RecipeProvider>(
                                       builder: (_, recipeProvider, ___) =>
                                           DropdownButton<String>(

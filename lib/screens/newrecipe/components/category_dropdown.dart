@@ -14,7 +14,7 @@ class CategoryDropDown extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
-          color: Colors.white,
+          color: Theme.of(context).inputDecorationTheme.fillColor,
         ),
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Consumer<RecipeProvider>(

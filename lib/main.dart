@@ -59,10 +59,7 @@ void main() async {
     child: HingApp(isLoggedIn: isLoggedIn, isOnBoardingDone: isOnboardingDone),
   ));
 
-  FirebaseMessaging.onMessage.listen(pushNotificationHandler);
-
   FirebaseMessaging.onBackgroundMessage(backgroundPushNotificationHandler);
-
 }
 
 class HingApp extends StatefulWidget {
@@ -82,6 +79,8 @@ class _HingAppState extends State<HingApp> {
     NotificationService().init();
 
     await Firebase.initializeApp();
+
+    FirebaseMessaging.onMessage.listen(pushNotificationHandler);
 
     final String? firebaseToken = await FirebaseMessaging.instance.getToken();
 
@@ -115,6 +114,7 @@ class _HingAppState extends State<HingApp> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: HingTheme.getHingThemeData(ThemeData.light()),
+        darkTheme: HingTheme.getHingDarkThemeData(ThemeData.dark()),
         onGenerateRoute: RouteGenerator.onGenerateRoutes,
         localizationsDelegates: [
           S.delegate,
@@ -167,13 +167,12 @@ class _HingAppState extends State<HingApp> {
     final Uri? deepLink = data?.link;
 
     if (deepLink != null) {
-      Navigator.of(context)
-          .pushNamed(kDetailsRoute, arguments: deepLink.queryParameters['recipe_id']);
+      Navigator.of(context).pushNamed(kDetailsRoute,
+          arguments: deepLink.queryParameters['recipe_id']);
     }
   }
-}
 
-void pushNotificationHandler(RemoteMessage message) {
+  void pushNotificationHandler(RemoteMessage message) {
     final payload = message.data;
     final int notificationType = int.parse(payload['type']);
     String? body;
@@ -199,6 +198,8 @@ void pushNotificationHandler(RemoteMessage message) {
     }
 
     if (body != null) {
+      Provider.of<UserProvider>(context, listen: false).setShowNotificationBadge(true);
       NotificationService().showNotifications(title, body, payload);
     }
   }
+}

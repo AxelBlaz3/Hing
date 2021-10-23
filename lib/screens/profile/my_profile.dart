@@ -110,7 +110,8 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                     floatHeaderSlivers: true,
                     headerSliverBuilder: (_, innerScroll) => [
                           SliverAppBar(
-                              title: Text(S.of(context).profile),
+                              title: Text(S.of(context).profile,
+                                  style: Theme.of(context).textTheme.headline6),
                               floating: true,
                               //snap: true,
                               leading: BackButton(
@@ -121,11 +122,12 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                 preferredSize: Size.fromHeight(96),
                                 child: Padding(
                                     padding: const EdgeInsets.all(16),
-                                    child: 
-                                    Consumer<UserProvider>(builder: (context, userProvider, child) =>
-                                    MyProfileHeader(
-                                      user: userProvider.currentUser
-                                    ))),
+                                    child: Consumer<UserProvider>(
+                                        builder: (context, userProvider,
+                                                child) =>
+                                            MyProfileHeader(
+                                                user:
+                                                    userProvider.currentUser))),
                               ),
                               actions: [
                                 PopupMenuButton(

@@ -13,7 +13,6 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-
   @override
   Widget build(BuildContext context) {
     //  print('Deep link - ${ModalRoute.of(context)?.settings.arguments}');
@@ -32,7 +31,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SvgPicture.asset(
-                      'assets/logo.svg',
+                      MediaQuery.of(context).platformBrightness ==
+                              Brightness.light
+                          ? 'assets/logo.svg'
+                          : 'assets/logo_dark.svg',
                       height: 48,
                     ),
                     SizedBox(

@@ -57,7 +57,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               SvgPicture.asset(
-                                'assets/logo.svg',
+                                MediaQuery.of(context).platformBrightness ==
+                                        Brightness.light
+                                    ? 'assets/logo.svg'
+                                    : 'assets/logo_dark.svg',
                                 height: 48,
                               ),
                               SizedBox(

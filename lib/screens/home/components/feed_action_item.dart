@@ -31,16 +31,17 @@ class _FeedActionItemState extends State<FeedActionItem> {
             SizedBox(
               height: 24,
               width: 24,
-              child: SvgPicture.asset(widget.iconPath),
+              child: SvgPicture.asset(
+                widget.iconPath,
+                color: Theme.of(context).textTheme.caption!.color,
+              ),
             ),
             SizedBox(
               width: 8,
             ),
             Text('${widget.countLabel}',
-                style: Theme.of(context)
-                    .textTheme
-                    .caption
-                    ?.copyWith(color: kBodyTextColor))
+                style: Theme.of(context).textTheme.caption?.copyWith(
+                    color: Theme.of(context).textTheme.bodyText2!.color))
           ],
         ));
   }

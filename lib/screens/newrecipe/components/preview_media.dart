@@ -26,7 +26,7 @@ class _PreviewMediaState extends State<PreviewMedia> {
         },
         child: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Consumer<RecipeProvider>(builder: (_, recipeProvider, __) {
@@ -36,6 +36,7 @@ class _PreviewMediaState extends State<PreviewMedia> {
                       borderType: BorderType.RRect,
                       radius: Radius.circular(16),
                       strokeWidth: 2,
+                      color: Theme.of(context).textTheme.bodyText1!.color!,
                       dashPattern: [8, 4],
                       padding:
                           EdgeInsets.symmetric(horizontal: 24, vertical: 56),

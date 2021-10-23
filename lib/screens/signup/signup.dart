@@ -59,7 +59,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           SvgPicture.asset(
-                            'assets/logo.svg',
+                            MediaQuery.of(context).platformBrightness ==
+                                    Brightness.light
+                                ? 'assets/logo.svg'
+                                : 'assets/logo_dark.svg',
                             height: 48,
                           ),
                           SizedBox(
@@ -188,17 +191,31 @@ class _SignupScreenState extends State<SignupScreen> {
                                                 ScaffoldMessenger.of(context)
                                                     .showSnackBar(SnackBar(
                                                         content: Text(response ==
-                                                                HttpStatus.conflict
+                                                                HttpStatus
+                                                                    .conflict
                                                             ? S
                                                                 .of(context)
                                                                 .emailNotAvailable
-                                                            : response == SOCKET_EXCEPTION_CODE ? S.of(context).checkYourConnection : response == 521 ? S.of(context).serverIsUnavailable : S
-                                                                .of(context)
-                                                                .somethingWentWrong)));
+                                                            : response ==
+                                                                    SOCKET_EXCEPTION_CODE
+                                                                ? S
+                                                                    .of(context)
+                                                                    .checkYourConnection
+                                                                : response ==
+                                                                        521
+                                                                    ? S
+                                                                        .of(
+                                                                            context)
+                                                                        .serverIsUnavailable
+                                                                    : S
+                                                                        .of(context)
+                                                                        .somethingWentWrong)));
                                               }
                                             });
                                           },
-                                    child: userProvider.isLoading ? const CircularIndicator() : Text(S.of(context).createAccount),
+                                    child: userProvider.isLoading
+                                        ? const CircularIndicator()
+                                        : Text(S.of(context).createAccount),
                                     style: ElevatedButton.styleFrom(
                                         padding:
                                             EdgeInsets.symmetric(vertical: 24),

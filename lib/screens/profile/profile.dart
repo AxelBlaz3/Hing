@@ -98,12 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         title: Text(
                           S.of(context).profile,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onSurface),
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                         actions: [
                           PopupMenuButton(

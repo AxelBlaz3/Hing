@@ -40,6 +40,7 @@ class _MyProfileHeaderState extends State<MyProfileHeader> {
           },
           icon: SvgPicture.asset(
             'assets/edit.svg',
+            color: Theme.of(context).textTheme.caption!.color,
             height: 20,
             width: 20,
           ),

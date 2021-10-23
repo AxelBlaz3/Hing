@@ -63,9 +63,11 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                               : ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Retry'))));
                 },
-                icon: SvgPicture.asset(widget.recipe.isFavorite
-                    ? 'assets/save_filled.svg'
-                    : 'assets/save.svg'))
+                icon: SvgPicture.asset(
+                    widget.recipe.isFavorite
+                        ? 'assets/save_filled.svg'
+                        : 'assets/save.svg',
+                    color: Theme.of(context).textTheme.caption!.color))
           ],
         ));
   }
