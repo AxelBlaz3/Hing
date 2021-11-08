@@ -282,4 +282,22 @@ class RecipeRepository {
       print(e);
     }
   }
+
+  Future<List<HingUser>> getRecipeLikes(
+      {int page = 1, required String recipeId}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.get(Uri.parse(
+          '${kAPIGetRecipeLikesRoute.replaceFirst('{}', recipeId)}?page=$page&user_id=${user!.id.oid}'));
+      if (response.statusCode == HttpStatus.ok) {
+        final List data = jsonDecode(response.body);
+        final List<HingUser> users =
+            List<HingUser>.from(data.map((user) => HingUser.fromJson(user)));
+        return users;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
 }

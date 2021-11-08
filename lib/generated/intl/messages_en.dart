@@ -119,6 +119,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage(" liked your recipe "),
         "likedYourReply":
             MessageLookupByLibrary.simpleMessage(" liked your reply "),
+        "likes": MessageLookupByLibrary.simpleMessage("Likes"),
         "loading": MessageLookupByLibrary.simpleMessage("LOADING"),
         "login": MessageLookupByLibrary.simpleMessage("Login"),
         "loginToYourAccount":

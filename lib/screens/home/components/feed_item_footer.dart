@@ -4,6 +4,7 @@ import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/recipe_provider.dart';
+import 'package:hing/screens/home/components/bottom_sheet_likes.dart';
 import 'package:hing/screens/home/components/feed_action_item.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -30,63 +31,78 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
     return Row(
       children: [
         Expanded(
-            child: FeedActionItem(
-          recipe: widget.recipe,
-          iconPath: widget.recipe.isLiked!
-              ? 'assets/star_filled.svg'
-              : 'assets/star.svg',
-          countLabel: widget.recipe.likesCount == 1
-          ? S.of(context).xLikes(widget.recipe.likesCount)
-              : widget.recipe.likesCount > 1 ? S.of(context).xLikesLabel(NumberFormat.compact().format(widget.recipe.likesCount))
-              : S.of(context).like,
-          onPressed: () {
-            final RecipeProvider recipeProvider =
-                context.read<RecipeProvider>();
+            child: InkWell(
+                onLongPress: () {
+                  showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(24.0))),
+                      builder: (context) =>
+                          SheetRecipeLikes(recipe: widget.recipe));
+                },
+                child: FeedActionItem(
+                  recipe: widget.recipe,
+                  iconPath: widget.recipe.isLiked!
+                      ? 'assets/star_filled.svg'
+                      : 'assets/star.svg',
+                  countLabel: widget.recipe.likesCount == 1
+                      ? S.of(context).xLikes(widget.recipe.likesCount)
+                      : widget.recipe.likesCount > 1
+                          ? S.of(context).xLikesLabel(NumberFormat.compact()
+                              .format(widget.recipe.likesCount))
+                          : S.of(context).like,
+                  onPressed: () {
+                    final RecipeProvider recipeProvider =
+                        context.read<RecipeProvider>();
 
-            !widget.recipe.isLiked!
-                ? recipeProvider
-                    .likeRecipe(recipeId: widget.recipe.id.oid)
-                    .then((success) {
-                    if (success) {
-                      final Recipe updatedRecipe = widget.recipe
-                        ..isLiked = !widget.recipe.isLiked!
-                        ..likesCount = widget.recipe.likesCount + 1;
-                      widget.refreshCallback(updatedRecipe);
-                      if (widget.detailsCallback != null) {
-                        widget.detailsCallback!(updatedRecipe);
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text('Retry')));
-                    }
-                  })
-                : recipeProvider
-                    .unLikeRecipe(recipeId: widget.recipe.id.oid)
-                    .then((success) {
-                    if (success) {
-                      final Recipe updatedRecipe = widget.recipe
-                        ..isLiked = !widget.recipe.isLiked!
-                        ..likesCount = widget.recipe.likesCount - 1;
-                      widget.refreshCallback(updatedRecipe);
-                      if (widget.detailsCallback != null) {
-                        widget.detailsCallback!(updatedRecipe);
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text('Retry')));
-                    }
-                  });
-            //Navigator.of(context).pushNamed(kCommentsRoute);
-          },
-        )),
+                    !widget.recipe.isLiked!
+                        ? recipeProvider
+                            .likeRecipe(recipeId: widget.recipe.id.oid)
+                            .then((success) {
+                            if (success) {
+                              final Recipe updatedRecipe = widget.recipe
+                                ..isLiked = !widget.recipe.isLiked!
+                                ..likesCount = widget.recipe.likesCount + 1;
+                              widget.refreshCallback(updatedRecipe);
+                              if (widget.detailsCallback != null) {
+                                widget.detailsCallback!(updatedRecipe);
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Retry')));
+                            }
+                          })
+                        : recipeProvider
+                            .unLikeRecipe(recipeId: widget.recipe.id.oid)
+                            .then((success) {
+                            if (success) {
+                              final Recipe updatedRecipe = widget.recipe
+                                ..isLiked = !widget.recipe.isLiked!
+                                ..likesCount = widget.recipe.likesCount - 1;
+                              widget.refreshCallback(updatedRecipe);
+                              if (widget.detailsCallback != null) {
+                                widget.detailsCallback!(updatedRecipe);
+                              }
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Retry')));
+                            }
+                          });
+                    //Navigator.of(context).pushNamed(kCommentsRoute);
+                  },
+                ))),
         Expanded(
             child: FeedActionItem(
           recipe: widget.recipe,
           iconPath: 'assets/message.svg',
           countLabel: widget.recipe.commentsCount == 1
-          ? S.of(context).xComments(widget.recipe.commentsCount)
-              : widget.recipe.commentsCount > 1 ? S.of(context).xCommentsLabel(NumberFormat.compact().format(widget.recipe.commentsCount))
-              : S.of(context).comment,
+              ? S.of(context).xComments(widget.recipe.commentsCount)
+              : widget.recipe.commentsCount > 1
+                  ? S.of(context).xCommentsLabel(NumberFormat.compact()
+                      .format(widget.recipe.commentsCount))
+                  : S.of(context).comment,
           onPressed: () {
             Navigator.of(context).pushNamed(kCommentsRoute, arguments: {
               'recipe': widget.recipe,
