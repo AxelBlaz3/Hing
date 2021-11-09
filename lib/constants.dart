@@ -49,6 +49,7 @@ const String kAPIUpdateFirebaseTokenRoute =
     '$kBaseUrl/$kAPIPrefix/user/update/token';
 const String kAPIGetRecipeRoute = '$kBaseUrl/$kAPIPrefix/recipe';
 const String kAPIGetRecipeLikesRoute = '$kBaseUrl/$kAPIPrefix/recipe/{}/likes';
+const String kAPISearchRecipesRoute = '$kBaseUrl/$kAPIPrefix/recipe/search/{}';
 
 // Route names
 const String kLoginRoute = '/login';
@@ -66,6 +67,7 @@ const String kRepliesRoute = '/replies';
 const String kDetailsRoute = '/details';
 const String kNotificationRoute = '/notifications';
 const String kCreatePasswordRoute = '/createPassword';
+const String kSearchRoute = '/search';
 
 // Categories
 const int kTotalCategories = 6;

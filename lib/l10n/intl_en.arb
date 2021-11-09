@@ -137,5 +137,6 @@
     "uploadPhoto": "UPLOAD PHOTO",
     "serverIsUnavailable": "Server is down, try again later.",
     "checkYourConnection": "Check your connection and try again.",
-    "likes": "Likes"
+    "likes": "Likes",
+    "search": "Search"
 }

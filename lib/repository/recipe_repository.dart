@@ -300,4 +300,23 @@ class RecipeRepository {
     }
     return [];
   }
+
+  Future<List<Recipe>> searchRecipes(
+      {int page = 1, required String query}) async {
+    try {
+      print('Searching for $query');
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.get(Uri.parse(
+          '${kAPISearchRecipesRoute.replaceFirst('{}', query)}?page=$page&user_id=${user!.id.oid}'));
+      if (response.statusCode == HttpStatus.ok) {
+        final List data = jsonDecode(response.body);
+        final List<Recipe> recipes =
+            List<Recipe>.from(data.map((recipe) => Recipe.fromJson(recipe)));
+        return recipes;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return [];
+  }
 }

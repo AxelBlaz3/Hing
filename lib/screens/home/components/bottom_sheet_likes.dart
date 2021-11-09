@@ -40,7 +40,8 @@ class _SheetRecipeLikesState extends State<SheetRecipeLikes> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(mainAxisSize: MainAxisSize.min, children: [
+    return SafeArea(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
       const SizedBox(
         height: 16.0,
       ),
@@ -71,6 +72,6 @@ class _SheetRecipeLikesState extends State<SheetRecipeLikes> {
                     _pagingController.itemList =
                         List.of(_pagingController.itemList!..[index] = user);
                   })))
-    ]);
+    ]));
   }
 }
