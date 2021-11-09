@@ -200,6 +200,12 @@ class _HomeAppBarState extends State<HomeAppBar> {
         actions: [
           IconButton(
               onPressed: () {
+                Navigator.of(context).pushNamed(kSearchRoute);
+              },
+              icon: SvgPicture.asset('assets/search_outline.svg',
+                  color: Theme.of(context).colorScheme.onSurface)),
+          IconButton(
+              onPressed: () {
                 Navigator.of(context).pushNamed(kNotificationRoute);
               },
               icon: Stack(alignment: Alignment.topRight, children: [

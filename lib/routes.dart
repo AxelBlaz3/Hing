@@ -16,6 +16,7 @@ import 'package:hing/screens/profile/profile.dart';
 import 'package:hing/screens/replies/replies.dart';
 import 'package:hing/screens/resetpassword/create_password_screen.dart';
 import 'package:hing/screens/resetpassword/reset_password_screen.dart';
+import 'package:hing/screens/search/search_screen.dart';
 import 'package:hing/screens/signup/signup.dart';
 
 class RouteGenerator {
@@ -73,6 +74,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => NotificationsScreen());
       case kCreatePasswordRoute:
         return MaterialPageRoute(builder: (_) => CreatePasswordScreen(email: settings.arguments as String));
+      case kSearchRoute:  
+        return MaterialPageRoute(builder: (_) => SearchScreen());
       default:
         throw Exception(
             'Unknown route ${settings.name}. Make sure to add the route to RouteGenerator before navigating.');

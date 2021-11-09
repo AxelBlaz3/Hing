@@ -137,4 +137,8 @@ class RecipeProvider extends ChangeNotifier {
   Future<List<HingUser>> getRecipeLikes({required String recipeId, int page = 1}) async {
     return await recipeRepository.getRecipeLikes(recipeId: recipeId, page: page);
   }
+
+  Future<List<Recipe>> searchRecipes({required String query, int page = 1}) async {
+    return await recipeRepository.searchRecipes(query: query, page: page);
+  }
 }

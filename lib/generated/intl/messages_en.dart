@@ -212,6 +212,7 @@ class MessageLookup extends MessageLookupByLibrary {
             "Enter your new password and repeat it once more to get your password changed."),
         "resetYourPassword":
             MessageLookupByLibrary.simpleMessage("Reset your password"),
+        "search": MessageLookupByLibrary.simpleMessage("Search"),
         "sendInstructions":
             MessageLookupByLibrary.simpleMessage("Send Instructions"),
         "serverIsUnavailable": MessageLookupByLibrary.simpleMessage(
