@@ -107,4 +107,8 @@ class UserProvider extends ChangeNotifier {
     return await userRepository.updateFirebaseToken(
         firebaseToken: firebaseToken);
   }
+
+  Future<bool> updateMyIngredients({required String recipeId, required List<String> myIngredients}) async {
+    return await userRepository.updateMyIngredients(recipeId: recipeId, ingredients: myIngredients);
+  }
 }

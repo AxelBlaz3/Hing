@@ -124,21 +124,32 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
                       SizedBox(
                         height: 24,
                       ),
-                      Text(
-                        S.of(context).ingredients,
-                        style: Theme.of(context).textTheme.subtitle2,
+                      RichText(
+                        text: TextSpan(
+                            text: S.of(context).ingredients,
+                            style: Theme.of(context).textTheme.subtitle2,
+                            children: [
+                              // TextSpan(
+                              //   text: ' (Check the one\'s you have)',
+                              //   style: Theme.of(context).textTheme.caption,
+                              // )
+                            ]),
                       ),
+                      const SizedBox(height: 4.0),
                       SafeArea(
                           top: false,
                           child: ListView.builder(
                               padding:
-                                  const EdgeInsets.only(bottom: 144, top: 16),
+                                  const EdgeInsets.only(bottom: 144, top: 4),
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: recipe.ingredients.length,
                               itemBuilder: (context, index) =>
                                   IngredientsListItem(
-                                      ingredient: recipe.ingredients[index])))
+                                    recipe: recipe,
+                                      ingredient: recipe.ingredients[index],
+                                      myIngredients:
+                                          recipe.myIngredients ?? <String>[])))
                     ])))
               ],
             )),

@@ -263,4 +263,20 @@ class UserRepository {
     } catch (e) {}
     return false;
   }
+
+  Future<bool> updateMyIngredients({required String recipeId, required List<String> ingredients}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.put(Uri.parse(kAPIUpdateMyIngredientsRoute),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            'recipe_id': recipeId,
+            'user_id': user!.id.oid,
+            'ingredients': ingredients
+          }));
+
+      return response.statusCode == HttpStatus.ok;
+    } catch (e) {}
+    return false;
+  }
 }

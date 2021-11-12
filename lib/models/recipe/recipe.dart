@@ -38,6 +38,9 @@ class Recipe {
   @HiveField(10)
   @JsonKey(name: 'is_liked')
   bool? isLiked = false;
+  @HiveField(11)
+  @JsonKey(name: 'my_ingredients')
+  List<String>? myIngredients;
 
   Recipe(
       {required this.id,
@@ -50,15 +53,12 @@ class Recipe {
       required this.likesCount,
       required this.isFavorite,
       required this.isLiked,
-      required this.commentsCount});
+      required this.commentsCount,
+      this.myIngredients = const <String>[]});
 
-  factory Recipe.fromJson(Map<String, dynamic> json) =>
-      _$RecipeFromJson(json);
+  factory Recipe.fromJson(Map<String, dynamic> json) => _$RecipeFromJson(json);
 
-  Map<String, dynamic> toJson() => _$RecipeToJson(this);    
-
+  Map<String, dynamic> toJson() => _$RecipeToJson(this);
 }
 
-enum RecipeMediaType {
-    image, video
-  }
+enum RecipeMediaType { image, video }

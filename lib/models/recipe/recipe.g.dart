@@ -28,13 +28,14 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
       isFavorite: fields[9] as bool,
       isLiked: fields[10] as bool?,
       commentsCount: fields[8] as int,
+      myIngredients: (fields[11] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, Recipe obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -56,7 +57,9 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
       ..writeByte(9)
       ..write(obj.isFavorite)
       ..writeByte(10)
-      ..write(obj.isLiked);
+      ..write(obj.isLiked)
+      ..writeByte(11)
+      ..write(obj.myIngredients);
   }
 
   @override
@@ -91,6 +94,9 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) {
     isFavorite: json['is_favorite'] as bool,
     isLiked: json['is_liked'] as bool?,
     commentsCount: json['comments_count'] as int,
+    myIngredients: (json['my_ingredients'] as List<dynamic>?)
+        ?.map((e) => e as String)
+        .toList(),
   );
 }
 
@@ -106,4 +112,5 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
       'comments_count': instance.commentsCount,
       'is_favorite': instance.isFavorite,
       'is_liked': instance.isLiked,
+      'my_ingredients': instance.myIngredients,
     };
