@@ -40,7 +40,7 @@ void main() async {
   Hive.registerAdapter(HingUserAdapter());
 
   await Hive.openBox<HingUser>(kUserBox);
-
+  
   final bool isLoggedIn =
       Hive.box<HingUser>(kUserBox).get(kUserKey, defaultValue: null) != null;
   final bool isOnboardingDone =
@@ -198,7 +198,8 @@ class _HingAppState extends State<HingApp> {
     }
 
     if (body != null) {
-      Provider.of<UserProvider>(context, listen: false).setShowNotificationBadge(true);
+      Provider.of<UserProvider>(context, listen: false)
+          .setShowNotificationBadge(true);
       NotificationService().showNotifications(title, body, payload);
     }
   }

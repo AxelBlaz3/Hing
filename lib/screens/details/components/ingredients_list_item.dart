@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hing/constants.dart';
+import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
+import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/providers/user_provider.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/src/provider.dart';
 
 class IngredientsListItem extends StatefulWidget {
@@ -21,19 +25,12 @@ class IngredientsListItem extends StatefulWidget {
 }
 
 class _IngredientsListItemState extends State<IngredientsListItem> {
-  late List<String> myIngredients;
-
-  @override
-  void initState() {
-    super.initState();
-
-    myIngredients = List.of(widget.myIngredients);
-  }
-
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final isInMyChecklist = myIngredients.contains(widget.ingredient.name);
+    final UserProvider _userProvider = Provider.of(context, listen: false);
+    final isInMyChecklist = (_userProvider.currentUser.myIngredients ?? [])
+        .contains(widget.ingredient.name);
 
     return InkWell(
         onTap: () {
@@ -68,19 +65,27 @@ class _IngredientsListItemState extends State<IngredientsListItem> {
   void updateMyIngredient(bool isInMyChecklist) async {
     final UserProvider userProvider = context.read<UserProvider>();
 
+    final HingUser user = userProvider.currentUser;
+
     if (isInMyChecklist) {
-      myIngredients.remove(widget.ingredient.name);
+      user.myIngredients?.remove(widget.ingredient.name);
     } else {
-      myIngredients.add(widget.ingredient.name);
+      if (user.myIngredients == null) {
+        user.myIngredients = [widget.ingredient.name];
+      } else {
+        user.myIngredients?.add(widget.ingredient.name);
+      }
     }
 
-    print(myIngredients);
+    await Hive.box<HingUser>(kUserBox).put(kUserKey, user.copy(myIngredients: user.myIngredients?.toSet().toList()));
 
-    final isUpdated = await userProvider.updateMyIngredients(
-        recipeId: widget.recipe.id.oid, myIngredients: myIngredients);
+    print(userProvider.currentUser.myIngredients);
 
-    if (isUpdated) {
-     setState(() {});
-    }
+    // final isUpdated = await userProvider.updateMyIngredients(
+    //     recipeId: widget.recipe.id.oid, myIngredients: myIngredients);
+
+    // if (isUpdated) {
+    setState(() {});
+    // }
   }
 }

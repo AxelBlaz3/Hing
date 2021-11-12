@@ -23,6 +23,7 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
       accessToken: fields[4] as String?,
       image: fields[2] as String?,
       isFollowing: fields[5] as bool?,
+      myIngredients: (fields[10] as List?)?.cast<String>(),
     )
       ..postsCount = fields[6] as int?
       ..followingCount = fields[7] as int?
@@ -33,7 +34,7 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
   @override
   void write(BinaryWriter writer, HingUser obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
       ..writeByte(8)
       ..write(obj.followersCount)
       ..writeByte(9)
-      ..write(obj.firebaseToken);
+      ..write(obj.firebaseToken)
+      ..writeByte(10)
+      ..write(obj.myIngredients);
   }
 
   @override
@@ -79,6 +82,9 @@ HingUser _$HingUserFromJson(Map<String, dynamic> json) {
     accessToken: json['accessToken'] as String?,
     image: json['image'] as String?,
     isFollowing: json['is_following'] as bool?,
+    myIngredients: (json['myIngredients'] as List<dynamic>?)
+        ?.map((e) => e as String)
+        .toList(),
   )
     ..postsCount = json['posts_count'] as int?
     ..followingCount = json['following_count'] as int?
@@ -97,4 +103,5 @@ Map<String, dynamic> _$HingUserToJson(HingUser instance) => <String, dynamic>{
       'following_count': instance.followingCount,
       'followers_count': instance.followersCount,
       'firebase_token': instance.firebaseToken,
+      'myIngredients': instance.myIngredients,
     };

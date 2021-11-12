@@ -7,6 +7,7 @@ import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/repository/recipe_repository.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
