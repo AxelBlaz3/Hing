@@ -79,8 +79,6 @@ class _IngredientsListItemState extends State<IngredientsListItem> {
 
     await Hive.box<HingUser>(kUserBox).put(kUserKey, user.copy(myIngredients: user.myIngredients?.toSet().toList()));
 
-    print(userProvider.currentUser.myIngredients);
-
     // final isUpdated = await userProvider.updateMyIngredients(
     //     recipeId: widget.recipe.id.oid, myIngredients: myIngredients);
 
