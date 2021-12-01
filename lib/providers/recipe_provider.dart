@@ -21,15 +21,15 @@ class RecipeProvider extends ChangeNotifier {
 
   DynamicLinkParameters getDynamicLinkForShare({required Recipe recipe}) {
     return DynamicLinkParameters(
-        uriPrefix: 'https://hing.page.link',
+        uriPrefix: 'https://hingapp.page.link',
         link: Uri.parse(
-            'https://hing.page.link/recipe?recipe_id=${recipe.id.oid}'),
+            'https://hingapp.page.link/recipe?recipe_id=${recipe.id.oid}'),
         androidParameters: AndroidParameters(
-          packageName: 'com.wielabs.hing',
+          packageName: 'com.hing',
           minimumVersion: 1,
         ),
         iosParameters: IosParameters(
-          bundleId: 'com.wielabs.hing',
+          bundleId: 'com.hing',
           minimumVersion: '1.0.0',
           appStoreId: '123456789',
         ),

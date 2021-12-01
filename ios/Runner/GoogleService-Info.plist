@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>349392211995-3pmqrgj56m1cuaf9emjcie55jgot8b2p.apps.googleusercontent.com</string>
+	<string>920485742296-m0pc44ge5p0c4sndmbvch9t2io22fhmn.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.349392211995-3pmqrgj56m1cuaf9emjcie55jgot8b2p</string>
+	<string>com.googleusercontent.apps.920485742296-m0pc44ge5p0c4sndmbvch9t2io22fhmn</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>349392211995-1lof4rq9apeqg90u8675hcvuj863vrgp.apps.googleusercontent.com</string>
+	<string>920485742296-bdjgouijad23cheomlfmgu29abiunn94.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDaT9gYF0S0aoTeU2X0rRiFqtprKJgT5es</string>
+	<string>AIzaSyD2J7I6szEs5YF_nO-qcs2U30b34jcCUs8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>349392211995</string>
+	<string>920485742296</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.wielabs.hing</string>
+	<string>com.hing</string>
 	<key>PROJECT_ID</key>
-	<string>hing-af9ca</string>
+	<string>hing-63abd</string>
 	<key>STORAGE_BUCKET</key>
-	<string>hing-af9ca.appspot.com</string>
+	<string>hing-63abd.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:349392211995:ios:8963cf059525e5399ca8be</string>
+	<string>1:920485742296:ios:b8882737a51b3e3a1239ad</string>
 </dict>
 </plist>

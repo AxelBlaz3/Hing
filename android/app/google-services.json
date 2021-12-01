@@ -1,41 +1,41 @@
 {
   "project_info": {
-    "project_number": "349392211995",
-    "project_id": "hing-af9ca",
-    "storage_bucket": "hing-af9ca.appspot.com"
+    "project_number": "920485742296",
+    "project_id": "hing-63abd",
+    "storage_bucket": "hing-63abd.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:349392211995:android:0f222dbdf2a432e59ca8be",
+        "mobilesdk_app_id": "1:920485742296:android:0775e3ad9fa1154d1239ad",
         "android_client_info": {
-          "package_name": "com.wielabs.hing"
+          "package_name": "com.hing"
         }
       },
       "oauth_client": [
         {
-          "client_id": "349392211995-1lof4rq9apeqg90u8675hcvuj863vrgp.apps.googleusercontent.com",
+          "client_id": "920485742296-bdjgouijad23cheomlfmgu29abiunn94.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.wielabs.hing",
+            "package_name": "com.hing",
             "certificate_hash": "eb2b820d2b93034bc4b1d63e31f7ade31012cb3d"
           }
         },
         {
-          "client_id": "349392211995-dgpkmhnnscosnt0dr9ia7g2gclsp40df.apps.googleusercontent.com",
+          "client_id": "920485742296-i9tb0hlkssbhvtg7ectjlqe34j0qca9s.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAtdkfnwUDhM1kc96WHPT4R72Of8qqd5qM"
+          "current_key": "AIzaSyCqTFDvdG89e_OlidP2YEnwuualvlqzmEw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "349392211995-dgpkmhnnscosnt0dr9ia7g2gclsp40df.apps.googleusercontent.com",
+              "client_id": "920485742296-i9tb0hlkssbhvtg7ectjlqe34j0qca9s.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
