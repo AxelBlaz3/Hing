@@ -37,6 +37,8 @@ class HingUser {
   String? firebaseToken;
   @HiveField(10)
   List<String>? myIngredients;
+  @HiveField(11)
+  List<String>? reportedRecipeIds;
 
   HingUser(
       {required this.id,
@@ -45,16 +47,27 @@ class HingUser {
       this.accessToken,
       this.image,
       this.isFollowing,
-      this.myIngredients});
+      this.myIngredients,
+      this.reportedRecipeIds});
 
-  HingUser copy({ObjectId? id, String? email, String? displayName, String? accessToken, String? image, bool? isFollowing, List<String>? myIngredients}) => HingUser(
-      id: id ?? this.id,
-      email: email ?? this.email,
-      displayName: displayName ?? this.displayName,
-      accessToken: accessToken ?? this.accessToken,
-      image: image ?? this.image,
-      isFollowing: isFollowing ?? this.isFollowing,
-      myIngredients: myIngredients ?? this.myIngredients);
+  HingUser copy(
+          {ObjectId? id,
+          String? email,
+          String? displayName,
+          String? accessToken,
+          String? image,
+          bool? isFollowing,
+          List<String>? myIngredients,
+          List<String>? reportedRecipeIds}) =>
+      HingUser(
+          id: id ?? this.id,
+          email: email ?? this.email,
+          displayName: displayName ?? this.displayName,
+          accessToken: accessToken ?? this.accessToken,
+          image: image ?? this.image,
+          isFollowing: isFollowing ?? this.isFollowing,
+          myIngredients: myIngredients ?? this.myIngredients,
+          reportedRecipeIds: reportedRecipeIds ?? this.reportedRecipeIds);
 
   factory HingUser.fromJson(Map<String, dynamic> json) =>
       _$HingUserFromJson(json);

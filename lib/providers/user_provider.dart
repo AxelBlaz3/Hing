@@ -11,9 +11,12 @@ class UserProvider extends ChangeNotifier {
   final UserRepository userRepository;
 
   UserProvider({required this.userRepository});
+
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
   XFile? _editProfileImage;
+
   XFile? get editProfileImage => _editProfileImage;
   bool _showNotificationBadge = false;
 
@@ -108,7 +111,20 @@ class UserProvider extends ChangeNotifier {
         firebaseToken: firebaseToken);
   }
 
-  Future<bool> updateMyIngredients({required String recipeId, required List<String> myIngredients}) async {
-    return await userRepository.updateMyIngredients(recipeId: recipeId, ingredients: myIngredients);
+  Future<bool> updateMyIngredients(
+      {required String recipeId, required List<String> myIngredients}) async {
+    return await userRepository.updateMyIngredients(
+        recipeId: recipeId, ingredients: myIngredients);
+  }
+
+  void updateReportedRecipes(Recipe recipe) async {
+    final List<String> reportedRecipeIds =
+        Set<String>.from(currentUser.reportedRecipeIds ?? []..add(recipe.id.oid)).toList();
+
+    await Hive.box<HingUser>(kUserBox).put(
+        kUserKey,
+        currentUser.copy(
+            reportedRecipeIds: reportedRecipeIds));
+    notifyListeners();
   }
 }
