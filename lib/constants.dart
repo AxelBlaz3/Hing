@@ -52,7 +52,7 @@ const String kAPIGetRecipeLikesRoute = '$kBaseUrl/$kAPIPrefix/recipe/{}/likes';
 const String kAPISearchRecipesRoute = '$kBaseUrl/$kAPIPrefix/recipe/search/{}';
 const String kAPIUpdateMyIngredientsRoute =
     '$kBaseUrl/$kAPIPrefix/user/update/ingredients';
-
+const String kAPIReportRecipeRoute='$kBaseUrl/$kAPIPrefix/recipe/report';
 // Route names
 const String kLoginRoute = '/login';
 const String kSignupRoute = '/signup';
