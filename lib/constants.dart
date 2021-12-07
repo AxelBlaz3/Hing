@@ -52,7 +52,7 @@ const String kAPIGetRecipeLikesRoute = '$kBaseUrl/$kAPIPrefix/recipe/{}/likes';
 const String kAPISearchRecipesRoute = '$kBaseUrl/$kAPIPrefix/recipe/search/{}';
 const String kAPIUpdateMyIngredientsRoute =
     '$kBaseUrl/$kAPIPrefix/user/update/ingredients';
-const String kAPIReportRecipeRoute='$kBaseUrl/$kAPIPrefix/recipe/report';
+const String kAPIReportRecipeRoute = '$kBaseUrl/$kAPIPrefix/recipe/report';
 // Route names
 const String kLoginRoute = '/login';
 const String kSignupRoute = '/signup';
@@ -70,6 +70,7 @@ const String kDetailsRoute = '/details';
 const String kNotificationRoute = '/notifications';
 const String kCreatePasswordRoute = '/createPassword';
 const String kSearchRoute = '/search';
+const String kShoppingList = '/shoppingList';
 
 // Categories
 const int kTotalCategories = 6;
