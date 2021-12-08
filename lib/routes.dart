@@ -44,10 +44,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => NewRecipeScreen());
       case kShoppingList:
         return MaterialPageRoute(
+            settings: settings,
             builder: (_) => IngredientsListItem1(
                   recipe: settings.arguments as Recipe,
-                  ingredient: (settings.arguments as Ingredient),
-                  //myIngredients: <String>[],
                 ));
       case kRepliesRoute:
         return MaterialPageRoute(

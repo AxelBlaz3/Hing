@@ -216,7 +216,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             child: Text("Confirm Password")),
                         TextFormField(
                           obscureText: _obscureText1,
-                          controller: _passwordController,
+                          controller: _confirmController,
                           decoration: InputDecoration(
                               suffixIcon: GestureDetector(
                             child: Icon(
