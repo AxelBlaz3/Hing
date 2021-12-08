@@ -140,6 +140,8 @@ class _HomeScreenState extends State<HomeScreen>
                                         size: 24,
                                       ),
                                   itemBuilder: (context, recipe, index) =>
+                                  Consumer<UserProvider>(
+                                      builder:(context,userProvider,child)=>
                                       FeedItem(
                                           index: index,
                                           recipe: recipe,
@@ -150,8 +152,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                   ..[index] = newRecipe;
                                             _pagingControllers[key].itemList =
                                                 updatedRecipes;
-                                          }),
-                                  noItemsFoundIndicatorBuilder: (_) =>
+                                          })),
+                                          noItemsFoundIndicatorBuilder: (_) =>
                                       EmptyIllustration(
                                         assetPath:
                                             'assets/no_recipes_illustration.png',

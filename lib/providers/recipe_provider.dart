@@ -25,11 +25,11 @@ class RecipeProvider extends ChangeNotifier {
         link: Uri.parse(
             'https://hingapp.page.link/recipe?recipe_id=${recipe.id.oid}'),
         androidParameters: AndroidParameters(
-          packageName: 'com.hing',
+          packageName: 'com.hingapp',
           minimumVersion: 1,
         ),
         iosParameters: IosParameters(
-          bundleId: 'com.hing',
+          bundleId: 'com.hingapp',
           minimumVersion: '1.0.0',
           appStoreId: '123456789',
         ),
