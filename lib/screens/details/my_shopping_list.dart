@@ -33,7 +33,8 @@ class _IngredientsListItemState1 extends State<IngredientsListItem1> {
           ),
           title: Text(
             "Shopping List",
-            style: Theme.of(context)
+            style: Theme
+                .of(context)
                 .textTheme
                 .headline6
                 ?.copyWith(color: Colors.black),
@@ -69,42 +70,46 @@ class _IngredientsListItemState1 extends State<IngredientsListItem1> {
                         RichText(
                             text: TextSpan(
                                 text:
-                                    '${widget.recipe.ingredients[index].name}',
+                                '${widget.recipe.ingredients[index].name}',
                                 style: themeData.textTheme.bodyText1,
                                 children: <TextSpan>[
-                              TextSpan(
-                                  text:
-                                      ' (${widget.recipe.ingredients[index].quantity} ${widget.recipe.ingredients[index].units})',
-                                  style: themeData.textTheme.caption)
-                            ]))
+                                  TextSpan(
+                                      text:
+                                      ' (${widget.recipe.ingredients[index]
+                                          .quantity} ${widget.recipe
+                                          .ingredients[index].units})',
+                                      style: themeData.textTheme.caption)
+                                ]))
                       ])));
-
             }));
   }
 
   void updateMyIngredient(bool isInMyChecklist) async {
     final UserProvider userProvider = context.read<UserProvider>();
     final HingUser user = userProvider.currentUser;
-    int index=0;
-    for (index=0;index == widget.recipe.ingredients.length;index++)
-    if (isInMyChecklist) {
-      user.myIngredients?.remove(widget.recipe.ingredients[index].name);
-    } else {
-      if (user.myIngredients == null) {
-        user.myIngredients = [widget.recipe.ingredients[index].name];
+    int index = 0;
+    if (index == widget.recipe.ingredients.length) {
+      index++;
+      print("index $index");
+      if (isInMyChecklist) {
+        user.myIngredients?.remove(widget.recipe.ingredients[index].name);
       } else {
-        user.myIngredients?.add(widget.recipe.ingredients[index].name);
+        if (user.myIngredients == null) {
+          user.myIngredients = [widget.recipe.ingredients[index].name];
+        } else {
+          user.myIngredients?.add(widget.recipe.ingredients[index].name);
+        }
       }
+
+      await Hive.box<HingUser>(kUserBox).put(kUserKey,
+          user.copy(myIngredients: user.myIngredients?.toSet().toList()));
+
+      // final isUpdated = await userProvider.updateMyIngredients(
+      //     recipeId: widget.recipe.id.oid, myIngredients: myIngredients);
+
+      // if (isUpdated) {
+      setState(() {});
+      // }
     }
-
-    await Hive.box<HingUser>(kUserBox).put(kUserKey,
-        user.copy(myIngredients: user.myIngredients?.toSet().toList()));
-
-    // final isUpdated = await userProvider.updateMyIngredients(
-    //     recipeId: widget.recipe.id.oid, myIngredients: myIngredients);
-
-    // if (isUpdated) {
-    setState(() {});
-    // }
   }
 }
