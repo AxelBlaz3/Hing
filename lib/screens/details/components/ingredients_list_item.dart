@@ -4,7 +4,6 @@ import 'package:hing/constants.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
-import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/providers/user_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/src/provider.dart';

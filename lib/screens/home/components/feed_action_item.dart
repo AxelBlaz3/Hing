@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hing/models/recipe/recipe.dart';
-import 'package:hing/theme/colors.dart';
 
 class FeedActionItem extends StatefulWidget {
   final Recipe recipe;

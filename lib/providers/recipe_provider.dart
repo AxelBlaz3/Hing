@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
@@ -7,7 +6,6 @@ import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/repository/recipe_repository.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
@@ -144,5 +142,13 @@ class RecipeProvider extends ChangeNotifier {
   Future<List<Recipe>> searchRecipes(
       {required String query, int page = 1}) async {
     return await recipeRepository.searchRecipes(query: query, page: page);
+  }
+
+  Future<dynamic> reportRecipe(
+      {required String reportReason,
+        required String userId,
+        required String recipeId}) async {
+    return await reportRecipe(
+        reportReason: reportReason, userId: userId, recipeId: recipeId);
   }
 }

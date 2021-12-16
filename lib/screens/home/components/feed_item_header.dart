@@ -120,6 +120,7 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
   }
 
   reportBottomSheet(context) {
+    final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -158,7 +159,22 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                           itemCount: 5,
                           itemBuilder: (context, index) => InkWell(
                               onTap: () {
-                                onReportSent(context, widget.recipe);
+                                recipeProvider.reportRecipe(
+                                    reportReason: index == 0
+                                        ? "It's Spam"
+                                        : index == 1
+                                            ? "Eating disorders"
+                                            : index == 2
+                                                ? "False Information"
+                                                : index == 3
+                                                    ? "Nudity or sexual activity"
+                                                    : index == 4
+                                                        ? "Intellectual property violation"
+                                                        : "",
+                                    userId: widget.recipe.user.id.oid,
+                                    recipeId: widget.recipe.id.oid);
+
+                                onReportSent(context, widget.recipe, index);
                               },
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,9 +205,10 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
         });
   }
 
-  void onReportSent(BuildContext context, Recipe recipe) async {
+  void onReportSent(BuildContext context, Recipe recipe, int index) async {
     final UserProvider userProvider = context.read<UserProvider>();
     userProvider.updateReportedRecipes(recipe);
+    final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -229,6 +246,20 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                   alignment: Alignment.bottomCenter,
                   child: ElevatedButton(
                       onPressed: () {
+                        recipeProvider.recipeRepository.reportRecipe(
+                            reportReason: index == 0
+                                ? "It's Spam"
+                                : index == 1
+                                    ? "Eating disorders"
+                                    : index == 2
+                                        ? "False Information"
+                                        : index == 3
+                                            ? "Nudity or sexual activity"
+                                            : index == 4
+                                                ? "Intellectual property violation"
+                                                : "",
+                            userId: widget.recipe.id.oid,
+                            recipeId: widget.recipe.id.oid);
                         Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);

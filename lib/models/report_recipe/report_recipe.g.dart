@@ -9,8 +9,8 @@ part of 'report_recipe.dart';
 ReportRecipe _$ReportRecipeFromJson(Map<String, dynamic> json) {
   return ReportRecipe(
     reportReason: json['report_reason'] as String,
-    recipeId: ObjectId.fromJson(json['recipeId'] as Map<String, dynamic>),
-    userId: ObjectId.fromJson(json['userId'] as Map<String, dynamic>),
+    recipeId: json['recipeId'] as String,
+    userId: json['userId'] as String,
   );
 }
 

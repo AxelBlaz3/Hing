@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
-import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/user_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';

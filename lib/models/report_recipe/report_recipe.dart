@@ -1,4 +1,3 @@
-import 'package:hing/models/object_id/object_id.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'report_recipe.g.dart';
@@ -7,8 +6,8 @@ part 'report_recipe.g.dart';
 class ReportRecipe {
   @JsonKey(name: 'report_reason')
   final String reportReason;
-  final ObjectId recipeId;
-  final ObjectId userId;
+  final String recipeId;
+  final String userId;
 
   ReportRecipe(
       {required this.reportReason,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
-import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/components/loading_screen.dart';
