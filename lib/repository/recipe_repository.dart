@@ -320,20 +320,20 @@ class RecipeRepository {
     return [];
   }
 
-  Future<dynamic> reportRecipe(
+  Future<bool> reportRecipe(
       {required String reportReason,
-        required String userId,
         required String recipeId}) async {
+          final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
     final response = await http.post(Uri.parse(kAPIReportRecipeRoute),
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
         body: jsonEncode(<String, String>{
-          'user_id': userId,
+          'user_id': user!.id.oid,
           'recipe_id': recipeId,
-          'report_recipe': reportReason
+          'report_reason': reportReason
         }));
 
-
-      return response.statusCode;
+      
+      return response.statusCode == 200;
 
   }
 }

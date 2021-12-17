@@ -66,7 +66,7 @@ class DetailsScreenReady extends StatefulWidget {
 class _DetailsScreeReadyState extends State<DetailsScreenReady> {
   @override
   Widget build(BuildContext context) {
-    int index=widget.index;
+    int index = widget.index;
     Recipe recipe = widget.recipe;
     return Stack(
       children: [
@@ -120,9 +120,7 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle2
-                                    ?.copyWith(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold),
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ))),
                       SizedBox(
                         height: 24,
@@ -162,11 +160,12 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
                               shrinkWrap: true,
                               itemCount: recipe.ingredients.length,
                               itemBuilder: (context, index) {
-                                  return IngredientsListItem(
-                                      recipe: recipe,
-                                      ingredient: recipe.ingredients[index],
-                                      myIngredients:
-                                          recipe.myIngredients ?? <String>[]);}))
+                                return IngredientsListItem(
+                                    recipe: recipe,
+                                    ingredient: recipe.ingredients[index],
+                                    myIngredients:
+                                        recipe.myIngredients ?? <String>[]);
+                              }))
                     ])))
               ],
             )),

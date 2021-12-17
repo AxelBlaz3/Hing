@@ -31,7 +31,7 @@ class _ProfileTabPostsContentState extends State<ProfileTabPostsContent> {
               itemBuilder: (_, recipe, index) => FeedItem(
                   index: index,
                   recipe: recipe,
-                  refreshCallback: (updatedRecipe) {
+                  refreshCallback: (updatedRecipe, {bool shouldRefresh = false}) {
                     widget.pagingController.itemList = List.of(
                         widget.pagingController.itemList!
                           ..[index] = updatedRecipe);

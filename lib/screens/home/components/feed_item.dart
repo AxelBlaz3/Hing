@@ -10,7 +10,7 @@ import 'feed_item_body.dart';
 class FeedItem extends StatefulWidget {
   final int index;
   final Recipe recipe;
-  final Function(Recipe newRecipe) refreshCallback;
+  final Function(Recipe newRecipe, {bool shouldRefresh}) refreshCallback;
 
   const FeedItem(
       {Key? key,

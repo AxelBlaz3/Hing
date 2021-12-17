@@ -231,7 +231,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                                             index: childIndex,
                                                             recipe: recipe,
                                                             refreshCallback:
-                                                                (updatedRecipe) {
+                                                                (updatedRecipe, {bool shouldRefresh = false}) {
                                                               if (index == 1) {
                                                                 // Check if recipe is not a favorite. If so, remove it from favorites list.
                                                                 if (!updatedRecipe

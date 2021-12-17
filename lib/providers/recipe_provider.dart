@@ -144,11 +144,10 @@ class RecipeProvider extends ChangeNotifier {
     return await recipeRepository.searchRecipes(query: query, page: page);
   }
 
-  Future<dynamic> reportRecipe(
+  Future<bool> reportRecipe(
       {required String reportReason,
-        required String userId,
         required String recipeId}) async {
     return await recipeRepository.reportRecipe(
-        reportReason: reportReason, userId: userId, recipeId: recipeId);
+        reportReason: reportReason, recipeId: recipeId);
   }
 }

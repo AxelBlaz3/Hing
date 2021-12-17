@@ -139,20 +139,33 @@ class _HomeScreenState extends State<HomeScreen>
                                         size: 24,
                                       ),
                                   itemBuilder: (context, recipe, index) =>
-                                  Consumer<UserProvider>(
-                                      builder:(context,userProvider,child)=>
-                                      FeedItem(
-                                          index: index,
-                                          recipe: recipe,
-                                          refreshCallback: (Recipe newRecipe) {
-                                            final List<Recipe> updatedRecipes =
-                                                List.of(_pagingControllers[key]
-                                                    .itemList!)
-                                                  ..[index] = newRecipe;
-                                            _pagingControllers[key].itemList =
-                                                updatedRecipes;
-                                          })),
-                                          noItemsFoundIndicatorBuilder: (_) =>
+                                      Consumer<UserProvider>(
+                                          builder: (context, userProvider,
+                                                  child) =>
+                                              FeedItem(
+                                                  index: index,
+                                                  recipe: recipe,
+                                                  refreshCallback: (Recipe
+                                                          newRecipe,
+                                                      {bool shouldRefresh =
+                                                          false}) {
+                                                    if (shouldRefresh) {
+                                                      _pagingControllers[key]
+                                                          .refresh();
+                                                      return;
+                                                    }
+                                                    final List<Recipe>
+                                                        updatedRecipes =
+                                                        List.of(
+                                                            _pagingControllers[
+                                                                    key]
+                                                                .itemList!)
+                                                          ..[index] = newRecipe;
+                                                    _pagingControllers[key]
+                                                            .itemList =
+                                                        updatedRecipes;
+                                                  })),
+                                  noItemsFoundIndicatorBuilder: (_) =>
                                       EmptyIllustration(
                                         assetPath:
                                             'assets/no_recipes_illustration.png',

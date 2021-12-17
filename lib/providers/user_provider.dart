@@ -132,7 +132,7 @@ class UserProvider extends ChangeNotifier {
     return await userRepository.changePassword(userId: userId, password: password,oldPassword: oldPassword);
   }
 
-  Future<dynamic> blockUser({required String userId,required String blockUserId})async{
+  Future<bool> blockUser({required String userId,required String blockUserId})async{
     return await userRepository.blockUser(userId: userId, blockUserId: blockUserId);
 }
 }

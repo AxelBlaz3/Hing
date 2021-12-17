@@ -85,7 +85,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         itemBuilder: (context, recipe, index) => FeedItem(
                             index: index,
                             recipe: recipe,
-                            refreshCallback: (updatedRecipe) {}),
+                            refreshCallback: (updatedRecipe, {bool shouldRefresh = false}) {}),
                         noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(
                               assetPath: 'assets/no_recipes_illustration.png',
                               title: S.of(context).noRecipesTitle,

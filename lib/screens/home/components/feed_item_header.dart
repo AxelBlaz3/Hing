@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class FeedItemHeader extends StatefulWidget {
   final Recipe recipe;
-  final Function(Recipe newRecipe) refreshCallback;
+  final Function(Recipe newRecipe, {bool shouldRefresh}) refreshCallback;
 
   const FeedItemHeader(
       {Key? key, required this.recipe, required this.refreshCallback})
@@ -24,6 +24,8 @@ class FeedItemHeader extends StatefulWidget {
 class _FeedItemHeaderState extends State<FeedItemHeader> {
   @override
   Widget build(BuildContext context) {
+    final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Row(
@@ -70,11 +72,13 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                         ? 'assets/save_filled.svg'
                         : 'assets/save.svg',
                     color: Theme.of(context).textTheme.caption!.color)),
-            IconButton(
-                onPressed: () {
-                  threeDotMenu(context);
-                },
-                icon: SvgPicture.asset("assets/report.svg"))
+            if (widget.recipe.user.id.oid != user!.id.oid)
+              IconButton(
+                  onPressed: () {
+                    threeDotMenu(context);
+                  },
+                  icon: SvgPicture.asset("assets/report.svg",
+                      color: Theme.of(context).colorScheme.onSurface))
           ],
         ));
   }
@@ -101,25 +105,21 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                       },
                       child: Text(
                         "Report",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(color: Colors.black),
+                        style: Theme.of(context).textTheme.bodyText1,
                       )),
                   TextButton(
                       onPressed: () {
                         final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
-                        userProvider.blockUser(
-                            userId: user!.id.oid,
-                            blockUserId: widget.recipe.user.id.oid);
-                        userProvider.userRepository
+                        userProvider
                             .blockUser(
-                                userId: user.id.oid,
+                                userId: user!.id.oid,
                                 blockUserId: widget.recipe.user.id.oid)
                             .then((success) {
-                          if (success==200) {
+                          if (success) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text("User Blocked")));
+                            widget.refreshCallback(widget.recipe,
+                                shouldRefresh: true);
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text("Couldn't block user")));
@@ -129,10 +129,7 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                       },
                       child: Text(
                         "Block",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(color: Colors.black),
+                        style: Theme.of(context).textTheme.bodyText1,
                       ))
                 ],
               ));
@@ -140,80 +137,47 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
   }
 
   reportBottomSheet(context) {
-
     return showModalBottomSheet(
+        isScrollControlled: true,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topRight: Radius.circular(24), topLeft: Radius.circular(24))),
         context: context,
         builder: (BuildContext context) {
           return Container(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 24),
-              height: 500,
+              padding:
+                  EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 48),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       "Report",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          ?.copyWith(color: Colors.black),
+                      style: Theme.of(context).textTheme.headline6,
                     ),
                     SizedBox(
                       height: 8,
                     ),
                     Text(
                       "Why are you reporting this post?",
-                      style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                            color: Colors.black,
-                          ),
+                      style: Theme.of(context).textTheme.bodyText2,
                       textAlign: TextAlign.left,
                     ),
                     SizedBox(
                       height: 24,
                     ),
-                    Expanded(
-                      child: ListView.builder(
-                          itemCount: 5,
-                          itemBuilder: (context, index) => InkWell(
-                              onTap: () {
-                                // recipeProvider
-                                //     .reportRecipe(
-                                //         reportReason: index == 0
-                                //             ? "It's Spam"
-                                //             : index == 1
-                                //                 ? "Eating disorders"
-                                //                 : index == 2
-                                //                     ? "False Information"
-                                //                     : index == 3
-                                //                         ? "Nudity or sexual activity"
-                                //                         : index == 4
-                                //                             ? "Intellectual property violation"
-                                //                             : "",
-                                //         userId: widget.recipe.user.id.oid,
-                                //         recipeId: widget.recipe.id.oid)
-                                //     .then((success) {
-                                //   if (success==200) {
-                                //     ScaffoldMessenger.of(context).showSnackBar(
-                                //         SnackBar(
-                                //             content: Text("Recipe Reported")));
-                                //   } else {
-                                //     ScaffoldMessenger.of(context).showSnackBar(
-                                //         SnackBar(
-                                //             content: Text(
-                                //                 "Couldn't report recipe")));
-                                //   }
-                                // });
-
-                                onReportSent(context, widget.recipe, index);
-                              },
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      index == 0
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: 5,
+                        itemBuilder: (context, index) => TextButton(
+                            onPressed: () {
+                              final recipeProvider =
+                                  Provider.of<RecipeProvider>(context,
+                                      listen: false);
+                              recipeProvider
+                                  .reportRecipe(
+                                      reportReason: index == 0
                                           ? "It's Spam"
                                           : index == 1
                                               ? "Eating disorders"
@@ -224,64 +188,26 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                                                       : index == 4
                                                           ? "Intellectual property violation"
                                                           : "",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2
-                                          ?.copyWith(color: Colors.black),
-                                    ),
-                                    SizedBox(
-                                      height: 24,
-                                    )
-                                  ]))),
-                    ),
-                  ]));
-        });
-  }
-
-  void onReportSent(BuildContext context, Recipe recipe, int index) async {
-    // final UserProvider userProvider = context.read<UserProvider>();
-    // userProvider.updateReportedRecipes(recipe);
-    final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
-    return showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(24), topRight: Radius.circular(24))),
-        context: context,
-        builder: (BuildContext context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 36,
-              ),
-              SvgPicture.asset("assets/Success_Illustration.svg"),
-              Text(
-                "Thanks for reporting the post",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6
-                    ?.copyWith(color: Colors.black),
-              ),
-              SizedBox(
-                height: 24,
-              ),
-              Padding(
-                  padding: EdgeInsets.only(left: 16, right: 16),
-                  child: Text(
-                    "Your Feedback is very important.We don't encourage such type of content on this app , thank you report ",
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle2
-                        ?.copyWith(color: Colors.black),
-                  )),
-              Spacer(),
-              Align(
-                  alignment: Alignment.bottomCenter,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        recipeProvider.recipeRepository
-                            .reportRecipe(
-                                reportReason: index == 0
+                                      recipeId: widget.recipe.id.oid)
+                                  .then((success) {
+                                if (success) {
+                                  onReportSent(context, widget.recipe, index);
+                                  widget.refreshCallback(widget.recipe,
+                                      shouldRefresh: true);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text("Reported Recipe")));
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content:
+                                              Text("Could not report recipe")));
+                                }
+                              });
+                            },
+                            child: Row(children: [
+                              Text(
+                                index == 0
                                     ? "It's Spam"
                                     : index == 1
                                         ? "Eating disorders"
@@ -292,17 +218,51 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                                                 : index == 4
                                                     ? "Intellectual property violation"
                                                     : "",
-                                userId: widget.recipe.id.oid,
-                                recipeId: widget.recipe.id.oid)
-                            .then((success) {
-                          if (success==200) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Reported Recipe")));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("Could not report recipe")));
-                          }
-                        });
+                                textAlign: TextAlign.left,
+                                style: Theme.of(context).textTheme.subtitle2,
+                              ),
+                            ]))),
+                  ]));
+        });
+  }
+
+  void onReportSent(BuildContext context, Recipe recipe, int index) async {
+    // final UserProvider userProvider = context.read<UserProvider>();
+    // userProvider.updateReportedRecipes(recipe);
+
+    return showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(24), topRight: Radius.circular(24))),
+        context: context,
+        isDismissible: false,
+        enableDrag: false,
+        builder: (BuildContext context) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 36,
+              ),
+              SvgPicture.asset("assets/Success_Illustration.svg"),
+              Text(
+                "Thanks for reporting the post",
+                style: Theme.of(context).textTheme.headline6,
+              ),
+              SizedBox(
+                height: 24,
+              ),
+              Padding(
+                  padding: EdgeInsets.only(left: 16, right: 16),
+                  child: Text(
+                    "Your Feedback is very important. We do not encourage such type of content on this app, Thank you.",
+                    style: Theme.of(context).textTheme.subtitle2,
+                  )),
+              Spacer(),
+              Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ElevatedButton(
+                      onPressed: () {
                         Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);

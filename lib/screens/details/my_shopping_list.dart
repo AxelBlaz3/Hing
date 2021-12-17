@@ -27,16 +27,10 @@ class _IngredientsListItemState1 extends State<IngredientsListItem1> {
 
     return Scaffold(
         appBar: AppBar(
-          leading: BackButton(
-            color: Colors.black,
-          ),
+          leading: BackButton(),
           title: Text(
             "Shopping List",
-            style: Theme
-                .of(context)
-                .textTheme
-                .headline6
-                ?.copyWith(color: Colors.black),
+            style: Theme.of(context).textTheme.headline6,
           ),
         ),
         body: ListView.builder(
@@ -69,16 +63,14 @@ class _IngredientsListItemState1 extends State<IngredientsListItem1> {
                         RichText(
                             text: TextSpan(
                                 text:
-                                '${widget.recipe.ingredients[index].name}',
+                                    '${widget.recipe.ingredients[index].name}',
                                 style: themeData.textTheme.bodyText1,
                                 children: <TextSpan>[
-                                  TextSpan(
-                                      text:
-                                      ' (${widget.recipe.ingredients[index]
-                                          .quantity} ${widget.recipe
-                                          .ingredients[index].units})',
-                                      style: themeData.textTheme.caption)
-                                ]))
+                              TextSpan(
+                                  text:
+                                      ' (${widget.recipe.ingredients[index].quantity} ${widget.recipe.ingredients[index].units})',
+                                  style: themeData.textTheme.caption)
+                            ]))
                       ])));
             }));
   }

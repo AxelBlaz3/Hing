@@ -298,7 +298,7 @@ class UserRepository {
     return false;
   }
 
-  Future<dynamic> blockUser(
+  Future<bool> blockUser(
       {required String userId, required String blockUserId}) async {
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
