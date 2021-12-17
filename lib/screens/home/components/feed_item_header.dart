@@ -86,6 +86,7 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                 topLeft: Radius.circular(24), topRight: Radius.circular(24))),
         context: (context),
         builder: (BuildContext context) {
+          final UserProvider userProvider = context.read<UserProvider>();
           return Container(
               height: 200,
               padding:
@@ -106,7 +107,26 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                             ?.copyWith(color: Colors.black),
                       )),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+                        userProvider.blockUser(
+                            userId: user!.id.oid,
+                            blockUserId: widget.recipe.user.id.oid);
+                        userProvider.userRepository
+                            .blockUser(
+                                userId: user.id.oid,
+                                blockUserId: widget.recipe.user.id.oid)
+                            .then((success) {
+                          if (success==200) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("User Blocked")));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Couldn't block user")));
+                          }
+                        });
+                        Navigator.pop(context);
+                      },
                       child: Text(
                         "Block",
                         style: Theme.of(context)
@@ -120,7 +140,7 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
   }
 
   reportBottomSheet(context) {
-    final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
+
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
@@ -159,20 +179,33 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                           itemCount: 5,
                           itemBuilder: (context, index) => InkWell(
                               onTap: () {
-                                recipeProvider.reportRecipe(
-                                    reportReason: index == 0
-                                        ? "It's Spam"
-                                        : index == 1
-                                            ? "Eating disorders"
-                                            : index == 2
-                                                ? "False Information"
-                                                : index == 3
-                                                    ? "Nudity or sexual activity"
-                                                    : index == 4
-                                                        ? "Intellectual property violation"
-                                                        : "",
-                                    userId: widget.recipe.user.id.oid,
-                                    recipeId: widget.recipe.id.oid);
+                                // recipeProvider
+                                //     .reportRecipe(
+                                //         reportReason: index == 0
+                                //             ? "It's Spam"
+                                //             : index == 1
+                                //                 ? "Eating disorders"
+                                //                 : index == 2
+                                //                     ? "False Information"
+                                //                     : index == 3
+                                //                         ? "Nudity or sexual activity"
+                                //                         : index == 4
+                                //                             ? "Intellectual property violation"
+                                //                             : "",
+                                //         userId: widget.recipe.user.id.oid,
+                                //         recipeId: widget.recipe.id.oid)
+                                //     .then((success) {
+                                //   if (success==200) {
+                                //     ScaffoldMessenger.of(context).showSnackBar(
+                                //         SnackBar(
+                                //             content: Text("Recipe Reported")));
+                                //   } else {
+                                //     ScaffoldMessenger.of(context).showSnackBar(
+                                //         SnackBar(
+                                //             content: Text(
+                                //                 "Couldn't report recipe")));
+                                //   }
+                                // });
 
                                 onReportSent(context, widget.recipe, index);
                               },
@@ -206,8 +239,8 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
   }
 
   void onReportSent(BuildContext context, Recipe recipe, int index) async {
-    final UserProvider userProvider = context.read<UserProvider>();
-    userProvider.updateReportedRecipes(recipe);
+    // final UserProvider userProvider = context.read<UserProvider>();
+    // userProvider.updateReportedRecipes(recipe);
     final recipeProvider = Provider.of<RecipeProvider>(context, listen: false);
     return showModalBottomSheet(
         shape: RoundedRectangleBorder(
@@ -246,20 +279,30 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                   alignment: Alignment.bottomCenter,
                   child: ElevatedButton(
                       onPressed: () {
-                        recipeProvider.recipeRepository.reportRecipe(
-                            reportReason: index == 0
-                                ? "It's Spam"
-                                : index == 1
-                                    ? "Eating disorders"
-                                    : index == 2
-                                        ? "False Information"
-                                        : index == 3
-                                            ? "Nudity or sexual activity"
-                                            : index == 4
-                                                ? "Intellectual property violation"
-                                                : "",
-                            userId: widget.recipe.id.oid,
-                            recipeId: widget.recipe.id.oid);
+                        recipeProvider.recipeRepository
+                            .reportRecipe(
+                                reportReason: index == 0
+                                    ? "It's Spam"
+                                    : index == 1
+                                        ? "Eating disorders"
+                                        : index == 2
+                                            ? "False Information"
+                                            : index == 3
+                                                ? "Nudity or sexual activity"
+                                                : index == 4
+                                                    ? "Intellectual property violation"
+                                                    : "",
+                                userId: widget.recipe.id.oid,
+                                recipeId: widget.recipe.id.oid)
+                            .then((success) {
+                          if (success==200) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Reported Recipe")));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("Could not report recipe")));
+                          }
+                        });
                         Navigator.pop(context);
                         Navigator.pop(context);
                         Navigator.pop(context);

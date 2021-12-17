@@ -148,7 +148,7 @@ class RecipeProvider extends ChangeNotifier {
       {required String reportReason,
         required String userId,
         required String recipeId}) async {
-    return await reportRecipe(
+    return await recipeRepository.reportRecipe(
         reportReason: reportReason, userId: userId, recipeId: recipeId);
   }
 }

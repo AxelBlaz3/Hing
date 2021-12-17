@@ -264,7 +264,8 @@ class UserRepository {
     return false;
   }
 
-  Future<bool> updateMyIngredients({required String recipeId, required List<String> ingredients}) async {
+  Future<bool> updateMyIngredients(
+      {required String recipeId, required List<String> ingredients}) async {
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
       final response = await http.put(Uri.parse(kAPIUpdateMyIngredientsRoute),
@@ -273,6 +274,39 @@ class UserRepository {
             'recipe_id': recipeId,
             'user_id': user!.id.oid,
             'ingredients': ingredients
+          }));
+
+      return response.statusCode == HttpStatus.ok;
+    } catch (e) {}
+    return false;
+  }
+
+  Future<dynamic> changePassword(
+      {required String userId, required String password,required String oldPassword}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.put(Uri.parse(kAPIChangePasswordRoute),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            'user_id': user!.id.oid,
+            'new_password': password,
+            "old_password":oldPassword
+          }));
+
+      return response.statusCode == HttpStatus.ok;
+    } catch (e) {}
+    return false;
+  }
+
+  Future<dynamic> blockUser(
+      {required String userId, required String blockUserId}) async {
+    try {
+      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      final response = await http.put(Uri.parse(kAPIBlockUserRoute),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            'user_id': user!.id.oid,
+            'other_user_id': blockUserId
           }));
 
       return response.statusCode == HttpStatus.ok;

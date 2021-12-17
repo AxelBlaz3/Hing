@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final HingUser user;
+
   const EditProfileScreen({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -24,11 +25,12 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     with TickerProviderStateMixin<EditProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmController = TextEditingController();
   late AnimationController _controller;
   var _obscureText = true;
   var _obscureText1 = true;
+
   void togglePasswordVisibility() {
     setState(() {
       _obscureText = !_obscureText;
@@ -224,7 +226,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                                   ? Icons.visibility_outlined
                                   : Icons.visibility_off_outlined,
                             ),
-                            onTap: () => togglePasswordVisibility(),
+                            onTap: () => togglePasswordVisibility1(),
                           )),
                         )
                       ],
@@ -246,6 +248,34 @@ class _EditProfileScreenState extends State<EditProfileScreen>
 
                           final UserProvider userProvider =
                               context.read<UserProvider>();
+                          if (_passwordController.text ==
+                              _confirmController.text) {
+                            userProvider.userRepository
+                                .changePassword(
+                                    userId: userProvider.currentUser.id.oid,
+                                    password: _confirmController.text,
+                                    oldPassword:userProvider.currentUser.displayName
+                            )
+                                .then((success) {
+                              if (success == 200) {
+                                context
+                                    .read<UserProvider>()
+                                    .notifyUserChanges();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            "Password changes successfully")));
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content:
+                                            Text("Could not update password")));
+                              }
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("Passwords doesn't match")));
+                          }
                           userProvider
                               .updateUser(
                                   displayName: _nameController.text,
