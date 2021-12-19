@@ -25,23 +25,9 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     with TickerProviderStateMixin<EditProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmController = TextEditingController();
+
   late AnimationController _controller;
-  var _obscureText = true;
-  var _obscureText1 = true;
 
-  void togglePasswordVisibility() {
-    setState(() {
-      _obscureText = !_obscureText;
-    });
-  }
-
-  void togglePasswordVisibility1() {
-    setState(() {
-      _obscureText1 = !_obscureText1;
-    });
-  }
 
   @override
   void initState() {
@@ -64,8 +50,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     super.dispose();
 
     _nameController.dispose();
-    _confirmController.dispose();
-    _passwordController.dispose();
+
   }
 
   @override
@@ -195,40 +180,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                         SizedBox(
                           height: 16,
                         ),
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Text("Change Password")),
-                        TextFormField(
-                          obscureText: _obscureText,
-                          controller: _passwordController,
-                          decoration: InputDecoration(
-                              suffixIcon: GestureDetector(
-                            child: Icon(
-                              _obscureText
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                            ),
-                            onTap: () => togglePasswordVisibility(),
-                          )),
-                        ),
-                        Container(
-                            alignment: Alignment.centerLeft,
-                            padding: EdgeInsets.symmetric(vertical: 8),
-                            child: Text("Confirm Password")),
-                        TextFormField(
-                          obscureText: _obscureText1,
-                          controller: _confirmController,
-                          decoration: InputDecoration(
-                              suffixIcon: GestureDetector(
-                            child: Icon(
-                              _obscureText
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                            ),
-                            onTap: () => togglePasswordVisibility1(),
-                          )),
-                        )
+
                       ],
                     )),
               )),
@@ -247,35 +199,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           }
 
                           final UserProvider userProvider =
-                              context.read<UserProvider>();
-                          if (_passwordController.text ==
-                              _confirmController.text) {
-                            userProvider.userRepository
-                                .changePassword(
-                                    userId: userProvider.currentUser.id.oid,
-                                    password: _confirmController.text,
-                                    oldPassword:userProvider.currentUser.displayName
-                            )
-                                .then((success) {
-                              if (success == 200) {
-                                context
-                                    .read<UserProvider>()
-                                    .notifyUserChanges();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content: Text(
-                                            "Password changes successfully")));
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                        content:
-                                            Text("Could not update password")));
-                              }
-                            });
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("Passwords doesn't match")));
-                          }
+                          context.read<UserProvider>();
                           userProvider
                               .updateUser(
                                   displayName: _nameController.text,

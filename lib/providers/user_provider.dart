@@ -128,7 +128,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> changePassword({required String userId,required String password,required String oldPassword})async{
+  Future<bool> changePassword({required String userId,required String password,required String oldPassword})async{
     return await userRepository.changePassword(userId: userId, password: password,oldPassword: oldPassword);
   }
 

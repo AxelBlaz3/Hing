@@ -170,82 +170,85 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
               ],
             )),
         SafeArea(
-            child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    child: Column(mainAxisSize: MainAxisSize.min, children: [
-                      Consumer<RecipeProvider>(
-                          builder: (context, recipeProvider, child) =>
-                              FeedItemFooter(
-                                recipe: recipe,
-                                refreshCallback: widget.refreshCallback,
-                                detailsCallback: (updatedRecipe) {
-                                  recipe = updatedRecipe;
-                                  recipeProvider.notifyRecipeChanges();
-                                },
-                              )),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: ElevatedButton(
-                            onPressed: () {
-                              final RecipeProvider recipeProvider =
-                                  context.read<RecipeProvider>();
-                              if (!recipe.isFavorite) {
-                                recipeProvider
-                                    .addRecipeToFavorites(
-                                        recipeId: recipe.id.oid)
-                                    .then((success) {
-                                  if (success) {
-                                    widget.refreshCallback(recipe
-                                      ..isFavorite = !recipe.isFavorite);
-
-                                    context
-                                        .read<RecipeProvider>()
-                                        .notifyRecipeChanges();
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(S
-                                                .of(context)
-                                                .somethingWentWrong)));
-                                  }
-                                });
-                              } else {
-                                recipeProvider
-                                    .removeRecipeFromFavorites(
-                                        recipeId: recipe.id.oid)
-                                    .then((success) {
-                                  if (success) {
-                                    widget.refreshCallback(recipe
-                                      ..isFavorite = !recipe.isFavorite);
-
-                                    context
-                                        .read<RecipeProvider>()
-                                        .notifyRecipeChanges();
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                            content: Text(S
-                                                .of(context)
-                                                .somethingWentWrong)));
-                                  }
-                                });
-                              }
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Consumer<RecipeProvider>(
+                      builder: (context, recipeProvider, child) =>
+                          FeedItemFooter(
+                            recipe: recipe,
+                            refreshCallback: widget.refreshCallback,
+                            detailsCallback: (updatedRecipe) {
+                              recipe = updatedRecipe;
+                              recipeProvider.notifyRecipeChanges();
                             },
-                            child: Consumer<RecipeProvider>(
-                                builder: (context, recipeProvider, child) =>
-                                    Text(recipe.isFavorite
-                                        ? S.of(context).removeFromFavorites
-                                        : S.of(context).addToFavorite)),
-                            style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.symmetric(vertical: 24),
-                                minimumSize: Size(double.infinity, 48))),
-                      ),
-                      SizedBox(
-                        height: 16,
-                      )
-                    ]))))
+                          )),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          final RecipeProvider recipeProvider =
+                              context.read<RecipeProvider>();
+                          if (!recipe.isFavorite) {
+                            recipeProvider
+                                .addRecipeToFavorites(recipeId: recipe.id.oid)
+                                .then((success) {
+                              if (success) {
+                                widget.refreshCallback(
+                                    recipe..isFavorite = !recipe.isFavorite);
+
+                                context
+                                    .read<RecipeProvider>()
+                                    .notifyRecipeChanges();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            S.of(context).somethingWentWrong)));
+                              }
+                            });
+                          } else {
+                            recipeProvider
+                                .removeRecipeFromFavorites(
+                                    recipeId: recipe.id.oid)
+                                .then((success) {
+                              if (success) {
+                                widget.refreshCallback(
+                                    recipe..isFavorite = !recipe.isFavorite);
+
+                                context
+                                    .read<RecipeProvider>()
+                                    .notifyRecipeChanges();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            S.of(context).somethingWentWrong)));
+                              }
+                            });
+                          }
+                        },
+                        child: Consumer<RecipeProvider>(
+                            builder: (context, recipeProvider, child) => Text(
+                                recipe.isFavorite
+                                    ? S.of(context).removeFromFavorites
+                                    : S.of(context).addToFavorite)),
+                        style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(vertical: 24),
+                            minimumSize: Size(double.infinity, 48))),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  )
+                ],
+              ),
+            ),
+          ),
+        )
       ],
     );
   }

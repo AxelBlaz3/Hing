@@ -281,18 +281,18 @@ class UserRepository {
     return false;
   }
 
-  Future<dynamic> changePassword(
+  Future<bool> changePassword(
       {required String userId, required String password,required String oldPassword}) async {
     try {
+
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
       final response = await http.put(Uri.parse(kAPIChangePasswordRoute),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-          body: jsonEncode(<String, dynamic>{
+          body: jsonEncode(<String, String>{
             'user_id': user!.id.oid,
             'new_password': password,
             "old_password":oldPassword
           }));
-
       return response.statusCode == HttpStatus.ok;
     } catch (e) {}
     return false;

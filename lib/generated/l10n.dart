@@ -656,6 +656,15 @@ class S {
     );
   }
 
+  String get changePassword {
+    return Intl.message(
+      'Change Password',
+      name: 'change password',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Image`
   String get image {
     return Intl.message(

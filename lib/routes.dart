@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/models/comment/comment.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
+import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/screens/comments/comments.dart';
 import 'package:hing/screens/details/details.dart';
@@ -44,6 +45,7 @@ class RouteGenerator {
             settings: settings,
             builder: (_) => IngredientsListItem1(
                   recipe: settings.arguments as Recipe,
+
                 ));
       case kRepliesRoute:
         return MaterialPageRoute(
