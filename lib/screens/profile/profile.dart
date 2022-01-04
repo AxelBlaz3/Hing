@@ -115,8 +115,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               },
                               itemBuilder: (_) => <PopupMenuEntry>[
                                     PopupMenuItem(
-                                        value: 0,
-                                        child: Text(S.of(context).logout))
+                                      value: 0,
+                                      child: Text(S.of(context).logout),
+                                    ),
                                   ])
                         ]),
                     SliverToBoxAdapter(

@@ -8,6 +8,7 @@ import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/providers/user_provider.dart';
 import 'package:hing/screens/components/circular_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -76,6 +77,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: 32,
                           ),
                           TextFormField(
+                            textInputAction: TextInputAction.next,
                             validator: (text) => text == null || text.isEmpty
                                 ? S.of(context).nameCannotBeEmpty
                                 : null,
@@ -92,6 +94,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: 16,
                           ),
                           TextFormField(
+                            textInputAction: TextInputAction.next,
                             validator: (text) => text == null || text.isEmpty
                                 ? S.of(context).emailCannotBeEmpty
                                 : !emailRegexPattern.hasMatch(text)
@@ -110,6 +113,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             height: 16,
                           ),
                           TextFormField(
+                            textInputAction: TextInputAction.done,
                             validator: (text) => text == null || text.length < 8
                                 ? S.of(context).passwordMustBeAtLeast8Chars
                                 : null,
@@ -152,7 +156,26 @@ class _SignupScreenState extends State<SignupScreen> {
                                             isTermsChecked = !isTermsChecked;
                                           });
                                         }),
-                                    Text(S.of(context).termsAndConditions)
+                                    Text(S.of(context).termsAndConditions),
+                                    Spacer(),
+                                    InkWell(
+                                      onTap: () async {
+                                        if (!await launch(
+                                            "https://wielabs.com/hing/termsandconditions.html"))
+                                          throw 'Could not launch google';
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 12.0),
+                                        child: Text(
+                                          "View",
+                                          style: TextStyle(
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                        ),
+                                      ),
+                                    )
                                   ],
                                 )),
                           ),
@@ -173,14 +196,16 @@ class _SignupScreenState extends State<SignupScreen> {
 
                                             authProvider
                                                 .signup(
-                                                    email:
-                                                        _emailController.text,
+                                                    email: _emailController.text
+                                                        .toString()
+                                                        .trim(),
                                                     displayName:
                                                         _displayNameController
                                                             .text,
                                                     password:
-                                                        _passwordController
-                                                            .text)
+                                                        _passwordController.text
+                                                            .toString()
+                                                            .trim())
                                                 .then((response) {
                                               userProvider.setIsLoading(false);
                                               if (response is HingUser?) {

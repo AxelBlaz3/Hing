@@ -32,38 +32,38 @@ class _IngredientsListItemState extends State<IngredientsListItem> {
         .contains(widget.ingredient.name);
 
     return InkWell(
-        onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              duration: Duration(milliseconds: 300),
-              content: isInMyChecklist
-                  ? Text("Item removed from Shopping List")
-                  : Text("Item added to Shopping List")));
-          updateMyIngredient(isInMyChecklist);
-        },
-        child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(children: [
-              CircleAvatar(
-                radius: 8.0,
-                backgroundColor: isInMyChecklist
-                    ? themeData.colorScheme.primary
-                    : Colors.grey,
-                child: SvgPicture.asset('assets/check.svg', height: 10.0),
-              ),
-              const SizedBox(
-                width: 8.0,
-              ),
-              RichText(
-                  text: TextSpan(
-                      text: '${widget.ingredient.name}',
-                      style: themeData.textTheme.bodyText2,
-                      children: <TextSpan>[
-                    TextSpan(
-                        text:
-                            ' (${widget.ingredient.quantity} ${widget.ingredient.units})',
-                        style: themeData.textTheme.caption)
-                  ]))
-            ])));
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  duration: Duration(milliseconds: 300),
+                  content: isInMyChecklist
+                      ? Text("Item removed from Shopping List")
+                      : Text("Item added to Shopping List")));
+              updateMyIngredient(isInMyChecklist);
+            },
+            child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(children: [
+                  CircleAvatar(
+                    radius: 8.0,
+                    backgroundColor: isInMyChecklist
+                        ? themeData.colorScheme.primary
+                        : Colors.grey,
+                    child: SvgPicture.asset('assets/check.svg', height: 10.0),
+                  ),
+                  const SizedBox(
+                    width: 8.0,
+                  ),
+                  RichText(
+                      text: TextSpan(
+                          text: '${widget.ingredient.name}',
+                          style: themeData.textTheme.bodyText2,
+                          children: <TextSpan>[
+                        TextSpan(
+                            text:
+                                ' (${widget.ingredient.quantity} ${widget.ingredient.units})',
+                            style: themeData.textTheme.caption)
+                      ]))
+                ])));
   }
 
   void updateMyIngredient(bool isInMyChecklist) async {
@@ -84,11 +84,12 @@ class _IngredientsListItemState extends State<IngredientsListItem> {
     await Hive.box<HingUser>(kUserBox).put(kUserKey,
         user.copy(myIngredients: user.myIngredients?.toSet().toList()));
 
-    // final isUpdated = await userProvider.updateMyIngredients(
-    //     recipeId: widget.recipe.id.oid, myIngredients: myIngredients);
+    final isUpdated = await userProvider.updateMyIngredients(
+        recipeId: widget.recipe.id.oid,
+        myIngredients: user.myIngredients!.toList());
 
-    // if (isUpdated) {
-    setState(() {});
-    // }
+    if (isUpdated) {
+      setState(() {});
+    }
   }
 }

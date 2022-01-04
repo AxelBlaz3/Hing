@@ -51,12 +51,18 @@ class _SearchScreenState extends State<SearchScreen> {
         body: SafeArea(
           child: CustomScrollView(
             slivers: [
+              SliverPadding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+              ),
               SliverAppBar(
                 floating: true,
                 automaticallyImplyLeading: false,
                 flexibleSpace: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: TextField(
+                      onSubmitted: (val) {
+                        _pagingController.refresh();
+                      },
                       textAlignVertical: TextAlignVertical.center,
                       controller: _searchController,
                       decoration: InputDecoration(
@@ -69,12 +75,18 @@ class _SearchScreenState extends State<SearchScreen> {
                             color: Theme.of(context).colorScheme.onSurface,
                           ),
                           suffixIcon: IconButton(
+                              highlightColor: Colors.white,
+                              splashColor: Colors.transparent,
+                              padding: EdgeInsets.symmetric(horizontal: 12.0),
                               onPressed: () {
                                 // Refresh pagingController.
                                 _pagingController.refresh();
                               },
                               icon: SvgPicture.asset(
-                                  'assets/search_outline.svg'))),
+                                  'assets/search_outline.svg',
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface))),
                     )),
               ),
               SliverPadding(
@@ -83,9 +95,11 @@ class _SearchScreenState extends State<SearchScreen> {
                     pagingController: _pagingController,
                     builderDelegate: PagedChildBuilderDelegate<Recipe>(
                         itemBuilder: (context, recipe, index) => FeedItem(
+                            fromProfilePage: true,
                             index: index,
                             recipe: recipe,
-                            refreshCallback: (updatedRecipe, {bool shouldRefresh = false}) {}),
+                            refreshCallback: (updatedRecipe,
+                                {bool shouldRefresh = false}) {}),
                         noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(
                               assetPath: 'assets/no_recipes_illustration.png',
                               title: S.of(context).noRecipesTitle,

@@ -41,6 +41,9 @@ class Recipe {
   @HiveField(11)
   @JsonKey(name: 'my_ingredients')
   List<String>? myIngredients;
+  @HiveField(12)
+  @JsonKey(name: 'created_at')
+  Map? createdAt;
 
   Recipe(
       {required this.id,

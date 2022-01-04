@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hing/constants.dart';
 import 'package:hing/generated/l10n.dart';
@@ -25,8 +26,17 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'enums/notification_type.dart';
+import 'providers/ingredients_provider.dart';
 
+//latest
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ],
+  );
   final UserRepository _userRepository = UserRepository();
   final RecipeRepository _recipeRepository = RecipeRepository();
   final UserProvider _authProvider =
@@ -40,24 +50,29 @@ void main() async {
   Hive.registerAdapter(HingUserAdapter());
 
   await Hive.openBox<HingUser>(kUserBox);
-  
+
   final bool isLoggedIn =
       Hive.box<HingUser>(kUserBox).get(kUserKey, defaultValue: null) != null;
   final bool isOnboardingDone =
       (await SharedPreferences.getInstance()).getBool(kOnBoardingPrefKey) ??
           false;
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(
-          create: (_) => CommentProvider(recipeRepository: _recipeRepository)),
-      ChangeNotifierProvider(
-          create: (_) => FeedProvider(recipeRepository: _recipeRepository)),
-      ChangeNotifierProvider(create: (_) => _authProvider),
-      ChangeNotifierProvider(create: (_) => _recipeProvider)
-    ],
-    child: HingApp(isLoggedIn: isLoggedIn, isOnBoardingDone: isOnboardingDone),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (_) =>
+                CommentProvider(recipeRepository: _recipeRepository)),
+        ChangeNotifierProvider(
+            create: (_) => FeedProvider(recipeRepository: _recipeRepository)),
+        ChangeNotifierProvider(create: (_) => _authProvider),
+        ChangeNotifierProvider(create: (_) => _recipeProvider),
+        ChangeNotifierProvider(create: (_) => IngredientsProvider()),
+      ],
+      child:
+          HingApp(isLoggedIn: isLoggedIn, isOnBoardingDone: isOnboardingDone),
+    ),
+  );
 
   FirebaseMessaging.onBackgroundMessage(backgroundPushNotificationHandler);
 }
@@ -65,9 +80,11 @@ void main() async {
 class HingApp extends StatefulWidget {
   final bool isLoggedIn;
   final bool isOnBoardingDone;
-  const HingApp(
-      {Key? key, required this.isLoggedIn, required this.isOnBoardingDone})
-      : super(key: key);
+  const HingApp({
+    Key? key,
+    required this.isLoggedIn,
+    required this.isOnBoardingDone,
+  }) : super(key: key);
 
   @override
   _HingAppState createState() => _HingAppState();

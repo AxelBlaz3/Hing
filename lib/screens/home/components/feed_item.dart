@@ -10,12 +10,14 @@ import 'feed_item_body.dart';
 class FeedItem extends StatefulWidget {
   final int index;
   final Recipe recipe;
+  final bool? fromProfilePage;
   final Function(Recipe newRecipe, {bool shouldRefresh}) refreshCallback;
 
-  const FeedItem(
+  FeedItem(
       {Key? key,
       required this.index,
       required this.recipe,
+      this.fromProfilePage,
       required this.refreshCallback})
       : super(key: key);
 
@@ -36,6 +38,7 @@ class _FeedItemState extends State<FeedItem> {
               Navigator.of(context).pushNamed(kDetailsRoute, arguments: {
                 'index': widget.index,
                 'recipe': widget.recipe,
+                "fromProfile": widget.fromProfilePage,
                 'refresh_callback': widget.refreshCallback
               });
             },
@@ -44,6 +47,7 @@ class _FeedItemState extends State<FeedItem> {
               children: [
                 FeedItemHeader(
                     recipe: widget.recipe,
+                    fromProfile: widget.fromProfilePage,
                     refreshCallback: widget.refreshCallback),
                 FeedItemBody(index: widget.index, recipe: widget.recipe),
                 FeedItemFooter(

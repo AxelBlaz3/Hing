@@ -12,19 +12,25 @@ import 'package:path_provider/path_provider.dart';
 
 class RecipeRepository {
   Future<bool> createNewRecipe(Map<String, dynamic> recipe, XFile? file) async {
-    final request =
-        http.MultipartRequest('POST', Uri.parse(kAPINewRecipeRoute));
+    try {
+      final request =
+          http.MultipartRequest('POST', Uri.parse(kAPINewRecipeRoute));
 
-    for (final item in recipe.entries) {
-      request.fields[item.key] = '${item.value}';
+      for (final item in recipe.entries) {
+        request.fields[item.key] = '${item.value}';
+      }
+      recipe.entries
+          .map((formData) => request.fields[formData.key] = formData.value);
+      request.files.add(await http.MultipartFile.fromPath('media', file!.path));
+
+      final response = await request.send();
+
+      print(response.statusCode);
+      return response.statusCode == 201;
+    } catch (e) {
+      print("error is $e");
+      return false;
     }
-    // recipe.entries
-    //     .map((formData) => request.fields[formData.key] = formData.value);
-    request.files.add(await http.MultipartFile.fromPath('media', file!.path));
-
-    final response = await request.send();
-    // final response = await http.post(Uri.parse(kAPINewRecipeRoute), body: recipe);
-    return response.statusCode == HttpStatus.created;
   }
 
   Future<List<Recipe>> getFeedForCategory(
@@ -36,6 +42,7 @@ class RecipeRepository {
 
       if (response.statusCode == HttpStatus.ok) {
         final List body = jsonDecode(response.body);
+        print("body is ${body[0]["created_at"]}");
         final List<Recipe> recipes = List<Recipe>.from(
             body.map((recipeJson) => Recipe.fromJson(recipeJson)).toList());
         return recipes;
@@ -321,19 +328,17 @@ class RecipeRepository {
   }
 
   Future<bool> reportRecipe(
-      {required String reportReason,
-        required String recipeId}) async {
-          final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      {required String reportReason, required String recipeId}) async {
+    final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+    print(user!.id.oid);
     final response = await http.post(Uri.parse(kAPIReportRecipeRoute),
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
         body: jsonEncode(<String, String>{
-          'user_id': user!.id.oid,
+          'user_id': user.id.oid,
           'recipe_id': recipeId,
           'report_reason': reportReason
         }));
 
-      
-      return response.statusCode == 200;
-
+    return response.statusCode == 200;
   }
 }

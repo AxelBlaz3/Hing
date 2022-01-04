@@ -7,6 +7,7 @@ import 'package:hing/screens/components/loading_screen.dart';
 import 'package:hing/screens/details/components/details_author_header.dart';
 import 'package:hing/screens/details/components/ingredients_list_item.dart';
 import 'package:hing/screens/home/components/feed_item_footer.dart';
+import 'package:hing/theme/colors.dart';
 import 'package:provider/provider.dart';
 import 'components/details_app_bar.dart';
 
@@ -64,6 +65,7 @@ class DetailsScreenReady extends StatefulWidget {
 }
 
 class _DetailsScreeReadyState extends State<DetailsScreenReady> {
+  int ingredientsSelected = 0;
   @override
   Widget build(BuildContext context) {
     int index = widget.index;
@@ -77,6 +79,7 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
                 DetailsAppBar(
                   index: widget.index,
                   recipe: recipe,
+                  ingredientsSelected: ingredientsSelected,
                 ),
                 SliverPadding(
                     padding: EdgeInsets.all(16),
@@ -87,9 +90,7 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
                         recipe.title,
                         style: Theme.of(context).textTheme.headline5,
                       ),
-                      SizedBox(
-                        height: 8,
-                      ),
+                      SizedBox(height: 8),
                       Row(
                         children: [
                           Container(
@@ -108,20 +109,6 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
                           Expanded(child: SizedBox())
                         ],
                       ),
-                      Align(
-                          alignment: Alignment.topRight,
-                          child: TextButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/shoppingList',
-                                    arguments: widget.recipe);
-                              },
-                              child: Text(
-                                "My Shopping List",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2
-                                    ?.copyWith(fontWeight: FontWeight.bold),
-                              ))),
                       SizedBox(
                         height: 24,
                       ),
@@ -144,28 +131,31 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
                             text: S.of(context).ingredients,
                             style: Theme.of(context).textTheme.subtitle2,
                             children: [
-                              // TextSpan(
-                              //   text: ' (Check the one\'s you have)',
-                              //   style: Theme.of(context).textTheme.caption,
-                              // )
+                              TextSpan(
+                                text: ' (Check the one\'s you have)',
+                                style: Theme.of(context).textTheme.caption,
+                              )
                             ]),
                       ),
-                      const SizedBox(height: 4.0),
-                      SafeArea(
-                          top: false,
-                          child: ListView.builder(
-                              padding:
-                                  const EdgeInsets.only(bottom: 144, top: 4),
-                              physics: NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: recipe.ingredients.length,
-                              itemBuilder: (context, index) {
-                                return IngredientsListItem(
-                                    recipe: recipe,
-                                    ingredient: recipe.ingredients[index],
-                                    myIngredients:
-                                        recipe.myIngredients ?? <String>[]);
-                              }))
+                      const SizedBox(height: 8.0),
+                      recipe.ingredients.isEmpty
+                          ? Text("No ingredient's were added",
+                              style: TextStyle(color: kOnSurfaceColor))
+                          : SafeArea(
+                              top: false,
+                              child: ListView.builder(
+                                  padding: const EdgeInsets.only(
+                                      bottom: 144, top: 4),
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: recipe.ingredients.length,
+                                  itemBuilder: (context, index) {
+                                    return IngredientsListItem(
+                                        recipe: recipe,
+                                        ingredient: recipe.ingredients[index],
+                                        myIngredients:
+                                            recipe.myIngredients ?? <String>[]);
+                                  }))
                     ])))
               ],
             )),

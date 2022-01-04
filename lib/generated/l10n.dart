@@ -656,15 +656,6 @@ class S {
     );
   }
 
-  String get changePassword {
-    return Intl.message(
-      'Change Password',
-      name: 'change password',
-      desc: '',
-      args: [],
-    );
-  }
-
   /// `Image`
   String get image {
     return Intl.message(
@@ -1460,6 +1451,16 @@ class S {
     return Intl.message(
       'Search',
       name: 'search',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change password`
+  String get changePassword {
+    return Intl.message(
+      'Change password',
+      name: 'changePassword',
       desc: '',
       args: [],
     );

@@ -24,6 +24,7 @@ class UserRepository {
 
         await Hive.box<HingUser>(kUserBox).put(kUserKey, hingUser);
         // Update firebase token and cache logged in user.
+
         final String? firebaseToken =
             await FirebaseMessaging.instance.getToken();
 
@@ -54,6 +55,7 @@ class UserRepository {
           }));
 
       if (response.statusCode == HttpStatus.created) {
+        print(response.body);
         final hingUser = HingUser.fromJson(jsonDecode(response.body));
 
         await Hive.box<HingUser>(kUserBox).put(kUserKey, hingUser);
@@ -68,7 +70,8 @@ class UserRepository {
       } else {
         return response.statusCode;
       }
-    } on SocketException {
+    } on SocketException catch (error) {
+      print(error);
       return SOCKET_EXCEPTION_CODE;
     } catch (e) {
       print(e);
@@ -277,25 +280,29 @@ class UserRepository {
           }));
 
       return response.statusCode == HttpStatus.ok;
-    } catch (e) {}
-    return false;
+    } catch (e) {
+      return false;
+    }
   }
 
-  Future<bool> changePassword(
-      {required String userId, required String password,required String oldPassword}) async {
+  Future<bool> changePassword({
+    required String userId,
+    required String password,
+    required String oldPassword,
+  }) async {
     try {
-
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
       final response = await http.put(Uri.parse(kAPIChangePasswordRoute),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
           body: jsonEncode(<String, String>{
             'user_id': user!.id.oid,
             'new_password': password,
-            "old_password":oldPassword
+            "old_password": oldPassword
           }));
       return response.statusCode == HttpStatus.ok;
-    } catch (e) {}
-    return false;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<bool> blockUser(
@@ -310,7 +317,25 @@ class UserRepository {
           }));
 
       return response.statusCode == HttpStatus.ok;
-    } catch (e) {}
-    return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+//new
+  Future<bool> deleteUserPost({required String recipeId}) async {
+    try {
+      print(kAPIDeletePost);
+      final response = await http.delete(Uri.parse(kAPIDeletePost),
+          headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+          body: jsonEncode(<String, dynamic>{
+            'recipe_id': recipeId,
+          }));
+      print(response.statusCode == 200);
+
+      return response.statusCode == 200;
+    } catch (e) {
+      return false;
+    }
   }
 }

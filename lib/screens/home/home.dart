@@ -57,6 +57,21 @@ class _HomeScreenState extends State<HomeScreen>
     });
   }
 
+  refreshPage({
+    required bool shouldRefresh,
+    required int key,
+    required int index,
+    required Recipe newRecipe,
+  }) {
+    if (shouldRefresh) {
+      _pagingControllers[key].refresh();
+      return;
+    }
+    final List<Recipe> updatedRecipes =
+        List.of(_pagingControllers[key].itemList!)..[index] = newRecipe;
+    _pagingControllers[key].itemList = updatedRecipes;
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -114,66 +129,63 @@ class _HomeScreenState extends State<HomeScreen>
               body: TabBarView(
                   children: getHomeCategories(context)
                       .asMap()
-                      .map((key, value) => MapEntry(
-                          key,
-                          RefreshIndicator(
-                            onRefresh: () => Future.sync(
-                                () => _pagingControllers[key].refresh()),
-                            child: PagedListView.separated(
-                              separatorBuilder: (_, index) => Divider(
-                                indent: 16.0,
-                                endIndent: 16.0,
-                                height: 4,
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onBackground
-                                    .withOpacity(.75),
-                              ),
-                              padding: EdgeInsets.only(bottom: 120),
-                              key: PageStorageKey(key),
-                              pagingController: _pagingControllers[key],
-                              builderDelegate: PagedChildBuilderDelegate<
-                                      Recipe>(
-                                  newPageProgressIndicatorBuilder: (context) =>
-                                      const ToqueLoading(
-                                        size: 24,
-                                      ),
-                                  itemBuilder: (context, recipe, index) =>
-                                      Consumer<UserProvider>(
-                                          builder: (context, userProvider,
-                                                  child) =>
-                                              FeedItem(
-                                                  index: index,
-                                                  recipe: recipe,
-                                                  refreshCallback: (Recipe
-                                                          newRecipe,
+                      .map((key, value) {
+                        return MapEntry(
+                            key,
+                            RefreshIndicator(
+                              onRefresh: () => Future.sync(
+                                  () => _pagingControllers[key].refresh()),
+                              child: PagedListView.separated(
+                                separatorBuilder: (_, index) => Divider(
+                                  indent: 16.0,
+                                  endIndent: 16.0,
+                                  height: 4,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground
+                                      .withOpacity(.75),
+                                ),
+                                padding: EdgeInsets.only(bottom: 120),
+                                key: PageStorageKey(key),
+                                pagingController: _pagingControllers[key],
+                                builderDelegate: PagedChildBuilderDelegate<
+                                        Recipe>(
+                                    newPageProgressIndicatorBuilder:
+                                        (context) => const ToqueLoading(
+                                              size: 24,
+                                            ),
+                                    itemBuilder: (context, recipe, index) {
+                                      return Consumer<UserProvider>(
+                                        builder:
+                                            (context, userProvider, child) {
+                                          return FeedItem(
+                                              fromProfilePage: false,
+                                              index: index,
+                                              recipe: recipe,
+                                              refreshCallback:
+                                                  (Recipe newRecipe,
                                                       {bool shouldRefresh =
                                                           false}) {
-                                                    if (shouldRefresh) {
-                                                      _pagingControllers[key]
-                                                          .refresh();
-                                                      return;
-                                                    }
-                                                    final List<Recipe>
-                                                        updatedRecipes =
-                                                        List.of(
-                                                            _pagingControllers[
-                                                                    key]
-                                                                .itemList!)
-                                                          ..[index] = newRecipe;
-                                                    _pagingControllers[key]
-                                                            .itemList =
-                                                        updatedRecipes;
-                                                  })),
-                                  noItemsFoundIndicatorBuilder: (_) =>
-                                      EmptyIllustration(
-                                        assetPath:
-                                            'assets/no_recipes_illustration.png',
-                                        title: S.of(context).noRecipesTitle,
-                                        summary: S.of(context).noRecipesFound,
-                                      )),
-                            ),
-                          )))
+                                                refreshPage(
+                                                    shouldRefresh:
+                                                        shouldRefresh,
+                                                    key: key,
+                                                    index: index,
+                                                    newRecipe: newRecipe);
+                                              });
+                                        },
+                                      );
+                                    },
+                                    noItemsFoundIndicatorBuilder: (_) =>
+                                        EmptyIllustration(
+                                          assetPath:
+                                              'assets/no_recipes_illustration.png',
+                                          title: S.of(context).noRecipesTitle,
+                                          summary: S.of(context).noRecipesFound,
+                                        )),
+                              ),
+                            ));
+                      })
                       .values
                       .toList()),
             ))));
@@ -233,23 +245,27 @@ class _HomeAppBarState extends State<HomeAppBar> {
                                 radius: 4.0)
                             : const SizedBox.shrink())
               ])),
-          IconButton(
-              onPressed: () async {
-                final HingUser? user =
-                    Hive.box<HingUser>(kUserBox).get(kUserKey);
-                Navigator.of(context)
-                    .pushNamed(kMyProfileRoute, arguments: user);
-              },
-              icon: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: CachedNetworkImage(
-                    height: 32,
-                    width: 32,
-                    fit: BoxFit.cover,
-                    imageUrl: '$kBaseUrl/${user?.image}',
-                    errorWidget: (_, __, ___) => const UserPlaceholder(),
-                    placeholder: (_, __) => const UserPlaceholder(),
-                  ))),
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: IconButton(
+                onPressed: () async {
+                  final HingUser? user =
+                      Hive.box<HingUser>(kUserBox).get(kUserKey);
+
+                  Navigator.of(context)
+                      .pushNamed(kMyProfileRoute, arguments: user);
+                },
+                icon: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: CachedNetworkImage(
+                      height: 32,
+                      width: 32,
+                      fit: BoxFit.cover,
+                      imageUrl: '$kBaseUrl/${user?.image}',
+                      errorWidget: (_, __, ___) => const UserPlaceholder(),
+                      placeholder: (_, __) => const UserPlaceholder(),
+                    ))),
+          ),
         ]);
   }
 }

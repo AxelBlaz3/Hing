@@ -8,6 +8,7 @@ import 'package:hing/screens/components/empty_illustration.dart';
 import 'package:hing/screens/home/components/feed_item.dart';
 import 'package:hing/screens/profile/components/my_profile_header.dart';
 import 'package:hing/screens/profile/components/profile_tab_delegate.dart';
+import 'package:hing/theme/colors.dart';
 import 'package:hive/hive.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -326,106 +327,152 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   changePassword(context) {
     return showModalBottomSheet(
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(24), topLeft: Radius.circular(24))),
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.75,
-          child: ListView(
-            padding: EdgeInsets.only(left: 24, right: 24, top: 24, bottom: 24),
-            children: [
-              Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text("Current Password")),
-              TextFormField(
-                obscureText: _obscureText3,
-                controller: _oldPasswordController,
-                decoration: InputDecoration(
-                    suffixIcon: GestureDetector(
-                  child: Icon(
-                    _obscureText
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
-                  ),
-                  onTap: () => togglePasswordVisibility2(),
-                )),
-              ),
-              Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text("Change Password")),
-              TextFormField(
-                obscureText: _obscureText,
-                controller: _passwordController,
-                decoration: InputDecoration(
-                    suffixIcon: GestureDetector(
-                  child: Icon(
-                    _obscureText
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
-                  ),
-                  onTap: () => togglePasswordVisibility(),
-                )),
-              ),
-              Container(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(vertical: 8),
-                  child: Text("Confirm Password")),
-              TextFormField(
-                obscureText: _obscureText1,
-                controller: _confirmController,
-                decoration: InputDecoration(
-                  suffixIcon: GestureDetector(
-                    child: Icon(
-                      _obscureText
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topRight: Radius.circular(24), topLeft: Radius.circular(24))),
+        context: context,
+        builder: (BuildContext context) {
+          bool isNewPasswordVisible = false;
+          bool isCurrentPasswordVisible = false;
+          bool isRepeatPassword = false;
+          return StatefulBuilder(builder: (context, StateSetter state) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                  left: 24.0,
+                  right: 24.0,
+                  top: 24.0),
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Column(
+                  children: [
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Text("Current Password")),
+                    TextFormField(
+                      textInputAction: TextInputAction.next,
+                      obscureText: !isCurrentPasswordVisible,
+                      controller: _oldPasswordController,
+                      decoration: InputDecoration(
+                          fillColor: kOnSurfaceDarkColor,
+                          suffixIcon: GestureDetector(
+                              child: Icon(
+                                isCurrentPasswordVisible
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
+                              onTap: () {
+                                state(() {
+                                  isCurrentPasswordVisible =
+                                      !isCurrentPasswordVisible;
+                                });
+                              })),
                     ),
-                    onTap: () => togglePasswordVisibility1(),
-                  ),
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Text("New Password")),
+                    TextFormField(
+                      textInputAction: TextInputAction.next,
+                      obscureText: !isNewPasswordVisible,
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                          fillColor: kOnSurfaceDarkColor,
+                          suffixIcon: GestureDetector(
+                              child: Icon(
+                                isNewPasswordVisible
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
+                              onTap: () {
+                                state(() {
+                                  isNewPasswordVisible = !isNewPasswordVisible;
+                                });
+                              })),
+                    ),
+                    Container(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.symmetric(vertical: 8),
+                        child: Text("Confirm Password")),
+                    TextFormField(
+                      textInputAction: TextInputAction.done,
+                      obscureText: !isRepeatPassword,
+                      controller: _confirmController,
+                      decoration: InputDecoration(
+                        fillColor: kOnSurfaceDarkColor,
+                        suffixIcon: GestureDetector(
+                            child: Icon(
+                              isRepeatPassword
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
+                            ),
+                            onTap: () {
+                              state(() {
+                                isRepeatPassword = !isRepeatPassword;
+                              });
+                            }),
+                      ),
+                    ),
+                    Spacer(),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            final UserProvider userProvider =
+                                context.read<UserProvider>();
+                            if (_passwordController.text ==
+                                _confirmController.text) {
+                              userProvider
+                                  .changePassword(
+                                      userId: userProvider.currentUser.id.oid,
+                                      password: _confirmController.text,
+                                      oldPassword: _oldPasswordController.text)
+                                  .then(
+                                (success) {
+                                  if (success) {
+                                    _oldPasswordController.clear();
+                                    _passwordController.clear();
+                                    _confirmController.clear();
+                                    context
+                                        .read<UserProvider>()
+                                        .notifyUserChanges();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                "Password changes successfully")));
+                                    Navigator.pop(context);
+                                  } else {
+                                    _oldPasswordController.clear();
+                                    _passwordController.clear();
+                                    _confirmController.clear();
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                            content: Text(
+                                                "Could not update password")));
+                                    Navigator.pop(context);
+                                  }
+                                },
+                              );
+                            } else {
+                              _passwordController.clear();
+                              _confirmController.clear();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content:
+                                          Text("Passwords doesn't match")));
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text(S.of(context).changePassword)),
+                    ),
+                    const SizedBox(height: 24.0),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    final UserProvider userProvider =
-                        context.read<UserProvider>();
-                    if (_passwordController.text == _confirmController.text) {
-                      userProvider
-                          .changePassword(
-                              userId: userProvider.currentUser.id.oid,
-                              password: _confirmController.text,
-                              oldPassword: _oldPasswordController.text)
-                          .then(
-                        (success) {
-                          if (success ) {
-                            context.read<UserProvider>().notifyUserChanges();
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content:
-                                    Text("Password changes successfully")));
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text("Could not update password")));
-                          }
-                        },
-                      );
-                      Navigator.pop(context);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Passwords doesn't match")));
-                    }
-                  },
-                  child: Text(S.of(context).changePassword))
-            ],
-          ),
-        );
-      },
-    );
+            );
+          });
+        });
   }
 }

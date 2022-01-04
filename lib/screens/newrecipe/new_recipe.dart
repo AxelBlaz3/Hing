@@ -10,6 +10,7 @@ import 'package:hing/screens/newrecipe/components/media_picker.dart';
 import 'package:hing/screens/newrecipe/components/new_integredient_sheet.dart';
 import 'package:hing/screens/newrecipe/components/preview_media.dart';
 import 'package:hing/screens/components/toque_loading.dart';
+import 'package:hing/theme/colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isValidated = false;
+  int wordsRemaining = 500;
 
   @override
   void initState() {
@@ -124,14 +126,22 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                         TextFormField(
                           controller: _descriptionController,
                           keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.done,
+                          onChanged: (description) {
+                            wordsRemaining = 500;
+                            List<String> words = description.split(" ");
+                            setState(() {
+                              wordsRemaining = wordsRemaining - words.length;
+                            });
+                          },
                           maxLines: null,
                           minLines: 3,
-                          maxLength: 400,
                           validator: (text) => text == null || text.isEmpty
                               ? 'Description cannot be empty'
                               : null,
                           decoration: InputDecoration(
-                            hintText: 'Less than 400 words',
+                            counterText: "$wordsRemaining",
+                            hintText: 'Description',
                           ),
                           style: Theme.of(context)
                               .textTheme
@@ -141,17 +151,38 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                         SizedBox(
                           height: 24,
                         ),
-                        Text(
-                          S.of(context).ingredients,
-                          style: Theme.of(context).textTheme.subtitle2,
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        IngredientsList(),
-                        Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    S.of(context).ingredients,
+                                    style:
+                                        Theme.of(context).textTheme.subtitle2,
+                                  ),
+                                  SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  Text(
+                                    "Add ingredients",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2!
+                                        .copyWith(color: Colors.grey),
+                                  ),
+                                ]),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                    kPrimaryColor,
+                                  ),
+                                  shape:
+                                      MaterialStateProperty.all(CircleBorder()),
+                                ),
                                 onPressed: () {
                                   showModalBottomSheet(
                                       context: context,
@@ -160,46 +191,42 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                                           .scaffoldBackgroundColor,
                                       shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.vertical(
-                                              top: Radius.circular(24))),
+                                              top: Radius.circular(48))),
                                       builder: (_) => NewIngredientSheet());
                                 },
-                                child: Text(S.of(context).addItem))),
+                                child: Icon(
+                                  Icons.add,
+                                  size: 18.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        IngredientsList(),
+                        SizedBox(height: 16.0),
                         Consumer<RecipeProvider>(
                             builder: (context, recipeProvider, child) =>
                                 ElevatedButton(
                                   onPressed: !isValidated ||
                                           (recipeProvider.pickedImage == null &&
                                               recipeProvider.pickedVideo ==
-                                                  null) ||
-                                          recipeProvider.ingredients.isEmpty
+                                                  null)
                                       ? null
                                       : () async {
-                                          final RecipeProvider _recipeProvider =
-                                              context.read<RecipeProvider>();
-
-                                          if (_recipeProvider
-                                              .ingredients.isEmpty) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(SnackBar(
-                                                    content: Text(S
-                                                        .of(context)
-                                                        .ingredientsCannotBeEmpty)));
-                                            return;
-                                          }
-
                                           final recipe = {
+                                            "date": DateTime.now(),
                                             'title': _titleController.text,
                                             'description':
                                                 _descriptionController.text,
-                                            'category':
-                                                _recipeProvider.category,
+                                            'category': recipeProvider.category,
                                             'user_id':
                                                 Hive.box<HingUser>(kUserBox)
                                                     .get(kUserKey)
                                                     ?.id
                                                     .oid,
                                             'ingredients': jsonEncode(
-                                                _recipeProvider.ingredients)
+                                                recipeProvider.ingredients)
                                           };
 
                                           // Show publishing sheet.
@@ -224,8 +251,8 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                                                               24))));
 
                                           final isRecipeCreated =
-                                              await _recipeProvider
-                                                  .createRecipe(recipe: recipe);
+                                              await recipeProvider.createRecipe(
+                                                  recipe: recipe);
                                           if (!isRecipeCreated) {
                                             // Dimiss publishing sheet.
                                             Navigator.of(context).pop();
@@ -245,9 +272,9 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                                                       .newRecipeCreated)));
 
                                           // Clean up picked images/videos and ingredients if any.
-                                          _recipeProvider.pickedImage = null;
-                                          _recipeProvider.setPickedVideo(null);
-                                          _recipeProvider.ingredients.clear();
+                                          recipeProvider.pickedImage = null;
+                                          recipeProvider.setPickedVideo(null);
+                                          recipeProvider.ingredients.clear();
 
                                           Navigator.of(context)
                                               .pushNamedAndRemoveUntil(
@@ -255,12 +282,12 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                                         },
                                   child: Text(S.of(context).publish),
                                   style: ElevatedButton.styleFrom(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 24),
-                                      minimumSize: Size(
-                                          MediaQuery.of(context).size.width,
-                                          48)),
-                                ))
+                                    padding: EdgeInsets.symmetric(vertical: 24),
+                                    minimumSize: Size(
+                                        MediaQuery.of(context).size.width, 48),
+                                  ),
+                                )),
+                        SizedBox(height: 16.0),
                       ],
                     )),
               ),

@@ -28,7 +28,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
 
   late AnimationController _controller;
 
-
   @override
   void initState() {
     super.initState();
@@ -50,7 +49,6 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     super.dispose();
 
     _nameController.dispose();
-
   }
 
   @override
@@ -175,12 +173,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           validator: (text) => text == null || text.isEmpty
                               ? S.of(context).nameCannotBeEmpty
                               : null,
-                          decoration: InputDecoration(hintText: 'Jack'),
+                          decoration: InputDecoration(hintText: 'User Name'),
                         ),
                         SizedBox(
                           height: 16,
                         ),
-
                       ],
                     )),
               )),
@@ -199,7 +196,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           }
 
                           final UserProvider userProvider =
-                          context.read<UserProvider>();
+                              context.read<UserProvider>();
                           userProvider
                               .updateUser(
                                   displayName: _nameController.text,
@@ -208,6 +205,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             if (success) {
                               // Notify about user update
                               context.read<UserProvider>().notifyUserChanges();
+                              Navigator.of(context).pop();
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

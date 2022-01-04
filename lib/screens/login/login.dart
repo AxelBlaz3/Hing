@@ -47,12 +47,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       alignment: Alignment.bottomCenter,
                       child: Form(
                           key: _formKey,
-                          onChanged: () {
-                            setState(() {
-                              isValidated =
-                                  _formKey.currentState?.validate() ?? false;
-                            });
-                          },
+                          // onChanged: () {
+                          //   setState(() {
+                          //     isValidated =
+                          //         _formKey.currentState?.validate() ?? false;
+                          //   });
+                          // },
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -74,6 +74,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 32,
                               ),
                               TextFormField(
+                                onFieldSubmitted: (val) {
+                                  setState(() {
+                                    isValidated =
+                                        _formKey.currentState?.validate() ??
+                                            false;
+                                  });
+                                },
+                                textInputAction: TextInputAction.next,
                                 validator: (text) =>
                                     text == null || text.isEmpty
                                         ? S.of(context).emailCannotBeEmpty
@@ -91,6 +99,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 16,
                               ),
                               TextFormField(
+                                onChanged: (val) {
+                                  setState(() {
+                                    isValidated =
+                                        _formKey.currentState?.validate() ??
+                                            false;
+                                  });
+                                },
+                                textInputAction: TextInputAction.done,
                                 validator: (text) =>
                                     text == null || text.isEmpty
                                         ? S.of(context).passwordCannotBeEmpty
