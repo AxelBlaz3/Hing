@@ -63,7 +63,7 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                             .then((success) {
                             if (success) {
                               final Recipe updatedRecipe = widget.recipe
-                                ..isLiked = !widget.recipe.isLiked!
+                                ..isLiked = true
                                 ..likesCount = widget.recipe.likesCount + 1;
                               widget.refreshCallback(updatedRecipe);
                               if (widget.detailsCallback != null) {
@@ -79,7 +79,7 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                             .then((success) {
                             if (success) {
                               final Recipe updatedRecipe = widget.recipe
-                                ..isLiked = !widget.recipe.isLiked!
+                                ..isLiked = false
                                 ..likesCount = widget.recipe.likesCount - 1;
                               widget.refreshCallback(updatedRecipe);
                               if (widget.detailsCallback != null) {

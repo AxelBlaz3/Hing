@@ -55,7 +55,6 @@ class UserRepository {
           }));
 
       if (response.statusCode == HttpStatus.created) {
-        print(response.body);
         final hingUser = HingUser.fromJson(jsonDecode(response.body));
 
         await Hive.box<HingUser>(kUserBox).put(kUserKey, hingUser);
@@ -325,7 +324,6 @@ class UserRepository {
 //new
   Future<bool> deleteUserPost({required String recipeId}) async {
     try {
-      print(kAPIDeletePost);
       final response = await http.delete(Uri.parse(kAPIDeletePost),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
           body: jsonEncode(<String, dynamic>{

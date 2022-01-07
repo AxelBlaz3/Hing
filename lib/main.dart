@@ -28,7 +28,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'enums/notification_type.dart';
 import 'providers/ingredients_provider.dart';
 
-//latest
+//latest 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(

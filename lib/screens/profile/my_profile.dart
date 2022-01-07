@@ -129,6 +129,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+  
     final tabTitles = getMyProfileTabTitles(context);
 
     return Scaffold(

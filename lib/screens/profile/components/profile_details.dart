@@ -36,7 +36,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
           height: 4,
         ),
         Consumer<UserProvider>(
-            builder: (_, userProvider, __) => user.isFollowing!
+            builder: (_, userProvider, __) => user.isFollowing ?? false
                 ? OutlinedButton(
                     onPressed: () {
                       final UserProvider userProvider =
@@ -48,7 +48,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                         if (success) {
                           final UserProvider userProvider =
                               context.read<UserProvider>();
-                          user = user..isFollowing = !user.isFollowing!;
+                          user = user..isFollowing = user.isFollowing = false;
 
                           userProvider.notifyUserChanges();
                         } else {
@@ -63,17 +63,12 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                             EdgeInsets.symmetric(vertical: 8, horizontal: 16)),
                   )
                 : ElevatedButton(
-                    onPressed: () {
-                      final UserProvider userProvider =
-                          context.read<UserProvider>();
-
+                    onPressed: () async {
                       userProvider
                           .followUser(followeeId: widget.user.id.oid)
                           .then((success) {
                         if (success) {
-                          final UserProvider userProvider =
-                              context.read<UserProvider>();
-                          user = user..isFollowing = !user.isFollowing!;
+                          user = user..isFollowing = true;
 
                           userProvider.notifyUserChanges();
                         } else {

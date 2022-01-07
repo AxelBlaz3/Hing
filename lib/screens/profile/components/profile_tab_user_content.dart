@@ -24,26 +24,33 @@ class ProfileTabUserContent extends StatefulWidget {
 }
 
 class _ProfileTabUserContentState extends State<ProfileTabUserContent> {
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-        onRefresh: () => Future.sync(() => widget.pagingController.refresh()),
-        child: PagedListView(
-            pagingController: widget.pagingController,
-            builderDelegate: PagedChildBuilderDelegate<HingUser>(
-              noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(assetPath: 'assets/no_users_illustration.png', title: S.of(context).noRecipesTitle, summary: S.of(context).noUsersSummary,),
-                itemBuilder: (_, user, index) => UserItem(
-                    user: user,
-                    isFollowing: widget.shouldFetchFollowers,
-                    refreshCallback: (updatedUser) {
-                      final List<HingUser> updatedUsers =
-                          widget.pagingController.itemList as List<HingUser>
-                            ..[index] = updatedUser;
-                      widget.pagingController.itemList = List.of(updatedUsers);
+      onRefresh: () => Future.sync(() => widget.pagingController.refresh()),
+      child: PagedListView(
+        pagingController: widget.pagingController,
+        builderDelegate: PagedChildBuilderDelegate<HingUser>(
+          noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(
+            assetPath: 'assets/no_users_illustration.png',
+            title: S.of(context).noRecipesTitle,
+            summary: S.of(context).noUsersSummary,
+          ),
+          itemBuilder: (_, user, index) => UserItem(
+            user: user,
+            isFollowing: widget.shouldFetchFollowers,
+            refreshCallback: (updatedUser) {
+              final List<HingUser> updatedUsers =
+                  widget.pagingController.itemList as List<HingUser>
+                    ..[index] = updatedUser;
+              widget.pagingController.itemList = List.of(updatedUsers);
 
-                      // Call refreshCallback on widget to update other list.
-                      widget.refreshCallback(updatedUser);
-                    }))));
+              // Call refreshCallback on widget to update other list.
+              widget.refreshCallback(updatedUser);
+            },
+          ),
+        ),
+      ),
+    );
   }
 }

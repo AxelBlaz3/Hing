@@ -49,9 +49,9 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                               arguments: cachedUser);
                       } else {
                         // User profile.
-                        if (!widget.fromProfile!)
-                          Navigator.of(context).pushNamed(kProfileRoute,
-                              arguments: widget.recipe.user);
+                        //if (!widget.fromProfile!)
+                        Navigator.of(context).pushNamed(kProfileRoute,
+                            arguments: widget.recipe.user);
                       }
                     },
                     child: FeedItemProfile(recipe: widget.recipe))),

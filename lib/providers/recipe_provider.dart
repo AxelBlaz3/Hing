@@ -139,14 +139,13 @@ class RecipeProvider extends ChangeNotifier {
         recipeId: recipeId, page: page);
   }
 
-  Future<List<Recipe>> searchRecipes(
+  Future<Map<String, dynamic>> searchRecipes(
       {required String query, int page = 1}) async {
     return await recipeRepository.searchRecipes(query: query, page: page);
   }
 
   Future<bool> reportRecipe(
-      {required String reportReason,
-        required String recipeId}) async {
+      {required String reportReason, required String recipeId}) async {
     return await recipeRepository.reportRecipe(
         reportReason: reportReason, recipeId: recipeId);
   }

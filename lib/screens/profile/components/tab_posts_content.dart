@@ -33,7 +33,7 @@ class _ProfileTabPostsContentState extends State<ProfileTabPostsContent> {
                   ),
               itemBuilder: (_, recipe, index) => FeedItem(
                   index: index,
-                  fromProfilePage: true,
+                  fromProfilePage: false,
                   recipe: recipe,
                   refreshCallback: (updatedRecipe,
                       {bool shouldRefresh = false}) {

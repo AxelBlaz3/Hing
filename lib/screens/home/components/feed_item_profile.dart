@@ -20,8 +20,15 @@ class FeedItemProfile extends StatefulWidget {
 class _FeedItemProfileState extends State<FeedItemProfile> {
   @override
   Widget build(BuildContext context) {
-    final DateTime date =
-        DateTime.fromMillisecondsSinceEpoch(widget.recipe.createdAt![r"$date"]);
+    DateTime date = DateTime.now();
+    bool? hasDate;
+    if (widget.recipe.createdAt != null) {
+      hasDate = true;
+      date = DateTime.fromMillisecondsSinceEpoch(
+          widget.recipe.createdAt![r"$date"]);
+    } else {
+      hasDate = false;
+    }
 
     return Row(
       children: [
@@ -62,7 +69,7 @@ class _FeedItemProfileState extends State<FeedItemProfile> {
               ),
             const SizedBox(height: 2),
             Text(
-              timeago.format(date),
+              hasDate ? timeago.format(date) : "Not available",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.subtitle2!.copyWith(

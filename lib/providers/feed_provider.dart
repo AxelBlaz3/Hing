@@ -15,8 +15,6 @@ class FeedProvider extends ChangeNotifier {
     final recipes = await recipeRepository.getFeedForCategory(
         category: category, page: page);
 
-    print(recipes[0].createdAt);
-    print("received categories $recipes");
     this._allRecipes
       ..clear()
       ..addAll(recipes);

@@ -40,15 +40,16 @@ class HingUser {
   @HiveField(11)
   List<String>? reportedRecipeIds;
 
-  HingUser(
-      {required this.id,
-      required this.email,
-      required this.displayName,
-      this.accessToken,
-      this.image,
-      this.isFollowing,
-      this.myIngredients,
-      this.reportedRecipeIds});
+  HingUser({
+    required this.id,
+    required this.email,
+    required this.displayName,
+    this.accessToken,
+    this.image,
+    this.isFollowing,
+    this.myIngredients,
+    this.reportedRecipeIds,
+  });
 
   HingUser copy(
           {ObjectId? id,

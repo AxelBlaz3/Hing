@@ -28,7 +28,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   PagingController<int, HingUser> _followersPagingController =
       PagingController<int, HingUser>(firstPageKey: 1);
   final int _perPage = 10;
+  int pageKeyValue = 1;
+
   late HingUser user;
+  List<Recipe> recipesData = [];
+  List<HingUser> followers = [];
+  List<HingUser> following = [];
 
   @override
   void initState() {
@@ -42,6 +47,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       userProvider
           .getPosts(page: pageKey, userId: widget.user.id.oid)
           .then((recipes) {
+        setState(() {
+          recipesData = recipes;
+          widget.user.postsCount = recipesData.length;
+          pageKeyValue = pageKey;
+        });
         if (recipes.length < _perPage) {
           _postsPagingController.appendLastPage(recipes);
         } else {
@@ -49,11 +59,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       });
     });
+    // userProvider
+    //     .getPosts(page: pageKeyValue, userId: widget.user.id.oid)
+    //     .then((recipes) {
+    //   setState(() {
+    //     recipesData = recipes;
+    //     widget.user.postsCount = recipesData.length;
+    //   });
+    //   if (recipes.length < _perPage) {
+    //     _postsPagingController.appendLastPage(recipes);
+    //   } else {
+    //     _postsPagingController.appendPage(recipes, pageKeyValue + 1);
+    //   }
+    // });
 
     _followersPagingController.addPageRequestListener((pageKey) {
       userProvider
           .getFollowers(page: pageKey, userId: widget.user.id.oid)
           .then((users) {
+        setState(() {
+          followers = users;
+          pageKeyValue = pageKey;
+
+          widget.user.followersCount = followers.length;
+        });
         if (users.length < _perPage) {
           _followersPagingController.appendLastPage(users);
         } else {
@@ -61,11 +90,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       });
     });
+    userProvider
+        .getFollowers(page: pageKeyValue, userId: widget.user.id.oid)
+        .then((users) {
+      setState(() {
+        followers = users;
+        widget.user.followersCount = followers.length;
+      });
+      if (users.length < _perPage) {
+        _followersPagingController.appendLastPage(users);
+      } else {
+        _followersPagingController.appendPage(users, pageKeyValue + 1);
+      }
+    });
 
     _followingPagingController.addPageRequestListener((pageKey) {
       userProvider
           .getFollowing(page: pageKey, userId: widget.user.id.oid)
           .then((users) {
+        setState(() {
+          pageKeyValue = pageKey;
+
+          following = users;
+          widget.user.followingCount = following.length;
+        });
         if (users.length < _perPage) {
           _followingPagingController.appendLastPage(users);
         } else {
@@ -73,12 +121,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         }
       });
     });
+    userProvider
+        .getFollowing(page: pageKeyValue, userId: widget.user.id.oid)
+        .then((users) {
+      setState(() {
+        following = users;
+        widget.user.followingCount = following.length;
+      });
+      if (users.length < _perPage) {
+        _followingPagingController.appendLastPage(users);
+      } else {
+        _followingPagingController.appendPage(users, pageKeyValue + 1);
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
-
     _followersPagingController.dispose();
     _followingPagingController.dispose();
     _postsPagingController.dispose();
@@ -107,16 +167,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       Theme.of(context).colorScheme.onSurface),
                               onSelected: (value) {
                                 if (value == 0) {
-                                  Hive.box<HingUser>(kUserBox).clear().then(
-                                      (value) => Navigator.of(context)
+                                  final user = Hive.box<HingUser>(kUserBox)
+                                      .get(kUserKey);
+                                  final userProvider =
+                                      Provider.of<UserProvider>(context,
+                                          listen: false);
+                                  userProvider
+                                      .blockUser(
+                                          userId: user!.id.oid,
+                                          blockUserId: widget.user.id.oid)
+                                      .then((success) {
+                                    if (success) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content: Text("User Blocked")));
+
+                                      Navigator.of(context)
                                           .pushNamedAndRemoveUntil(
-                                              kLoginRoute, (route) => false));
+                                              "/home", (route) => false);
+
+                                      // widget.refreshCallback(widget.recipe,
+                                      //     shouldRefresh: true);
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                              content:
+                                                  Text("Couldn't Block user")));
+                                    }
+                                  });
+                                  Navigator.pop(context);
                                 }
                               },
                               itemBuilder: (_) => <PopupMenuEntry>[
                                     PopupMenuItem(
                                       value: 0,
-                                      child: Text(S.of(context).logout),
+                                      child: Text("Block"),
                                     ),
                                   ])
                         ]),
@@ -127,8 +212,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               builder: (_, userProvider, __) =>
                                   ProfileHeader(user: user)),
                           Consumer<UserProvider>(
-                              builder: (_, userProvider, __) =>
-                                  ProfileTabs(user: user)),
+                            builder: (_, userProvider, __) =>
+                                ProfileTabs(user: user),
+                          ),
                         ],
                       ),
                     )

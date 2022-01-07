@@ -308,33 +308,37 @@ class RecipeRepository {
     return [];
   }
 
-  Future<List<Recipe>> searchRecipes(
+  Future<Map<String, dynamic>> searchRecipes(
       {int page = 1, required String query}) async {
     try {
-      print('Searching for $query');
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
       final response = await http.get(Uri.parse(
           '${kAPISearchRecipesRoute.replaceFirst('{}', query)}?page=$page&user_id=${user!.id.oid}'));
       if (response.statusCode == HttpStatus.ok) {
-        final List data = jsonDecode(response.body);
-        final List<Recipe> recipes =
-            List<Recipe>.from(data.map((recipe) => Recipe.fromJson(recipe)));
-        return recipes;
+        final Map data = jsonDecode(response.body);
+        final List<Recipe> recipes = List<Recipe>.from(
+            data["recipes"].map((recipe) => Recipe.fromJson(recipe)));
+        final List<HingUser> users = List<HingUser>.from(
+            data["users"].map((user) => HingUser.fromJson(user)));
+
+        return {
+          "recipes": recipes,
+          "users": users,
+        };
       }
     } catch (e) {
-      print(e);
+      print("error $e");
     }
-    return [];
+    return {"recipes": [], "users": []};
   }
 
   Future<bool> reportRecipe(
       {required String reportReason, required String recipeId}) async {
     final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
-    print(user!.id.oid);
     final response = await http.post(Uri.parse(kAPIReportRecipeRoute),
         headers: {HttpHeaders.contentTypeHeader: "application/json"},
         body: jsonEncode(<String, String>{
-          'user_id': user.id.oid,
+          'user_id': user!.id.oid,
           'recipe_id': recipeId,
           'report_reason': reportReason
         }));
