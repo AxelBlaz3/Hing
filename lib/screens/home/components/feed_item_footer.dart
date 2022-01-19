@@ -28,6 +28,8 @@ class FeedItemFooter extends StatefulWidget {
 class _FeedItemFooterState extends State<FeedItemFooter> {
   @override
   Widget build(BuildContext context) {
+    print(widget.recipe.title);
+    print(widget.recipe.isLiked);
     return Row(
       children: [
         Expanded(
@@ -44,7 +46,7 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                 },
                 child: FeedActionItem(
                   recipe: widget.recipe,
-                  iconPath: widget.recipe.isLiked ?? false
+                  iconPath: widget.recipe.isLiked!
                       ? 'assets/star_filled.svg'
                       : 'assets/star.svg',
                   countLabel: widget.recipe.likesCount == 1
