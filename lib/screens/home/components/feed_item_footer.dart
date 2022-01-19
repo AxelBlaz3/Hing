@@ -44,7 +44,7 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                 },
                 child: FeedActionItem(
                   recipe: widget.recipe,
-                  iconPath: widget.recipe.isLiked!
+                  iconPath: widget.recipe.isLiked ?? false
                       ? 'assets/star_filled.svg'
                       : 'assets/star.svg',
                   countLabel: widget.recipe.likesCount == 1
@@ -54,6 +54,7 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                               .format(widget.recipe.likesCount))
                           : S.of(context).like,
                   onPressed: () {
+                    print(widget.recipe.isLiked);
                     final RecipeProvider recipeProvider =
                         context.read<RecipeProvider>();
 
@@ -70,9 +71,13 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                                 widget.detailsCallback!(updatedRecipe);
                               }
                             } else {
+                              print("success value is $success");
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Retry')));
                             }
+                          }, onError: (error) {
+                            print(error);
+                            print("error while liking");
                           })
                         : recipeProvider
                             .unLikeRecipe(recipeId: widget.recipe.id.oid)

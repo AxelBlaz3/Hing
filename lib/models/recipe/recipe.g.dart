@@ -93,7 +93,8 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) {
     title: json['title'] as String,
     user: HingUser.fromJson(json['user'] as Map<String, dynamic>),
     likesCount: json['likes_count'] as int,
-    isFavorite: json['is_favorite'] as bool,
+    isFavorite:
+        json['is_favorite'] != null ? json['is_favorite'] as bool : false,
     isLiked: json['is_liked'] as bool?,
     commentsCount: json['comments_count'] as int,
     myIngredients: (json['my_ingredients'] as List<dynamic>?)

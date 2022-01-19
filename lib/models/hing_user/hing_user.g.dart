@@ -79,10 +79,14 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
 
 HingUser _$HingUserFromJson(Map<String, dynamic> json) {
   return HingUser(
-    id: ObjectId.fromJson(json['_id'] as Map<String, dynamic>),
+    id: ObjectId.fromJson(json['_id'] == null
+        ? Map<String, dynamic>()
+        : json["_id"] as Map<String, dynamic>),
     email: json['email'] as String?,
-    displayName: json['display_name'] as String,
-    accessToken: json['accessToken'] as String?,
+    displayName:
+        json['display_name'] == null ? "" : json['display_name'] as String,
+    accessToken:
+        json['accessToken'] == null ? "" : json['accessToken'] as String?,
     image: json['image'] as String?,
     isFollowing: json['is_following'] as bool?,
     myIngredients: (json['myIngredients'] as List<dynamic>?)

@@ -25,7 +25,6 @@ class RecipeRepository {
 
       final response = await request.send();
 
-      print(response.statusCode);
       return response.statusCode == 201;
     } catch (e) {
       print("error is $e");
@@ -42,7 +41,6 @@ class RecipeRepository {
 
       if (response.statusCode == HttpStatus.ok) {
         final List body = jsonDecode(response.body);
-        print("body is ${body[0]["created_at"]}");
         final List<Recipe> recipes = List<Recipe>.from(
             body.map((recipeJson) => Recipe.fromJson(recipeJson)).toList());
         return recipes;
@@ -175,16 +173,22 @@ class RecipeRepository {
   Future<bool> likeRecipe({required String recipeId}) async {
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+      print(kAPILikeRecipeRoute);
+      print(recipeId);
+      print(user!.id.oid);
       final response = await http.put(Uri.parse(kAPILikeRecipeRoute),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-          body: jsonEncode(<String, String>{
-            'recipe_id': recipeId,
-            'user_id': user!.id.oid
-          }));
+          body: jsonEncode(
+              <String, String>{'recipe_id': recipeId, 'user_id': user.id.oid}));
+
+      print(response.body);
+      print(response.statusCode == HttpStatus.ok);
 
       return response.statusCode == HttpStatus.ok;
-    } catch (e) {}
-    return false;
+    } catch (e) {
+      print("error while liking recipe in repo $e");
+      return false;
+    }
   }
 
   Future<bool> unLikeRecipe({required String recipeId}) async {

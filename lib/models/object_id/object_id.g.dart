@@ -46,7 +46,7 @@ class ObjectIdAdapter extends TypeAdapter<ObjectId> {
 
 ObjectId _$ObjectIdFromJson(Map<String, dynamic> json) {
   return ObjectId(
-    oid: json[r'$oid'] as String,
+    oid: json[r'$oid'] == null ? "" : json[r'$oid'] as String,
   );
 }
 
