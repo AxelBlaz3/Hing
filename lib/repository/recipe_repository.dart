@@ -316,7 +316,10 @@ class RecipeRepository {
       final response = await http.get(Uri.parse(
           '${kAPISearchRecipesRoute.replaceFirst('{}', query)}?page=$page&user_id=${user!.id.oid}'));
       if (response.statusCode == HttpStatus.ok) {
+        print("body is ${response.statusCode}");
+        // print(jsonEncode(response.body).runtimeType);
         final Map data = jsonDecode(response.body);
+        print(data);
         final List<Recipe> recipes = List<Recipe>.from(
             data["recipes"].map((recipe) => Recipe.fromJson(recipe)));
         final List<HingUser> users = List<HingUser>.from(
@@ -330,7 +333,7 @@ class RecipeRepository {
     } catch (e) {
       print("error $e");
     }
-    return {"recipes": [], "users": []};
+    return {"recipes": <Recipe>[], "users": <HingUser>[]};
   }
 
   Future<bool> reportRecipe(

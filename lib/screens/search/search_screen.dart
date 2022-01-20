@@ -76,13 +76,19 @@ class _SearchScreenState extends State<SearchScreen> {
                             .searchRecipes(
                                 query: _searchController.text, page: pageKey)
                             .then((data) {
-                          setState(() {
-                            users = data["users"];
-                            recipes = data["recipes"];
-                          });
+                          print(data);
+
                           if (recipes.length < _pageSize) {
+                            setState(() {
+                              users = data["users"];
+                              recipes = data["recipes"];
+                            });
                             _pagingController.appendLastPage(data["recipes"]);
                           } else {
+                            setState(() {
+                              users = data["users"];
+                              recipes = data["recipes"];
+                            });
                             _pagingController.appendPage(
                                 data["recipes"], pageKey + 1);
                           }
@@ -114,16 +120,20 @@ class _SearchScreenState extends State<SearchScreen> {
                                         query: _searchController.text,
                                         page: pageKey)
                                     .then((data) {
-                                  setState(() {
-                                    users = data["users"];
-                                    recipes = data["recipes"];
-                                  });
                                   if (recipes.length < _pageSize) {
-                                    _pagingController
-                                        .appendLastPage(data["recipes"]);
+                                    setState(() {
+                                      users = data["users"];
+                                      recipes = data["recipes"];
+                                    });
+                                    // _pagingController
+                                    //     .appendLastPage(data["recipes"]);
                                   } else {
-                                    _pagingController.appendPage(
-                                        data["recipes"], pageKey + 1);
+                                    setState(() {
+                                      users = data["users"];
+                                      recipes = data["recipes"];
+                                    });
+                                    // _pagingController.appendPage(
+                                    //     data["recipes"], pageKey + 1);
                                   }
                                 });
                                 _pagingController.refresh();
