@@ -175,7 +175,6 @@ class _HingAppState extends State<HingApp> {
         }
       }
     }, onError: (OnLinkErrorException e) async {
-      print('onLinkError');
       print(e.message);
     });
 

@@ -172,18 +172,15 @@ class RecipeRepository {
   }
 
   Future<bool> likeRecipe({required String recipeId}) async {
-    print("like is called");
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
-      print(kAPILikeRecipeRoute);
-      print(recipeId);
-      print(user!.id.oid);
+
       final response = await http.put(Uri.parse(kAPILikeRecipeRoute),
           headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-          body: jsonEncode(
-              <String, String>{'recipe_id': recipeId, 'user_id': user.id.oid}));
-
-      print(response.statusCode == HttpStatus.ok);
+          body: jsonEncode(<String, String>{
+            'recipe_id': recipeId,
+            'user_id': user!.id.oid
+          }));
 
       return response.statusCode == HttpStatus.ok;
     } catch (e) {
@@ -192,7 +189,6 @@ class RecipeRepository {
   }
 
   Future<bool> unLikeRecipe({required String recipeId}) async {
-    print("unlike is called");
     try {
       final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
       final response = await http.put(Uri.parse(kAPIUnLikeRecipeRoute),

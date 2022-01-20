@@ -9,8 +9,8 @@ const String kOnBoardingPrefKey = 'HING.ONBOARDING_KEY';
 final emailRegexPattern = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
-// const String kBaseUrl = 'http://192.168.50.196:5050/';
-const String kBaseUrl = 'https://hing.wielabs.tech/';
+const String kBaseUrl = 'http://192.168.50.196:5050/';
+// const String kBaseUrl = 'https://hing.wielabs.tech/';
 const int kAPIVersion = 1;
 const String kAPIPrefix = 'api/v$kAPIVersion';
 const String kAPILoginRoute = kBaseUrl + kAPIPrefix + '/user/login';

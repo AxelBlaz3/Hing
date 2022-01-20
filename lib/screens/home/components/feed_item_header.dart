@@ -267,7 +267,7 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
                           ),
                           const SizedBox(width: 12.0),
                           Text(
-                            "Cancle",
+                            "Cancel",
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ],

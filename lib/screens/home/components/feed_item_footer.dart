@@ -28,8 +28,7 @@ class FeedItemFooter extends StatefulWidget {
 class _FeedItemFooterState extends State<FeedItemFooter> {
   @override
   Widget build(BuildContext context) {
-    print(widget.recipe.title);
-    print(widget.recipe.isLiked);
+ 
     return Row(
       children: [
         Expanded(
@@ -56,7 +55,6 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                               .format(widget.recipe.likesCount))
                           : S.of(context).like,
                   onPressed: () {
-                    print(widget.recipe.isLiked);
                     final RecipeProvider recipeProvider =
                         context.read<RecipeProvider>();
 
@@ -73,13 +71,10 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                                 widget.detailsCallback!(updatedRecipe);
                               }
                             } else {
-                              print("success value is $success");
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Retry')));
                             }
                           }, onError: (error) {
-                            print(error);
-                            print("error while liking");
                           })
                         : recipeProvider
                             .unLikeRecipe(recipeId: widget.recipe.id.oid)
