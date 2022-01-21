@@ -10,6 +10,7 @@ import 'package:hing/theme/colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class FeedItemHeader extends StatefulWidget {
   final Recipe recipe;
   bool? fromProfile = false;
@@ -30,6 +31,8 @@ class _FeedItemHeaderState extends State<FeedItemHeader> {
   @override
   Widget build(BuildContext context) {
     final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+    print(widget.recipe.user.displayName);
+    print(widget.recipe.title);
 
     return Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

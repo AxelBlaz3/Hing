@@ -34,8 +34,9 @@ class RecipeRepository {
 
   Future<List<Recipe>> getFeedForCategory(
       {int category = 0, int page = 1}) async {
+    final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
+    print("$kAPIFeedRoute/${user?.id.oid}?page=$page&category=$category");
     try {
-      final user = Hive.box<HingUser>(kUserBox).get(kUserKey);
       final response = await http.get(Uri.parse(
           '$kAPIFeedRoute/${user?.id.oid}?page=$page&category=$category'));
 

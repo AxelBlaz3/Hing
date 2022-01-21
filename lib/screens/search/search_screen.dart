@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
-import 'package:hing/models/object_id/object_id.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/screens/components/empty_illustration.dart';
@@ -76,21 +75,19 @@ class _SearchScreenState extends State<SearchScreen> {
                             .searchRecipes(
                                 query: _searchController.text, page: pageKey)
                             .then((data) {
-                          print(data);
-
                           if (recipes.length < _pageSize) {
                             setState(() {
                               users = data["users"];
                               recipes = data["recipes"];
                             });
-                            _pagingController.appendLastPage(data["recipes"]);
+                            // _pagingController.appendLastPage(data["recipes"]);
                           } else {
                             setState(() {
                               users = data["users"];
                               recipes = data["recipes"];
                             });
-                            _pagingController.appendPage(
-                                data["recipes"], pageKey + 1);
+                            // _pagingController.appendPage(
+                            //     data["recipes"], pageKey + 1);
                           }
                         });
                         _pagingController.refresh();

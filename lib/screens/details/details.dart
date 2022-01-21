@@ -68,7 +68,7 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
   int ingredientsSelected = 0;
   @override
   Widget build(BuildContext context) {
-    int index = widget.index;
+    //int index = widget.index;
     Recipe recipe = widget.recipe;
     return Stack(
       children: [

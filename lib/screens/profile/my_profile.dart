@@ -129,7 +129,6 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-  
     final tabTitles = getMyProfileTabTitles(context);
 
     return Scaffold(
@@ -356,6 +355,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       textInputAction: TextInputAction.next,
                       obscureText: !isCurrentPasswordVisible,
                       controller: _oldPasswordController,
+                      style: TextStyle(color: Colors.black),
                       decoration: InputDecoration(
                           fillColor: kOnSurfaceDarkColor,
                           suffixIcon: GestureDetector(
@@ -376,6 +376,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Text("New Password")),
                     TextFormField(
+                      style: TextStyle(color: Colors.black),
                       textInputAction: TextInputAction.next,
                       obscureText: !isNewPasswordVisible,
                       controller: _passwordController,
@@ -398,6 +399,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Text("Confirm Password")),
                     TextFormField(
+                      style: TextStyle(color: Colors.black),
                       textInputAction: TextInputAction.done,
                       obscureText: !isRepeatPassword,
                       controller: _confirmController,
