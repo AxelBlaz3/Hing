@@ -59,6 +59,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "back": MessageLookupByLibrary.simpleMessage("Back"),
         "categories": MessageLookupByLibrary.simpleMessage("Categories"),
         "category": MessageLookupByLibrary.simpleMessage("Category"),
+        "changePassword":
+            MessageLookupByLibrary.simpleMessage("Change password"),
         "checkYourConnection": MessageLookupByLibrary.simpleMessage(
             "Check your connection and try again."),
         "chinese": MessageLookupByLibrary.simpleMessage("CHINESE"),

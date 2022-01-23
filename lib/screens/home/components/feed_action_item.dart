@@ -1,7 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hing/models/recipe/recipe.dart';
-import 'package:hing/theme/colors.dart';
 
 class FeedActionItem extends StatefulWidget {
   final Recipe recipe;
@@ -28,19 +28,34 @@ class _FeedActionItemState extends State<FeedActionItem> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: 24,
-              width: 24,
-              child: SvgPicture.asset(
-                widget.iconPath,
-                color: Theme.of(context).textTheme.caption!.color,
-              ),
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            Text('${widget.countLabel}',
+            widget.iconPath.contains("share") ||
+                    widget.iconPath.contains("message")
+                ? SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: SvgPicture.asset(
+                      widget.iconPath,
+                      height: 24.0,
+                      color: Theme.of(context).textTheme.caption!.color,
+                    ),
+                  )
+                : SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: SvgPicture.asset(
+                      widget.iconPath,
+                      height: 24.0,
+                      color: Theme.of(context).textTheme.caption!.color,
+                    ),
+                  ),
+            const SizedBox(width: 8),
+            AutoSizeText('${widget.countLabel}',
+                overflow: TextOverflow.ellipsis,
+                softWrap: true,
+                wrapWords: true,
+                textScaleFactor: 0.9,
                 style: Theme.of(context).textTheme.caption?.copyWith(
+                    overflow: TextOverflow.clip,
                     color: Theme.of(context).textTheme.bodyText2!.color))
           ],
         ));

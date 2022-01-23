@@ -18,7 +18,6 @@ class ProfileTabPostsContent extends StatefulWidget {
 }
 
 class _ProfileTabPostsContentState extends State<ProfileTabPostsContent> {
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -27,11 +26,17 @@ class _ProfileTabPostsContentState extends State<ProfileTabPostsContent> {
           padding: const EdgeInsets.only(bottom: 72, top: 24),
           pagingController: widget.pagingController,
           builderDelegate: PagedChildBuilderDelegate<Recipe>(
-            noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(assetPath: 'assets/no_users_illustration.png', title: S.of(context).noRecipesTitle, summary: S.of(context).noUsersSummary,),
+              noItemsFoundIndicatorBuilder: (_) => EmptyIllustration(
+                    assetPath: 'assets/no_users_illustration.png',
+                    title: S.of(context).noRecipesTitle,
+                    summary: S.of(context).noUsersSummary,
+                  ),
               itemBuilder: (_, recipe, index) => FeedItem(
                   index: index,
+                  fromProfilePage: false,
                   recipe: recipe,
-                  refreshCallback: (updatedRecipe) {
+                  refreshCallback: (updatedRecipe,
+                      {bool shouldRefresh = false}) {
                     widget.pagingController.itemList = List.of(
                         widget.pagingController.itemList!
                           ..[index] = updatedRecipe);

@@ -4,6 +4,7 @@ import 'package:hing/constants.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:hing/theme/colors.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class FeedItemProfile extends StatefulWidget {
   final Recipe recipe;
@@ -19,13 +20,23 @@ class FeedItemProfile extends StatefulWidget {
 class _FeedItemProfileState extends State<FeedItemProfile> {
   @override
   Widget build(BuildContext context) {
+    DateTime date = DateTime.now();
+    bool? hasDate;
+    if (widget.recipe.createdAt != null) {
+      hasDate = true;
+      date = DateTime.fromMillisecondsSinceEpoch(
+          widget.recipe.createdAt![r"$date"]);
+    } else {
+      hasDate = false;
+    }
+
     return Row(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(24),
           child: widget.recipe.user.image != null
               ? CachedNetworkImage(
-                fit: BoxFit.cover,
+                  fit: BoxFit.cover,
                   height: 36,
                   width: 36,
                   imageUrl: '$kBaseUrl/${widget.recipe.user.image}',
@@ -45,9 +56,7 @@ class _FeedItemProfileState extends State<FeedItemProfile> {
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context).textTheme.subtitle2,
             ),
-            SizedBox(
-              height: 4,
-            ),
+            const SizedBox(height: 2),
             if (!widget.isDetailScreen)
               Text(
                 widget.recipe.title,
@@ -57,7 +66,20 @@ class _FeedItemProfileState extends State<FeedItemProfile> {
                     .textTheme
                     .caption
                     ?.copyWith(color: kBodyTextColor),
-              )
+              ),
+            const SizedBox(height: 2),
+            Text(
+              hasDate ? timeago.format(date) : "Not available",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                    color: kBodyTextColor,
+                    fontSize: 10.0,
+                  ),
+            ),
+            SizedBox(
+              height: 4,
+            ),
           ],
         ))
       ],

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
@@ -7,7 +6,6 @@ import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/repository/recipe_repository.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
@@ -25,11 +23,11 @@ class RecipeProvider extends ChangeNotifier {
         link: Uri.parse(
             'https://hingapp.page.link/recipe?recipe_id=${recipe.id.oid}'),
         androidParameters: AndroidParameters(
-          packageName: 'com.hing',
+          packageName: 'com.hingapp',
           minimumVersion: 1,
         ),
         iosParameters: IosParameters(
-          bundleId: 'com.hing',
+          bundleId: 'com.hingapp',
           minimumVersion: '1.0.0',
           appStoreId: '123456789',
         ),
@@ -141,8 +139,14 @@ class RecipeProvider extends ChangeNotifier {
         recipeId: recipeId, page: page);
   }
 
-  Future<List<Recipe>> searchRecipes(
+  Future<Map<String, dynamic>> searchRecipes(
       {required String query, int page = 1}) async {
     return await recipeRepository.searchRecipes(query: query, page: page);
+  }
+
+  Future<bool> reportRecipe(
+      {required String reportReason, required String recipeId}) async {
+    return await recipeRepository.reportRecipe(
+        reportReason: reportReason, recipeId: recipeId);
   }
 }

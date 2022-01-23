@@ -28,6 +28,7 @@ class FeedItemFooter extends StatefulWidget {
 class _FeedItemFooterState extends State<FeedItemFooter> {
   @override
   Widget build(BuildContext context) {
+ 
     return Row(
       children: [
         Expanded(
@@ -63,7 +64,7 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                             .then((success) {
                             if (success) {
                               final Recipe updatedRecipe = widget.recipe
-                                ..isLiked = !widget.recipe.isLiked!
+                                ..isLiked = true
                                 ..likesCount = widget.recipe.likesCount + 1;
                               widget.refreshCallback(updatedRecipe);
                               if (widget.detailsCallback != null) {
@@ -73,13 +74,14 @@ class _FeedItemFooterState extends State<FeedItemFooter> {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(content: Text('Retry')));
                             }
+                          }, onError: (error) {
                           })
                         : recipeProvider
                             .unLikeRecipe(recipeId: widget.recipe.id.oid)
                             .then((success) {
                             if (success) {
                               final Recipe updatedRecipe = widget.recipe
-                                ..isLiked = !widget.recipe.isLiked!
+                                ..isLiked = false
                                 ..likesCount = widget.recipe.likesCount - 1;
                               widget.refreshCallback(updatedRecipe);
                               if (widget.detailsCallback != null) {

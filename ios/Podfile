@@ -1,3 +1,7 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+
 # Uncomment this line to define a global platform for your project
 # platform :ios, '9.0'
 
@@ -30,6 +34,9 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Core'
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end

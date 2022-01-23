@@ -38,64 +38,65 @@ class _DetailsAuthorHeaderState extends State<DetailsAuthorHeader> {
             Expanded(
                 child: FeedItemProfile(
                     recipe: widget.recipe, isDetailScreen: true)),
-
-            if (user!.id.oid != recipe.user.id.oid) 
+            if (user!.id.oid != recipe.user.id.oid)
               Consumer<RecipeProvider>(
-                  builder: (_, recipeProvider, __) => widget
-                          .recipe.user.isFollowing!
-                      ? OutlinedButton(
-                          onPressed: () async {
-                            final bool isUnfollowed = await context
-                                .read<UserProvider>()
-                                .unFollowUser(
-                                    followeeId: widget.recipe.user.id.oid);
+                  builder: (_, recipeProvider, __) =>
+                      widget.recipe.user.isFollowing ?? false
+                          ? OutlinedButton(
+                              onPressed: () async {
+                                final bool isUnfollowed = await context
+                                    .read<UserProvider>()
+                                    .unFollowUser(
+                                        followeeId: widget.recipe.user.id.oid);
 
-                            if (isUnfollowed) {
-                              recipe = recipe
-                                ..user.isFollowing = !recipe.user.isFollowing!;
-                              context
-                                  .read<RecipeProvider>()
-                                  .notifyRecipeChanges();
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Retry')));
-                            }
-                          },
-                          child: Text(
-                            S.of(context).unfollow,
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                          ),
-                        )
-                      : ElevatedButton(
-                          onPressed: () async {
-                            final bool isFollowed = await context
-                                .read<UserProvider>()
-                                .followUser(
-                                    followeeId: widget.recipe.user.id.oid);
+                                if (isUnfollowed) {
+                                  recipe = recipe
+                                    ..user.isFollowing =
+                                        !recipe.user.isFollowing!;
+                                  context
+                                      .read<RecipeProvider>()
+                                      .notifyRecipeChanges();
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Retry')));
+                                }
+                              },
+                              child: Text(
+                                S.of(context).unfollow,
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                              ),
+                            )
+                          : ElevatedButton(
+                              onPressed: () async {
+                                final bool isFollowed = await context
+                                    .read<UserProvider>()
+                                    .followUser(
+                                        followeeId: widget.recipe.user.id.oid);
 
-                            if (isFollowed) {
-                              recipe = recipe
-                                ..user.isFollowing = !recipe.user.isFollowing!;
+                                if (isFollowed) {
+                                  recipe = recipe
+                                    ..user.isFollowing =
+                                        !recipe.user.isFollowing!;
 
-                              context
-                                  .read<RecipeProvider>()
-                                  .notifyRecipeChanges();
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Retry')));
-                            }
-                          },
-                          child: Text(
-                            S.of(context).follow,
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
-                          ),
-                        ))
+                                  context
+                                      .read<RecipeProvider>()
+                                      .notifyRecipeChanges();
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Retry')));
+                                }
+                              },
+                              child: Text(
+                                S.of(context).follow,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 16),
+                              ),
+                            ))
           ],
         ));
   }

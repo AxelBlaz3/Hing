@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final HingUser user;
+
   const EditProfileScreen({Key? key, required this.user}) : super(key: key);
 
   @override
@@ -24,6 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
     with TickerProviderStateMixin<EditProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
+
   late AnimationController _controller;
 
   @override
@@ -171,11 +173,11 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                           validator: (text) => text == null || text.isEmpty
                               ? S.of(context).nameCannotBeEmpty
                               : null,
-                          decoration: InputDecoration(hintText: 'Jack'),
+                          decoration: InputDecoration(hintText: 'User Name'),
                         ),
                         SizedBox(
                           height: 16,
-                        )
+                        ),
                       ],
                     )),
               )),
@@ -203,6 +205,7 @@ class _EditProfileScreenState extends State<EditProfileScreen>
                             if (success) {
                               // Notify about user update
                               context.read<UserProvider>().notifyUserChanges();
+                              Navigator.of(context).pop();
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
