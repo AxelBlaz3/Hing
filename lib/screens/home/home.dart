@@ -14,7 +14,6 @@ import 'package:hing/screens/components/toque_loading.dart';
 import 'package:hing/screens/components/user_placeholder.dart';
 import 'package:hing/screens/home/components/feed_item.dart';
 import 'package:hing/screens/home/components/home_tab_delegate.dart';
-import 'package:hing/theme/colors.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
@@ -140,6 +139,8 @@ class _HomeScreenState extends State<HomeScreen>
                                         size: 24,
                                       ),
                                   itemBuilder: (context, recipe, index) =>
+                                  Consumer<UserProvider>(
+                                      builder:(context,userProvider,child)=>
                                       FeedItem(
                                           index: index,
                                           recipe: recipe,
@@ -150,8 +151,8 @@ class _HomeScreenState extends State<HomeScreen>
                                                   ..[index] = newRecipe;
                                             _pagingControllers[key].itemList =
                                                 updatedRecipes;
-                                          }),
-                                  noItemsFoundIndicatorBuilder: (_) =>
+                                          })),
+                                          noItemsFoundIndicatorBuilder: (_) =>
                                       EmptyIllustration(
                                         assetPath:
                                             'assets/no_recipes_illustration.png',

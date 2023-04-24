@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:hing/constants.dart';
 import 'package:hing/models/comment/comment.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
+import 'package:hing/models/object_id/object_id.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -318,5 +319,26 @@ class RecipeRepository {
       print(e);
     }
     return [];
+  }
+
+  Future<dynamic> reportRecipe(
+      {required String reportReason,
+        required String userId,
+        required String recipeId}) async {
+    final response = await http.post(Uri.parse(kReportRecipe),
+        headers: {HttpHeaders.contentTypeHeader: "application/json"},
+        body: jsonEncode(<String, String>{
+          'user_id': userId,
+          'recipe_id': recipeId,
+          'report_recipe': reportReason
+        }));
+
+    if (response.statusCode == HttpStatus.created) {
+      final hingUser = HingUser.fromJson(jsonDecode(response.body));
+
+      await Hive.box<HingUser>(kUserBox).put(kUserKey, hingUser);
+    } else {
+      return response.statusCode;
+    }
   }
 }

@@ -66,6 +66,7 @@ class DetailsScreenReady extends StatefulWidget {
 class _DetailsScreeReadyState extends State<DetailsScreenReady> {
   @override
   Widget build(BuildContext context) {
+    int index=widget.index;
     Recipe recipe = widget.recipe;
     return Stack(
       children: [
@@ -107,6 +108,22 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
                           Expanded(child: SizedBox())
                         ],
                       ),
+                      Align(
+                          alignment: Alignment.topRight,
+                          child: TextButton(
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/shoppingList',
+                                    arguments: widget.recipe);
+                              },
+                              child: Text(
+                                "My Shopping List",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    ?.copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                              ))),
                       SizedBox(
                         height: 24,
                       ),
@@ -144,12 +161,12 @@ class _DetailsScreeReadyState extends State<DetailsScreenReady> {
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount: recipe.ingredients.length,
-                              itemBuilder: (context, index) =>
-                                  IngredientsListItem(
-                                    recipe: recipe,
+                              itemBuilder: (context, index) {
+                                  return IngredientsListItem(
+                                      recipe: recipe,
                                       ingredient: recipe.ingredients[index],
                                       myIngredients:
-                                          recipe.myIngredients ?? <String>[])))
+                                          recipe.myIngredients ?? <String>[]);}))
                     ])))
               ],
             )),

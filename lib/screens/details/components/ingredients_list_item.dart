@@ -4,7 +4,6 @@ import 'package:hing/constants.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/ingredient/ingredient.dart';
 import 'package:hing/models/recipe/recipe.dart';
-import 'package:hing/providers/recipe_provider.dart';
 import 'package:hing/providers/user_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/src/provider.dart';
@@ -34,6 +33,11 @@ class _IngredientsListItemState extends State<IngredientsListItem> {
 
     return InkWell(
         onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              duration: Duration(milliseconds: 300),
+              content: isInMyChecklist
+                  ? Text("Item removed from Shopping List")
+                  : Text("Item added to Shopping List")));
           updateMyIngredient(isInMyChecklist);
         },
         child: Padding(
@@ -77,7 +81,8 @@ class _IngredientsListItemState extends State<IngredientsListItem> {
       }
     }
 
-    await Hive.box<HingUser>(kUserBox).put(kUserKey, user.copy(myIngredients: user.myIngredients?.toSet().toList()));
+    await Hive.box<HingUser>(kUserBox).put(kUserKey,
+        user.copy(myIngredients: user.myIngredients?.toSet().toList()));
 
     // final isUpdated = await userProvider.updateMyIngredients(
     //     recipeId: widget.recipe.id.oid, myIngredients: myIngredients);

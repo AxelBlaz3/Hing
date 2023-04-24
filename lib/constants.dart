@@ -9,8 +9,8 @@ const String kOnBoardingPrefKey = 'HING.ONBOARDING_KEY';
 final emailRegexPattern = RegExp(
     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
 
-// const String kBaseUrl = 'http://192.168.50.183:5050';
-const String kBaseUrl = 'https://hing.wielabs.tech';
+const String kBaseUrl = 'http://192.168.50.184:5050';
+//const String kBaseUrl = 'https://hing.wielabs.tech';
 const int kAPIVersion = 1;
 const String kAPIPrefix = 'api/v$kAPIVersion';
 const String kAPILoginRoute = '$kBaseUrl/$kAPIPrefix/user/login';
@@ -52,7 +52,7 @@ const String kAPIGetRecipeLikesRoute = '$kBaseUrl/$kAPIPrefix/recipe/{}/likes';
 const String kAPISearchRecipesRoute = '$kBaseUrl/$kAPIPrefix/recipe/search/{}';
 const String kAPIUpdateMyIngredientsRoute =
     '$kBaseUrl/$kAPIPrefix/user/update/ingredients';
-
+const String kAPIChangePasswordRoute = '$kBaseUrl/$kAPIPrefix/change/password';
 // Route names
 const String kLoginRoute = '/login';
 const String kSignupRoute = '/signup';
@@ -70,6 +70,8 @@ const String kDetailsRoute = '/details';
 const String kNotificationRoute = '/notifications';
 const String kCreatePasswordRoute = '/createPassword';
 const String kSearchRoute = '/search';
+const String kShoppingList = '/shoppingList';
+const String kReportRecipe ='/report';
 
 // Categories
 const int kTotalCategories = 6;
