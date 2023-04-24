@@ -16,8 +16,9 @@ class MediaPicker extends StatelessWidget {
             onPressed: () async {
               final _recipeProvider = context.read<RecipeProvider>();
               final imagePicker = ImagePicker();
-              final image =
-                  await imagePicker.pickImage(source: ImageSource.gallery);
+              final image = await imagePicker.pickImage(
+                source: ImageSource.gallery,
+              );
               _recipeProvider.pickedImage = image;
             },
             child: Row(

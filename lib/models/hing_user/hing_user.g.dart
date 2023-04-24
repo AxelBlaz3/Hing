@@ -24,6 +24,7 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
       image: fields[2] as String?,
       isFollowing: fields[5] as bool?,
       myIngredients: (fields[10] as List?)?.cast<String>(),
+      reportedRecipeIds: (fields[11] as List?)?.cast<String>(),
     )
       ..postsCount = fields[6] as int?
       ..followingCount = fields[7] as int?
@@ -34,7 +35,7 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
   @override
   void write(BinaryWriter writer, HingUser obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -56,7 +57,9 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
       ..writeByte(9)
       ..write(obj.firebaseToken)
       ..writeByte(10)
-      ..write(obj.myIngredients);
+      ..write(obj.myIngredients)
+      ..writeByte(11)
+      ..write(obj.reportedRecipeIds);
   }
 
   @override
@@ -76,13 +79,20 @@ class HingUserAdapter extends TypeAdapter<HingUser> {
 
 HingUser _$HingUserFromJson(Map<String, dynamic> json) {
   return HingUser(
-    id: ObjectId.fromJson(json['_id'] as Map<String, dynamic>),
+    id: ObjectId.fromJson(json['_id'] == null
+        ? Map<String, dynamic>()
+        : json["_id"] as Map<String, dynamic>),
     email: json['email'] as String?,
-    displayName: json['display_name'] as String,
-    accessToken: json['accessToken'] as String?,
+    displayName:
+        json['display_name'] == null ? "" : json['display_name'] as String,
+    accessToken:
+        json['accessToken'] == null ? "" : json['accessToken'] as String?,
     image: json['image'] as String?,
     isFollowing: json['is_following'] as bool?,
     myIngredients: (json['myIngredients'] as List<dynamic>?)
+        ?.map((e) => e as String)
+        .toList(),
+    reportedRecipeIds: (json['reportedRecipeIds'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
   )
@@ -104,4 +114,5 @@ Map<String, dynamic> _$HingUserToJson(HingUser instance) => <String, dynamic>{
       'followers_count': instance.followersCount,
       'firebase_token': instance.firebaseToken,
       'myIngredients': instance.myIngredients,
+      'reportedRecipeIds': instance.reportedRecipeIds,
     };

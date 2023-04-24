@@ -30,13 +30,13 @@ class _ProfileTabsState extends State<ProfileTabs> {
         // indicatorPadding: const EdgeInsets.all(0),
         tabs: [
           ProfileTabItem(
-              text: S.of(context).posts, count: widget.user.postsCount!),
+              text: S.of(context).posts, count: widget.user.postsCount ?? 0),
           ProfileTabItem(
               text: S.of(context).following,
-              count: widget.user.followingCount!),
+              count: widget.user.followingCount ?? 0),
           ProfileTabItem(
               text: S.of(context).followers,
-              count: widget.user.followersCount!),
+              count: widget.user.followersCount ?? 0),
         ],
       ),
     );

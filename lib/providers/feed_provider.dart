@@ -14,6 +14,7 @@ class FeedProvider extends ChangeNotifier {
       {int page = 1, int category = 0}) async {
     final recipes = await recipeRepository.getFeedForCategory(
         category: category, page: page);
+
     this._allRecipes
       ..clear()
       ..addAll(recipes);

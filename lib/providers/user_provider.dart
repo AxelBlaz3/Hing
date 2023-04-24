@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hing/constants.dart';
+import 'package:hing/generated/l10n.dart';
 import 'package:hing/models/hing_user/hing_user.dart';
 import 'package:hing/models/recipe/recipe.dart';
 import 'package:hing/models/hing_notification/hing_notification.dart';
@@ -11,9 +12,12 @@ class UserProvider extends ChangeNotifier {
   final UserRepository userRepository;
 
   UserProvider({required this.userRepository});
+
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
   XFile? _editProfileImage;
+
   XFile? get editProfileImage => _editProfileImage;
   bool _showNotificationBadge = false;
 
@@ -108,7 +112,59 @@ class UserProvider extends ChangeNotifier {
         firebaseToken: firebaseToken);
   }
 
-  Future<bool> updateMyIngredients({required String recipeId, required List<String> myIngredients}) async {
-    return await userRepository.updateMyIngredients(recipeId: recipeId, ingredients: myIngredients);
+  Future<bool> updateMyIngredients(
+      {required String recipeId, required List<String> myIngredients}) async {
+    return await userRepository.updateMyIngredients(
+        recipeId: recipeId, ingredients: myIngredients);
+  }
+
+  void updateReportedRecipes(Recipe recipe) async {
+    final List<String> reportedRecipeIds =
+        Set<String>.from(currentUser.reportedRecipeIds ?? []
+              ..add(recipe.id.oid))
+            .toList();
+
+    await Hive.box<HingUser>(kUserBox)
+        .put(kUserKey, currentUser.copy(reportedRecipeIds: reportedRecipeIds));
+    notifyListeners();
+  }
+
+  Future<bool> changePassword(
+      {required String userId,
+      required String password,
+      required String oldPassword}) async {
+    return await userRepository.changePassword(
+        userId: userId, password: password, oldPassword: oldPassword);
+  }
+
+  Future<bool> blockUser(
+      {required String userId, required String blockUserId}) async {
+    return await userRepository.blockUser(
+        userId: userId, blockUserId: blockUserId);
+  }
+
+//new
+  Future deleteUserPost(
+      {required String recipeId, required BuildContext context}) async {
+    try {
+      bool result = await userRepository.deleteUserPost(recipeId: recipeId);
+      if (result) {
+
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(kHomeRoute, (route) => false);
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("Post Successfully deleted.")));
+      } else {
+        Navigator.of(context).pop();
+
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(S.of(context).somethingWentWrong)));
+      }
+      notifyUserChanges();
+    } catch (error) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(error.toString())));
+    }
   }
 }

@@ -29,13 +29,13 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
       isLiked: fields[10] as bool?,
       commentsCount: fields[8] as int,
       myIngredients: (fields[11] as List?)?.cast<String>(),
-    );
+    )..createdAt = (fields[12] as Map?)?.cast<dynamic, dynamic>();
   }
 
   @override
   void write(BinaryWriter writer, Recipe obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -59,7 +59,9 @@ class RecipeAdapter extends TypeAdapter<Recipe> {
       ..writeByte(10)
       ..write(obj.isLiked)
       ..writeByte(11)
-      ..write(obj.myIngredients);
+      ..write(obj.myIngredients)
+      ..writeByte(12)
+      ..write(obj.createdAt);
   }
 
   @override
@@ -91,13 +93,14 @@ Recipe _$RecipeFromJson(Map<String, dynamic> json) {
     title: json['title'] as String,
     user: HingUser.fromJson(json['user'] as Map<String, dynamic>),
     likesCount: json['likes_count'] as int,
-    isFavorite: json['is_favorite'] as bool,
+    isFavorite:
+        json['is_favorite'] != null ? json['is_favorite'] as bool : false,
     isLiked: json['is_liked'] as bool?,
     commentsCount: json['comments_count'] as int,
     myIngredients: (json['my_ingredients'] as List<dynamic>?)
         ?.map((e) => e as String)
         .toList(),
-  );
+  )..createdAt = json['created_at'] as Map<String, dynamic>?;
 }
 
 Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
@@ -113,4 +116,5 @@ Map<String, dynamic> _$RecipeToJson(Recipe instance) => <String, dynamic>{
       'is_favorite': instance.isFavorite,
       'is_liked': instance.isLiked,
       'my_ingredients': instance.myIngredients,
+      'created_at': instance.createdAt,
     };
