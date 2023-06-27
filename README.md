@@ -17,8 +17,11 @@ Hing is developed to make sharing food recipes a lot easier. You dont have to br
 - FFMPEG (Video processing, Smooth video playback)
 
 ## Screenshots
-![Login Screen](docs/images/nia-splash.jpg)
-![Home Screen](docs/images/nia-splash.jpg)
-![Upload Recipe Screen](docs/images/nia-splash.jpg)
-
+<div style="display:flex">
+  <img src="/docs/images/login_screen.webp" height="800" width="400" />
+  &nbsp&nbsp&nbsp&nbsp
+  <img src="/docs/images/home_screen.webp" height="800" width="400" />
+  &nbsp&nbsp&nbsp&nbsp
+  <img src="/docs/images/recipe_screen.webp" height="800" width="400" />
+</div>
 
