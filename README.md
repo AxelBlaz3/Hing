@@ -1,16 +1,24 @@
-# hing
+# Hing: Share Food Recipes
 
-A new Flutter project.
+Hing is developed to make sharing food recipes a lot easier. You dont have to browse the internet for recipes. With Hing, anyone can share their own recipes and show their creativity!  
 
-## Getting Started
+<a href="https://play.google.com/store/apps/details?id=com.hing"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" height="70"></a>
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Tech Stack
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+- Flutter
+- Dart
+- Provider and a bit of state hoisting (State management)
+- Python
+- Flask (Backend)
+- MongoDB
+- JWTAuth
+- FFMPEG (Video processing, Smooth video playback)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Screenshots
+![Login Screen](docs/images/nia-splash.jpg)
+![Home Screen](docs/images/nia-splash.jpg)
+![Upload Recipe Screen](docs/images/nia-splash.jpg)
+
+
