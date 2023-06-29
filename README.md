@@ -1,3 +1,5 @@
+<img width=144 height=144 src='/docs/images/logo.webp' />
+
 # Hing: Share Food Recipes
 
 Hing is developed to make sharing food recipes a lot easier. You dont have to browse the internet for recipes. With Hing, anyone can share their own recipes and show their creativity!  
