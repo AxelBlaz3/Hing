@@ -20,10 +20,10 @@ Hing is developed to make sharing food recipes a lot easier. You dont have to br
 
 ## Screenshots
 <div style="display:flex">
-  <img src="/docs/images/login_screen.webp" height="800" width="400" />
+  <img src="/docs/images/login_screen.webp" height="600" width="270" />
   &nbsp&nbsp&nbsp&nbsp
-  <img src="/docs/images/home_screen.webp" height="800" width="400" />
+  <img src="/docs/images/home_screen.webp" height="600" width="270" />
   &nbsp&nbsp&nbsp&nbsp
-  <img src="/docs/images/recipe_screen.webp" height="800" width="400" />
+  <img src="/docs/images/recipe_screen.webp" height="600" width="272" />
 </div>
 
